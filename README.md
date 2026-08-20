@@ -1,5 +1,13 @@
 # relief-atlas
 
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="assets/logo-light.svg">
+    <img src="assets/logo-light.svg" width="180" alt="RELIEF-ATLAS logo: an indexed contact sheet presents varied 3D mesh records over terrain contours.">
+  </picture>
+</p>
+
 **10,000+ 3D mesh assets for disaster relief, humanitarian aid, and civil protection.**
 
 AI-generated polygonal meshes (GLB) for use in robotics simulation, embodied AI training, and disaster response planning. Covers equipment and vehicles from Germany (DRK, THW, Feuerwehr, Bundeswehr), EU Civil Protection, Ukraine recovery operations, and global natural disaster response.
