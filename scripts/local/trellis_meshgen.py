@@ -78,6 +78,8 @@ def parse_args():
     ap.add_argument("--geographies", nargs="*", default=list(MANIFESTS),
                     choices=list(MANIFESTS))
     ap.add_argument("--limit", type=int, default=None)
+    ap.add_argument("--ids", nargs="*", default=None,
+                    help="explicit item ids (overrides geographies/limit)")
     ap.add_argument("--pipeline-type", default="512",
                     choices=["512", "1024", "1024_cascade"])
     ap.add_argument("--texture-size", type=int, default=1024,
@@ -85,6 +87,12 @@ def parse_args():
     ap.add_argument("--seed", type=int, default=None,
                     help="override the per-item deterministic seed")
     return ap.parse_args()
+
+
+def save_json_atomic(path, data):
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(json.dumps(data, indent=2))
+    tmp.replace(path)
 
 
 def export_glb(mesh_out, glb_path, texture_size):
@@ -177,13 +185,26 @@ def main():
     args = parse_args()
 
     items = []
-    for geo in args.geographies:
-        for it in load_manifest(geo):
-            it = dict(it)
-            it["prompt_clean"] = clean_prompt(it["prompt"], it["id"])
-            items.append(it)
-    if args.limit:
-        items = items[: args.limit]
+    if args.ids:
+        by_id = {it["id"]: it for geo in MANIFESTS for it in load_manifest(geo)}
+        missing = [i for i in args.ids if i not in by_id]
+        if missing:
+            print(f"unknown ids: {missing}")
+            return
+        items = [dict(by_id[i]) for i in args.ids]
+    else:
+        for geo in args.geographies:
+            for it in load_manifest(geo):
+                it = dict(it)
+                it["prompt_clean"] = clean_prompt(it["prompt"], it["id"])
+                items.append(it)
+        if args.limit:
+            items = items[: args.limit]
+
+    retries = {}
+    retries_path = STATE_DIR / "qa_retries.json"
+    if retries_path.exists():
+        retries = json.loads(retries_path.read_text())
 
     todo = []
     for it in items:
@@ -226,7 +247,8 @@ def main():
         png_path = out_dir / f"{item_id}.png"
 
         t0 = time.time()
-        seed = args.seed if args.seed is not None else item_seed(item_id)
+        seed = args.seed if args.seed is not None else (
+            item_seed(item_id) + 7919 * retries.get(item_id, 0))
         try:
             img = PILImage.open(png_path)
             outputs = pipeline.run(img, seed=seed, pipeline_type=args.pipeline_type)
@@ -237,8 +259,14 @@ def main():
                 raise RuntimeError("empty mesh (possible GPU watchdog kill)")
 
             t_gen = time.time() - t0
-            bake_backend = export_glb(mesh_out, glb_path, args.texture_size)
-            n_gaussians = export_gaussians_from_mesh_with_voxel(mesh_out, str(ply_path))
+            # Export to temp names and atomically promote, so a crash can
+            # never leave a truncated GLB/PLY that resume logic accepts.
+            glb_tmp = Path(str(glb_path) + ".tmp")
+            ply_tmp = Path(str(ply_path) + ".tmp")
+            bake_backend = export_glb(mesh_out, glb_tmp, args.texture_size)
+            n_gaussians = export_gaussians_from_mesh_with_voxel(mesh_out, str(ply_tmp))
+            glb_tmp.replace(glb_path)
+            ply_tmp.replace(ply_path)
             t_total = time.time() - t0
 
             metadata = {
@@ -263,7 +291,7 @@ def main():
             image_meta_path = out_dir / "image_meta.json"
             if image_meta_path.exists():
                 metadata["image_meta"] = json.loads(image_meta_path.read_text())
-            (out_dir / "metadata.json").write_text(json.dumps(metadata, indent=2))
+            save_json_atomic(out_dir / "metadata.json", metadata)
             failures.pop(item_id, None)
             done += 1
             print(f"[{done}/{len(todo)}] {item_id}: {len(verts):,} verts, "
@@ -272,7 +300,7 @@ def main():
             failures[item_id] = {"error": str(e), "at": datetime.now(timezone.utc).isoformat()}
             print(f"[{done}/{len(todo)}] {item_id} FAILED: {e}")
         finally:
-            failures_path.write_text(json.dumps(failures, indent=2))
+            save_json_atomic(failures_path, failures)
 
     print(f"finished: {done} meshes, {len(failures)} failures")
 

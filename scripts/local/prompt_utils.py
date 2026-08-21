@@ -54,15 +54,15 @@ def _studio_tail(framing: str) -> str:
     The original boilerplate demanded a pure white seamless backdrop under
     softbox lighting 'with gentle contact shadows'. That floor + shadow
     gradient survived matting and TRELLIS.2 extruded it into white slab
-    geometry. We instead demand a flat uniform solid magenta backdrop with no
-    floor plane at all: trivially mattable, high contrast against every
-    relief-subject color (gray concrete, olive drab, white tents), and it
-    keeps deep focus so edges stay crisp for image-to-3D.
+    geometry. We instead demand a flat uniform light neutral gray backdrop
+    with no floor plane at all: gray bounce light stays hue-neutral on the
+    subject (saturated backdrops tinted it), matches the neutral-studio
+    distribution TRELLIS.2 was trained on, and BiRefNet mattes it cleanly.
     """
     return (
         f"The object stands alone, perfectly centered, fully visible and "
         f"uncropped, photographed from {framing}, isolated on a completely "
-        f"flat uniform solid magenta seamless background that fills the "
+        f"flat uniform light neutral gray seamless background that fills the "
         f"entire frame edge to edge, with no horizon line and no floor "
         f"plane. Even diffuse shadowless studio lighting, crisp edges, deep "
         f"focus keeping the entire object sharp. Professional product "
@@ -162,8 +162,14 @@ def clean_prompt(prompt: str, item_id: str | None = None) -> str:
 
     subject = TEMPLATE_START_RE.split(p, maxsplit=1)[0]
     is_vehicle = bool(VEHICLE_RE.search(subject))
+    # Aircraft/rotorcraft match VEHICLE_RE, but the spliced variant blocks are
+    # ground-vehicle gear (mud guards, tire chains, sandbag racks) — nonsense
+    # on a quadcopter. Strip them for anything that flies.
+    flies = bool(re.search(
+        r"\b(quadcopter|hexacopter|octocopter|multirotor|drone|uav|vtol|"
+        r"helicopter|fixed-wing|aircraft|plane)\b", subject, re.I))
 
-    if not is_vehicle:
+    if not is_vehicle or flies:
         for block in VARIANT_BLOCKS:
             p = p.replace(block, "")
         p = SURFACE_RE.sub(_neutral_surface, p)

@@ -17,7 +17,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from matting import composite_checker, has_object, solid_bg_to_rgba  # noqa: E402
+from matting import composite_checker, has_object, matte_image  # noqa: E402
 from prompt_utils import (  # noqa: E402
     MANIFESTS, PROJECT_DIR, clean_prompt, item_seed, load_manifest,
 )
@@ -34,6 +34,8 @@ def parse_args():
     ap.add_argument("--geographies", nargs="*", default=list(MANIFESTS),
                     choices=list(MANIFESTS))
     ap.add_argument("--limit", type=int, default=None)
+    ap.add_argument("--ids", nargs="*", default=None,
+                    help="explicit item ids (overrides geographies/limit)")
     ap.add_argument("--steps", type=int, default=18)
     ap.add_argument("--guidance", type=float, default=3.0)
     ap.add_argument("--size", type=int, default=1024)
@@ -44,6 +46,19 @@ def parse_args():
     return ap.parse_args()
 
 
+def load_qa_retries():
+    """QA retry counters: each QA rejection bumps a per-item retry count that
+    perturbs the deterministic seed so regeneration explores a new sample."""
+    path = STATE_DIR / "qa_retries.json"
+    return json.loads(path.read_text()) if path.exists() else {}
+
+
+def save_json_atomic(path: Path, data):
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(json.dumps(data, indent=2))
+    tmp.replace(path)
+
+
 def main():
     args = parse_args()
 
@@ -51,16 +66,27 @@ def main():
     from diffusers import Flux2KleinPipeline
 
     items = []
-    for geo in args.geographies:
-        for it in load_manifest(geo):
-            it = dict(it)
-            it["prompt_clean"] = clean_prompt(it["prompt"], it["id"])
-            items.append(it)
-    if args.limit:
-        items = items[: args.limit]
+    if args.ids:
+        by_id = {it["id"]: it for geo in MANIFESTS for it in load_manifest(geo)}
+        missing = [i for i in args.ids if i not in by_id]
+        if missing:
+            sys.exit(f"unknown ids: {missing}")
+        items = [dict(by_id[i]) for i in args.ids]
+    else:
+        for geo in args.geographies:
+            for it in load_manifest(geo):
+                it = dict(it)
+                it["prompt_clean"] = clean_prompt(it["prompt"], it["id"])
+                items.append(it)
+        if args.limit:
+            items = items[: args.limit]
+
+    retries = load_qa_retries()
 
     todo = []
     for it in items:
+        if "prompt_clean" not in it:
+            it["prompt_clean"] = clean_prompt(it["prompt"], it["id"])
         png = OUTPUT_DIR / it["geography"] / it["category"] / it["id"] / f"{it['id']}.png"
         if not png.exists():
             todo.append(it)
@@ -86,7 +112,8 @@ def main():
         png = out_dir / f"{item_id}.png"
 
         t0 = time.time()
-        seed = args.seed if args.seed is not None else item_seed(item_id)
+        seed = args.seed if args.seed is not None else (
+            item_seed(item_id) + 7919 * retries.get(item_id, 0))
         try:
             gen = pipe(
                 prompt=it["prompt_clean"],
@@ -100,10 +127,12 @@ def main():
             # Keep the pre-matte frame: matting can be re-tuned and re-run
             # from this file without paying generation cost again.
             rgb.convert("RGB").save(out_dir / f"{item_id}.raw.jpg", quality=95)
-            rgba, stats = solid_bg_to_rgba(rgb)
+            rgba, stats = matte_image(rgb)
             if not has_object(rgba):
                 raise RuntimeError("matting found no object (empty backdrop mask)")
-            rgba.save(png)
+            png_tmp = png.with_name(png.stem + ".tmp.png")
+            rgba.save(png_tmp, format="PNG")
+            png_tmp.replace(png)
             image_meta = {
                 "id": item_id,
                 "image_model": IMAGE_MODEL_ID,
@@ -114,7 +143,7 @@ def main():
                 "matting": stats,
                 "timestamp": datetime.now(timezone.utc).isoformat(),
             }
-            (out_dir / "image_meta.json").write_text(json.dumps(image_meta, indent=2))
+            save_json_atomic(out_dir / "image_meta.json", image_meta)
             if args.debug_masks:
                 composite_checker(rgba).save(out_dir / f"{item_id}.debug.png")
             failures.pop(item_id, None)
@@ -125,7 +154,7 @@ def main():
             failures[item_id] = {"error": str(e), "at": datetime.now(timezone.utc).isoformat()}
             print(f"[{done}/{len(todo)}] {item_id} FAILED: {e}")
         finally:
-            failures_path.write_text(json.dumps(failures, indent=2))
+            save_json_atomic(failures_path, failures)
 
     print(f"finished: {done} generated, {len(failures)} failures")
 
