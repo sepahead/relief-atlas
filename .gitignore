@@ -17,3 +17,26 @@ __pycache__/
 # OS
 .DS_Store
 Thumbs.db
+
+# Relocated meshmaker tooling (moved here from the prisoma repo).
+# Cost-bearing asset-generation tooling with large generated outputs, run logs,
+# and credentials. Keep the ~35G of generated meshes and any secrets out of git.
+meshmaker/api_keys.txt
+meshmaker/**/api_keys.txt
+meshmaker/output*/
+meshmaker/*.log
+meshmaker/spending.json
+meshmaker/failed.json
+
+# Local (on-device) generation workspace: model weights, virtualenvs,
+# upstream source clones, and run logs. Only the pipeline scripts under
+# scripts/local/ are committed; setup_local.sh rebuilds this workspace.
+meshmaker/local/models/
+meshmaker/local/imgenv/
+meshmaker/local/trellis-mac/
+meshmaker/local/*.log
+
+# Generated dataset artifacts (PNG/GLB/PLY/raw frames) stay out of git.
+# Completed runs upload to the relief-atlas dataset store instead; git keeps
+# pipeline code, manifests and QA ledgers only.
+outputs_relief/

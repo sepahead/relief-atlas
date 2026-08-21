@@ -15,9 +15,9 @@ AI-generated polygonal meshes (GLB) for use in robotics simulation, embodied AI 
 ## Dataset
 
 - **10,079 items** across 4 geography manifests
-- Generated via GPT-Image → Trellis 2 / Tripo v3.1 / Hunyuan3D pipeline
+- Original generation: GPT-Image → Trellis 2 / Tripo v3.1 / Hunyuan3D pipeline (cloud)
+- Local generation: FLUX.2 [klein] 4B → TRELLIS.2-4B on Apple Silicon (see below)
 - Prompts optimized for image-to-3D: natural language, camera specifications, explicit constraints
-- Dual API providers (fal.ai + Runware) with multi-key rotation and budget management
 
 ## Geography
 
@@ -32,6 +32,7 @@ AI-generated polygonal meshes (GLB) for use in robotics simulation, embodied AI 
 
 ```
 scripts/              — Generation pipeline (prompts, mesh generation, verification)
+scripts/local/        — On-device pipeline (FLUX.2 klein -> TRELLIS.2, mesh + 3DGS)
 manifests/            — Item definitions with pre-generated prompts
 outputs_relief/       — Generated 3D meshes (GLB + PNG + metadata)
 legacy_original/      — Pre-existing meshes from earlier generation runs
@@ -71,6 +72,44 @@ python scripts/verify_outputs.py
 - **Trellis 2 settings**: `ss_guidance_strength: 8.0`, `resolution: 1024`, `textureSize: 2048`
 - **Tripo v3.1 settings**: `geometryQuality: detailed`, `pbr: true`, `imageAutoFix: true`
 - **Output**: GLB with PBR textures, reference PNG, metadata JSON
+
+## Local generation pipeline (on-device)
+
+The same 10,079 manifest items can be regenerated **entirely on-device** on
+Apple Silicon (developed on M4 Max, 128GB) — no API keys, no cloud calls:
+
+| Stage | Model | Runtime |
+|-------|-------|---------|
+| Text-to-image | FLUX.2 [klein] 4B (Apache-2.0) | diffusers on MPS |
+| Matting | Flood-fill white-backdrop matting (no model) | numpy/PIL |
+| Image-to-3D | TRELLIS.2-4B via [trellis-mac](https://github.com/shivampkumar/trellis-mac) | PyTorch MPS + Metal bake |
+
+Each item produces **both** representations:
+
+- `<item_id>.glb` — PBR-textured mesh (Metal-baked base color / metallic / roughness)
+- `<item_id>.ply` — 3D Gaussian Splat converted from TRELLIS.2's decoded voxel grid (standard INRIA 3DGS layout)
+- `<item_id>.png` — RGBA reference image (alpha lets TRELLIS.2 skip its gated background remover, so the run is fully offline)
+- `metadata.json` — prompt, models, seed, timings, vertex/gaussian counts
+
+```bash
+# One-time workspace setup (~40GB of weights, no HF login required)
+scripts/local/setup_local.sh
+
+# Smoke test
+python3 scripts/local/run_all.py --limit 2
+
+# Full run (checkpointed; safe to relaunch)
+python3 scripts/local/run_all.py
+
+# Unattended multi-day run
+nohup scripts/local/run_forever.sh > state/full_run.log 2>&1 &
+
+# Progress report
+python3 scripts/local/verify_local.py
+```
+
+Model weights live outside git in `meshmaker/local/models/` (~37GB);
+`scripts/local/setup_local.sh` rebuilds the workspace from scratch.
 
 ## License
 
