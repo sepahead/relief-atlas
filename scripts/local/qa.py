@@ -117,14 +117,17 @@ def image_pass(scores, category_peers):
         reasons.append(f"touches border {scores['border_touch']}")
     if scores["sharpness"] < SHARPNESS_MIN:
         reasons.append(f"blurry {scores['sharpness']}")
-    if scores.get("phash") and category_peers is not None:
+    if scores.get("phash") and category_peers:
         import imagehash
         h = imagehash.hex_to_hash(scores["phash"])
         for peer in category_peers:
-            if h - peer <= DUP_HAMMING:
+            if h - imagehash.hex_to_hash(peer) <= DUP_HAMMING:
                 reasons.append("near-duplicate subject")
                 break
     return reasons
+
+
+NSFW_DIR = PROJECT_DIR / "meshmaker" / "local" / "models" / "nsfw_image_detection"
 
 
 class NsfwGuard:
@@ -137,10 +140,10 @@ class NsfwGuard:
             from transformers import pipeline
             self.pipe = pipeline(
                 "image-classification",
-                model="Falconsai/nsfw_image_detection",
-                device="mps",
+                model=str(NSFW_DIR),
+                device="cpu",
             )
-        out = self.pipe(str(png), truncation=True)
+        out = self.pipe(str(png))
         return next(r["score"] for r in out if r["label"] == "nsfw")
 
 

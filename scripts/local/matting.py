@@ -17,6 +17,9 @@ History:
 Deterministic; needs numpy/scipy/PIL (+ transformers/torch for BiRefNet).
 """
 
+import os
+from pathlib import Path
+
 import numpy as np
 from PIL import Image, ImageFilter
 from scipy import ndimage
@@ -68,8 +71,13 @@ def _border_touch_mask(mask: np.ndarray) -> np.ndarray:
 
 # ------------------------------------------------------------------ methods
 
+_BIREFNET_DIR = Path(__file__).resolve().parents[2] / "meshmaker" / "local" / "models" / "BiRefNet"
+# MPS triggers a float64 op inside the backbone; CPU at ~7 s/frame is fine.
+_BIREFNET_DEVICE = os.environ.get("MATTING_DEVICE", "cpu")
+
+
 def birefnet_alpha(img: Image.Image) -> np.ndarray:
-    """Saliency matte from ZhengPeng7/BiRefNet, float alpha in [0, 1]."""
+    """Saliency matte from local BiRefNet weights, float alpha in [0, 1]."""
     global _BIREFNET
     import torch
 
@@ -77,23 +85,21 @@ def birefnet_alpha(img: Image.Image) -> np.ndarray:
         from transformers import AutoModelForImageSegmentation
 
         model = AutoModelForImageSegmentation.from_pretrained(
-            "ZhengPeng7/BiRefNet", trust_remote_code=True)
-        model.eval()
-        device = "mps" if torch.backends.mps.is_available() else "cpu"
-        _BIREFNET = model.to(device=device, dtype=torch.float32)
+            str(_BIREFNET_DIR), trust_remote_code=True, local_files_only=True)
+        model = model.float().eval()
+        _BIREFNET = model.to(_BIREFNET_DEVICE)
 
-    dev = next(_BIREFNET.parameters()).device
     im = img.convert("RGB").resize((1024, 1024), Image.LANCZOS)
     x = np.asarray(im, dtype=np.float32) / 255.0
     x = (x - np.array([0.485, 0.456, 0.406])) / np.array([0.229, 0.224, 0.225])
-    t = torch.from_numpy(x).permute(2, 0, 1).unsqueeze(0).to(dev)
+    t = torch.from_numpy(x).permute(2, 0, 1).unsqueeze(0).float().to(_BIREFNET_DEVICE)
     with torch.no_grad():
-        logits = _BIREFNET(pixel_values=t).logits
-        up = torch.nn.functional.interpolate(
-            logits, size=(img.height, img.width),
-            mode="bilinear", align_corners=False)
-        alpha = up[0, 0].sigmoid().cpu().numpy()
-    return np.clip(alpha, 0.0, 1.0)
+        preds = _BIREFNET(t)
+        p = preds[-1] if isinstance(preds, list) else preds
+        small = torch.sigmoid(p)[0, 0].cpu().numpy()
+    up = np.asarray(Image.fromarray((small * 255).astype(np.uint8)).resize(
+        (img.width, img.height), Image.LANCZOS), dtype=np.float32) / 255.0
+    return np.clip(up, 0.0, 1.0)
 
 
 def chroma_alpha(rgb: np.ndarray) -> tuple[np.ndarray, np.ndarray, float]:
