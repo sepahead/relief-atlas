@@ -45,6 +45,81 @@ ROTOR_CLAUSE = ("All propellers are fully stationary and parked, each rotor "
                 "showing crisp distinct rigid blades with sharp silhouettes, "
                 "no motion blur and no spinning-disc effect.")
 
+# Manifest templates splice one shared subject sentence into dozens of rows
+# (e.g. 52 items are all "collapsed building rubble pile"). After cleaning,
+# those rows would produce byte-identical prompts that differ only by camera
+# framing, collapsing dataset variety. These per-category variation clauses
+# give every duplicate row a deterministic, visually distinct appearance that
+# stays plausible for its asset class.
+VARIATION_GROUPS = [
+    (re.compile(r"rubble|debris|demolition", re.I), [
+        "This particular pile is dominated by large broken concrete slabs with rusted rebar jutting out at angles.",
+        "This particular pile consists mainly of shattered red brick and mortar chunks mixed with crushed concrete.",
+        "This particular pile mixes concrete chunks with splintered wooden beams and twisted corrugated metal sheets.",
+        "This particular pile is mostly fine pulverized concrete gravel with a few large tilted slab fragments on top.",
+        "This particular pile is pale freshly-broken concrete lightly dusted with gray powder.",
+        "This particular pile is dark weathered debris streaked with rain stains and old soot.",
+    ]),
+    (re.compile(r"tent|shelter|canopy", re.I), [
+        "This particular unit is a dome-style tent with curved pole arches.",
+        "This particular unit is an A-frame ridge tent with straight sloped walls.",
+        "This particular unit is a rectangular cabin-style tent with near-vertical walls and a peaked roof.",
+        "This particular unit is a tunnel-style tent with a rounded half-cylinder profile.",
+        "This particular unit has an attached front vestibule awning over the entrance.",
+    ]),
+    (re.compile(r"flood barrier|gabion|mitigation barrier|barrier wall", re.I), [
+        "This particular section is assembled from stacked aluminum panels with visible interlocking bolts.",
+        "This particular section combines metal frames with tan sandbags layered along the base.",
+        "This particular section uses dark rubberized modular blocks in a staggered brick pattern.",
+        "This particular section is a taller two-tier configuration with cross bracing on the back side.",
+    ]),
+    (re.compile(r"pallet|cache|kit\b|supplies|blanket|hygiene|bedding", re.I), [
+        "This particular load is stacked in neat cardboard boxes with printed labels, shrink-wrapped.",
+        "This particular load is arranged in open plastic crates showing contents, strapped to the pallet.",
+        "This particular load is wrapped in blue tarpaulin with tension straps.",
+        "This particular load is stacked loose with rolled goods on top of boxed items.",
+    ]),
+    (re.compile(r"generator|pump|purification|x-ray|concentrator|terminal|repeater|"
+                r"radar|laboratory|decontamination|siren", re.I), [
+        "This particular unit is housed in a rugged yellow polymer case with black corner bumpers.",
+        "This particular unit is mounted in an open steel frame with exposed cabling on one side.",
+        "This particular unit is a compact suitcase-style enclosure with recessed handles and latches.",
+        "This particular unit sits on a wheeled trolley chassis with a telescoping pull handle.",
+        "This particular unit has an attached control panel with an array of indicator lights and dials.",
+    ]),
+    (re.compile(r"truck|van|ambulance|vehicle|carrier|transporter|bus|tanker|"
+                r"bulldozer|excavator|loader|tractor|crane|robot", re.I), [
+        "This particular vehicle has a clean recently-repainted body with crisp markings.",
+        "This particular vehicle shows heavy field use: chipped paint, mud splatter on the lower panels and dusty windows.",
+        "This particular vehicle carries a roof-mounted light bar and antenna mast.",
+        "This particular vehicle has a reinforced bull bar front bumper and auxiliary driving lamps.",
+        "This particular vehicle has rear-mounted storage racks loaded with strapped equipment cases.",
+    ]),
+    (re.compile(r"drone|quadcopter|aircraft|plane|helicopter|vtol", re.I), [
+        "This particular aircraft has a matte gray airframe with orange high-visibility accents.",
+        "This particular aircraft has a white body with red stripe markings and dark sensor gimbal.",
+        "This particular aircraft has a compact folding-arm design with the arms folded inward.",
+        "This particular aircraft has oversized bulbous sensor housings under the nose.",
+    ]),
+    (re.compile(r"bridge", re.I), [
+        "This particular bridge section has an open truss lattice deck surface.",
+        "This particular bridge section has a solid non-slip plate deck with raised edges.",
+        "This particular bridge section includes fold-down support legs at both ends.",
+    ]),
+    (re.compile(r"container|housing unit|mobile clinic|field hospital|command|hub", re.I), [
+        "This particular unit is a standard ISO container shape with corrugated steel walls.",
+        "This particular unit has smooth flat sandwich-panel walls and a slightly wider footprint than a shipping container.",
+        "This particular unit has an extendable slide-out section doubling its interior width.",
+        "This particular unit has a rooftop solar panel array and cable ducts along one wall.",
+    ]),
+]
+FALLBACK_VARIATIONS = [
+    "This particular unit has a clean factory finish with crisp unmarked surfaces.",
+    "This particular unit shows light service wear: fine scratches, slightly faded color and dust settled in crevices.",
+    "This particular unit shows heavy weathering: rain stains, scuffed edges and a dull oxidized sheen.",
+    "This particular unit has a few worn touch-up patches and a slightly sun-bleached finish.",
+]
+
 STUDIO_SPLIT = "The object stands alone"
 
 
@@ -142,6 +217,30 @@ PART_WORDS_RE = re.compile(
 )
 
 
+def _variation_clause(subject: str, item_id: str) -> str:
+    """Deterministic per-item appearance variation for a shared subject."""
+    for pattern, clauses in VARIATION_GROUPS:
+        if pattern.search(subject):
+            return clauses[stable_hash(f"relief-atlas/var/{item_id}") % len(clauses)]
+    return FALLBACK_VARIATIONS[
+        stable_hash(f"relief-atlas/var/{item_id}") % len(FALLBACK_VARIATIONS)]
+
+
+_SUBJECT_COUNTS: dict[str, int] | None = None
+
+
+def _subject_counts() -> dict[str, int]:
+    """How many manifest rows share each raw subject sentence (lazy, cached)."""
+    global _SUBJECT_COUNTS
+    if _SUBJECT_COUNTS is None:
+        counts: dict[str, int] = {}
+        for it in all_items():
+            subj = TEMPLATE_START_RE.split(it["prompt"].strip(), maxsplit=1)[0]
+            counts[subj] = counts.get(subj, 0) + 1
+        _SUBJECT_COUNTS = counts
+    return _SUBJECT_COUNTS
+
+
 def clean_prompt(prompt: str, item_id: str | None = None) -> str:
     """Normalize a manifest prompt for local FLUX.2 generation.
 
@@ -183,6 +282,11 @@ def clean_prompt(prompt: str, item_id: str | None = None) -> str:
 
     if ROTORCRAFT_RE.search(p):
         p = f"{p.rstrip('. ')}. {ROTOR_CLAUSE}"
+
+    # Shared-subject rows get one deterministic appearance variation so the
+    # dataset does not collapse to N near-identical assets.
+    if item_id and _subject_counts().get(subject, 0) > 1:
+        p = f"{p.rstrip('. ')}. {_variation_clause(subject, item_id)}"
 
     framing = FRAMINGS[stable_hash(item_id or prompt) % len(FRAMINGS)]
     p = re.sub(r"\s+", " ", p).strip()
