@@ -215,7 +215,8 @@ def main():
             continue  # image phase hasn't produced it yet
         complete = (
             glb.exists() and glb.stat().st_size > 1024
-            and (out_dir / f"{it['id']}.ply").exists()
+            and any((out_dir / f"{it['id']}.{ext}").exists()
+                    for ext in ("spz", "splat", "ply"))
             and (out_dir / "metadata.json").exists()
         )
         if not complete:
@@ -243,7 +244,6 @@ def main():
         item_id = it["id"]
         out_dir = OUTPUT_DIR / it["geography"] / it["category"] / item_id
         glb_path = out_dir / f"{item_id}.glb"
-        ply_path = out_dir / f"{item_id}.ply"
         png_path = out_dir / f"{item_id}.png"
 
         t0 = time.time()
@@ -260,13 +260,15 @@ def main():
 
             t_gen = time.time() - t0
             # Export to temp names and atomically promote, so a crash can
-            # never leave a truncated GLB/PLY that resume logic accepts.
+            # never leave a truncated GLB/3DGS that resume logic accepts.
             glb_tmp = Path(str(glb_path) + ".tmp")
-            ply_tmp = Path(str(ply_path) + ".tmp")
             bake_backend = export_glb(mesh_out, glb_tmp, args.texture_size)
-            n_gaussians = export_gaussians_from_mesh_with_voxel(mesh_out, str(ply_tmp))
+            # Condensed 3DGS: .spz preferred (~10x smaller than PLY), falls
+            # back to .splat (32 B/splat). The raw float32 PLY is never kept.
+            gs_final, n_gaussians = export_gaussians_from_mesh_with_voxel(
+                mesh_out, str(out_dir / item_id))
             glb_tmp.replace(glb_path)
-            ply_tmp.replace(ply_path)
+            Path(str(gs_final) + ".tmp").replace(gs_final)
             t_total = time.time() - t0
 
             metadata = {
@@ -284,6 +286,7 @@ def main():
                 "vertices": int(len(verts)),
                 "triangles": int(len(mesh_out.faces)),
                 "gaussians": int(n_gaussians),
+                "gs_format": Path(gs_final).suffix.lstrip("."),
                 "generation_seconds": round(t_gen, 1),
                 "total_seconds": round(t_total, 1),
                 "timestamp": datetime.now(timezone.utc).isoformat(),

@@ -1,0 +1,179 @@
+{
+  "meshes": [
+    {
+      "id": "tank_leopard_2a7",
+      "category": "military_vehicle",
+      "prompt": "German Leopard 2A7 main battle tank, desert camouflage, high detailed turret"
+    },
+    {
+      "id": "tank_puma_ifv",
+      "category": "military_vehicle",
+      "prompt": "German Puma infantry fighting vehicle, forest camo, tracked"
+    },
+    {
+      "id": "vehicle_boxer_apc",
+      "category": "military_vehicle",
+      "prompt": "Boxer armored personnel carrier, 8x8 wheeled, german military green"
+    },
+    {
+      "id": "vehicle_fennek_recon",
+      "category": "military_vehicle",
+      "prompt": "Fennek reconnaissance vehicle, 4x4, sensor mast extended"
+    },
+    {
+      "id": "artillery_pzh2000",
+      "category": "military_vehicle",
+      "prompt": "Panzerhaubitze 2000 self-propelled artillery, tracked, long barrel"
+    },
+    {
+      "id": "drone_vector_vtol",
+      "category": "military_drone",
+      "prompt": "Quantum Systems Vector VTOL drone, fixed wing with rotors, military grey"
+    },
+    {
+      "id": "drone_luna_ng",
+      "category": "military_drone",
+      "prompt": "Luna NG reconnaissance drone, catapult launch rail, sleek aerodynamic"
+    },
+    {
+      "id": "drone_heron_tp",
+      "category": "military_drone",
+      "prompt": "Large MALE UAV Heron TP, german luftwaffe markings, runway landing gear"
+    },
+    {
+      "id": "drone_mikado_quad",
+      "category": "military_drone",
+      "prompt": "Mikado micro reconnaissance quadcopter, ruggedized, black plastic"
+    },
+    {
+      "id": "drone_aladin_hand",
+      "category": "military_drone",
+      "prompt": "Aladin hand-launched mini UAV, two-tone grey"
+    },
+    {
+      "id": "weapon_g36_rifle",
+      "category": "weapon_modern",
+      "prompt": "Heckler & Koch G36 assault rifle, carry handle optic, black polymer"
+    },
+    {
+      "id": "weapon_hk416_rifle",
+      "category": "weapon_modern",
+      "prompt": "HK416 assault rifle, quad rail handguard, tan color"
+    },
+    {
+      "id": "weapon_mp7_pdw",
+      "category": "weapon_modern",
+      "prompt": "MP7 personal defense weapon, compact, foregrip folded"
+    },
+    {
+      "id": "weapon_mg5_machinegun",
+      "category": "weapon_modern",
+      "prompt": "MG5 general purpose machine gun, belt fed, bipod deployed"
+    },
+    {
+      "id": "weapon_panzerfaust3",
+      "category": "weapon_modern",
+      "prompt": "Panzerfaust 3 anti-tank weapon, fired position, olive drab"
+    },
+    {
+      "id": "weapon_pistol_p8",
+      "category": "weapon_modern",
+      "prompt": "P8 combat pistol, black, polymer frame"
+    },
+    {
+      "id": "weapon_cold_km2000",
+      "category": "weapon_cold",
+      "prompt": "KM2000 combat knife, tanto point, serrated edge, black handle"
+    },
+    {
+      "id": "weapon_cold_trench_shovel",
+      "category": "weapon_cold",
+      "prompt": "German folding trench shovel, serrated edge, wooden handle"
+    },
+    {
+      "id": "weapon_cold_bayonet",
+      "category": "weapon_cold",
+      "prompt": "Modern bayonet for assault rifle, wire cutter sheath mechanism"
+    },
+    {
+      "id": "weapon_cold_tactical_tomahawk",
+      "category": "weapon_cold",
+      "prompt": "Tactical tomahawk axe, matte black finish, spike poll"
+    },
+    {
+      "id": "fruit_apple_red",
+      "category": "fruit",
+      "prompt": "Fresh red delicious apple, shiny skin, stem attached"
+    },
+    {
+      "id": "fruit_banana_bunch",
+      "category": "fruit",
+      "prompt": "Bunch of yellow bananas, slightly spotted, ripe"
+    },
+    {
+      "id": "fruit_pineapple_whole",
+      "category": "fruit",
+      "prompt": "Whole pineapple, rough skin, green crown leaves"
+    },
+    {
+      "id": "fruit_grapes_green",
+      "category": "fruit",
+      "prompt": "Bunch of green grapes, on vine, fresh with dew"
+    },
+    {
+      "id": "fruit_orange_whole",
+      "category": "fruit",
+      "prompt": "Whole naval orange, textured skin, vibrant color"
+    },
+    {
+      "id": "fruit_pear_green",
+      "category": "fruit",
+      "prompt": "Green anjou pear, smooth skin, classic shape"
+    },
+    {
+      "id": "fruit_watermelon_slice",
+      "category": "fruit",
+      "prompt": "Slice of watermelon, red flesh, black seeds, green rind"
+    },
+    {
+      "id": "fruit_strawberry_large",
+      "category": "fruit",
+      "prompt": "Large garden strawberry, red and bumpy, green calyx"
+    },
+    {
+      "id": "fruit_lemon_yellow",
+      "category": "fruit",
+      "prompt": "Bright yellow lemon, textured rind, oval shape"
+    },
+    {
+      "id": "fruit_cherry_pair",
+      "category": "fruit",
+      "prompt": "Pair of red cherries, joined by stems"
+    },
+    {
+      "id": "equipment_helmet_combat",
+      "category": "military_gear",
+      "prompt": "German combat helmet (Gefechtshelm M92), flecktarn cover"
+    },
+    {
+      "id": "equipment_backpack_flecktarn",
+      "category": "military_gear",
+      "prompt": "Large military rucksack, flecktarn camouflage pattern, stuffed full"
+    },
+    {
+      "id": "equipment_radio_sem52",
+      "category": "military_gear",
+      "prompt": "SEM 52 handheld military radio, olive green, antenna"
+    },
+    {
+      "id": "equipment_binoculars_vector",
+      "category": "military_gear",
+      "prompt": "High-end military laser rangefinder binoculars, rubberized armor"
+    },
+    {
+      "id": "equipment_boots_combat",
+      "category": "military_gear",
+      "prompt": "Pair of black leather combat boots, laced up, heavy tread"
+    }
+  ]
+}

@@ -1,0 +1,176 @@
+{
+  "version": "1.0",
+  "description": "Bundeswehr and German Military Equipment",
+  "meshes": [
+    {
+      "id": "vehicle_Leopard_2A7",
+      "category": "bundeswehr_vehicles",
+      "prompt": "German main battle tank Leopard 2A7, desert camo, photorealistic, isolated, white background, military vehicle"
+    },
+    {
+      "id": "vehicle_Puma_IFV",
+      "category": "bundeswehr_vehicles",
+      "prompt": "Bundeswehr Puma infantry fighting vehicle, forest camo, photorealistic, isolated, white background, military vehicle"
+    },
+    {
+      "id": "vehicle_Boxer_GTK",
+      "category": "bundeswehr_vehicles",
+      "prompt": "GTK Boxer armored transport vehicle, modular mission module, photorealistic, isolated, white background, military vehicle"
+    },
+    {
+      "id": "vehicle_Fennek_Recon",
+      "category": "bundeswehr_vehicles",
+      "prompt": "Fennek reconnaissance vehicle, light armored car, photorealistic, isolated, white background, military vehicle"
+    },
+    {
+      "id": "vehicle_Dingo_2",
+      "category": "bundeswehr_vehicles",
+      "prompt": "ATF Dingo 2 protected patrol vehicle, photorealistic, isolated, white background, military vehicle"
+    },
+    {
+      "id": "vehicle_PzH_2000",
+      "category": "bundeswehr_vehicles",
+      "prompt": "Panzerhaubitze 2000 self-propelled howitzer, photorealistic, isolated, white background, military vehicle"
+    },
+    {
+      "id": "airdef_Gepard_1A2",
+      "category": "bundeswehr_airdefense",
+      "prompt": "Flakpanzer Gepard anti-aircraft gun tank, dual autocannons, military engineering, detailed, isolated, white background"
+    },
+    {
+      "id": "airdef_IRIS_T_SLM_Launcher",
+      "category": "bundeswehr_airdefense",
+      "prompt": "IRIS-T SLM launcher vehicle, german air defense system, military engineering, detailed, isolated, white background"
+    },
+    {
+      "id": "airdef_Patriot_Launcher_Truck",
+      "category": "bundeswehr_airdefense",
+      "prompt": "M901 Launching Station on MAN truck chassis, Luftwaffe markings, military engineering, detailed, isolated, white background"
+    },
+    {
+      "id": "airdef_MANTIS_Turret",
+      "category": "bundeswehr_airdefense",
+      "prompt": "MANTIS air defence system turret, stationary C-RAM, military engineering, detailed, isolated, white background"
+    },
+    {
+      "id": "airdef_Ozelot_Wiesel_2",
+      "category": "bundeswehr_airdefense",
+      "prompt": "LeFlaSys Ozelot on Wiesel 2 chassis, stinger launcher, military engineering, detailed, isolated, white background"
+    },
+    {
+      "id": "airdef_Radar_TRML_4D",
+      "category": "bundeswehr_airdefense",
+      "prompt": "TRML-4D radar system truck, active electronically scanned array, military engineering, detailed, isolated, white background"
+    },
+    {
+      "id": "aircraft_Eurofighter_Typhoon",
+      "category": "bundeswehr_aircraft",
+      "prompt": "Eurofighter Typhoon, Luftwaffe grey livery, air superiority fighter, aircraft in flight configuration or landed, isolated, white background"
+    },
+    {
+      "id": "aircraft_Panavia_Tornado_IDS",
+      "category": "bundeswehr_aircraft",
+      "prompt": "Panavia Tornado IDS, German Air Force, recon configuration, aircraft in flight configuration or landed, isolated, white background"
+    },
+    {
+      "id": "aircraft_Tiger_UHT_Helicopter",
+      "category": "bundeswehr_aircraft",
+      "prompt": "Eurocopter Tiger UHT attack helicopter, anti-tank missiles, aircraft in flight configuration or landed, isolated, white background"
+    },
+    {
+      "id": "aircraft_NH90_TTH",
+      "category": "bundeswehr_aircraft",
+      "prompt": "NH90 tactical transport helicopter, olive drab army aviation, aircraft in flight configuration or landed, isolated, white background"
+    },
+    {
+      "id": "aircraft_CH53_G_Stallion",
+      "category": "bundeswehr_aircraft",
+      "prompt": "Sikorsky CH-53G heavy transport helicopter, Heer markings, aircraft in flight configuration or landed, isolated, white background"
+    },
+    {
+      "id": "aircraft_A400M_Atlas",
+      "category": "bundeswehr_aircraft",
+      "prompt": "Airbus A400M Atlas military transport aircraft, aircraft in flight configuration or landed, isolated, white background"
+    },
+    {
+      "id": "gear_G36_Rifle",
+      "category": "bundeswehr_gear",
+      "prompt": "Heckler & Koch G36 assault rifle, standard issue, optic handle, military equipment, studio lighting, white background"
+    },
+    {
+      "id": "gear_Gefechtshelm_M92",
+      "category": "bundeswehr_gear",
+      "prompt": "Bundeswehr combat helmet M92, flecktarn cover, military equipment, studio lighting, white background"
+    },
+    {
+      "id": "gear_Flecktarn_Backpack",
+      "category": "bundeswehr_gear",
+      "prompt": "Military backpack in 5-color Flecktarn camouflage, military equipment, studio lighting, white background"
+    },
+    {
+      "id": "gear_Panzerfaust_3",
+      "category": "bundeswehr_gear",
+      "prompt": "Panzerfaust 3 anti-tank weapon, loaded, military equipment, studio lighting, white background"
+    },
+    {
+      "id": "gear_MG5_MachineGun",
+      "category": "bundeswehr_gear",
+      "prompt": "Heckler & Koch MG5 general purpose machine gun, military equipment, studio lighting, white background"
+    },
+    {
+      "id": "gear_SEM_70_Radio",
+      "category": "bundeswehr_gear",
+      "prompt": "SEM 70 manpack military radio, vintage bundeswehr, military equipment, studio lighting, white background"
+    },
+    {
+      "id": "gear_Combat_Boots_Gen2",
+      "category": "bundeswehr_gear",
+      "prompt": "Bundeswehr combat boots model 2000, black leather, military equipment, studio lighting, white background"
+    },
+    {
+      "id": "gear_Plate_Carrier_System",
+      "category": "bundeswehr_gear",
+      "prompt": "Modern IdZ infantry vest, flecktarn camo, military equipment, studio lighting, white background"
+    },
+    {
+      "id": "logistics_Unimog_U1300L",
+      "category": "bundeswehr_logistics",
+      "prompt": "Unimog U1300L military truck, canvas top, olive green, logistics equipment, used condition, white background"
+    },
+    {
+      "id": "logistics_MAN_KAT1_8x8",
+      "category": "bundeswehr_logistics",
+      "prompt": "MAN KAT1 8x8 heavy tactical truck, logistics equipment, used condition, white background"
+    },
+    {
+      "id": "logistics_Field_Kitchen_TFK250",
+      "category": "bundeswehr_logistics",
+      "prompt": "Taktische Feldkueche TFK 250, mobile field kitchen trailer, logistics equipment, used condition, white background"
+    },
+    {
+      "id": "logistics_Faltstrasse_Mat",
+      "category": "bundeswehr_logistics",
+      "prompt": "Military temporary road mat roll, engineering equipment, logistics equipment, used condition, white background"
+    },
+    {
+      "id": "logistics_Jerrycan_20L",
+      "category": "bundeswehr_logistics",
+      "prompt": "Classic 20L steel jerrycan, olive drab, bundeswehr markings, logistics equipment, used condition, white background"
+    },
+    {
+      "id": "naval_Frigate_Baden_Wuerttemberg",
+      "category": "bundeswehr_naval",
+      "prompt": "F125 class frigate Baden-Wuerttemberg, german navy, warship, waterline model, white background"
+    },
+    {
+      "id": "naval_Submarine_Type_212A",
+      "category": "bundeswehr_naval",
+      "prompt": "Type 212A submarine, deutsche marine, fuel cell propulsion, warship, waterline model, white background"
+    },
+    {
+      "id": "naval_Corvette_Braunschweig",
+      "category": "bundeswehr_naval",
+      "prompt": "K130 Braunschweig class corvette, warship, waterline model, white background"
+    }
+  ]
+}

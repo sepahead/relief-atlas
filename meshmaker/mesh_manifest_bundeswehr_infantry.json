@@ -1,0 +1,111 @@
+{
+  "version": "1.0",
+  "description": "Bundeswehr Infantry - All Branches",
+  "meshes": [
+    {
+      "id": "heer_Panzergrenadier_Dismounted",
+      "category": "bundeswehr_infantry_heer",
+      "prompt": "German Panzergrenadier soldier, IdZ vest, G36, flecktarn, running pose, photorealistic, full body character, isolated, white background, military uniform detail"
+    },
+    {
+      "id": "heer_Jaeger_Light_Infantry",
+      "category": "bundeswehr_infantry_heer",
+      "prompt": "Bundeswehr J\u00e4ger soldier, forest camo, patrolling, Boonie hat, photorealistic, full body character, isolated, white background, military uniform detail"
+    },
+    {
+      "id": "heer_Gebirgsjaeger_Alpine",
+      "category": "bundeswehr_infantry_heer",
+      "prompt": "German mountain trooper (Gebirgsj\u00e4ger), Edelweiss patch, heavy backpack, snow camo elements, photorealistic, full body character, isolated, white background, military uniform detail"
+    },
+    {
+      "id": "heer_Fallschirmjaeger_Paratrooper",
+      "category": "bundeswehr_infantry_heer",
+      "prompt": "German paratrooper (Fallschirmj\u00e4ger), jump helmet, knee pads, G36K, photorealistic, full body character, isolated, white background, military uniform detail"
+    },
+    {
+      "id": "heer_Panzer_Crewman",
+      "category": "bundeswehr_infantry_heer",
+      "prompt": "Leopard 2 tank crewman, olive tank suit, beret, headset, photorealistic, full body character, isolated, white background, military uniform detail"
+    },
+    {
+      "id": "heer_KSK_Operator_Combat",
+      "category": "bundeswehr_infantry_heer",
+      "prompt": "KSK special forces operator, multicam/flecktarn mix, high-cut helmet, G95 rifle, tactical, photorealistic, full body character, isolated, white background, military uniform detail"
+    },
+    {
+      "id": "heer_Recon_Scout",
+      "category": "bundeswehr_infantry_heer",
+      "prompt": "Heeresaufkl\u00e4rungstruppe scout, Fennek crew dismounted, light gear, binoculars, photorealistic, full body character, isolated, white background, military uniform detail"
+    },
+    {
+      "id": "luftwaffe_Objektschutz_Soldier",
+      "category": "bundeswehr_infantry_luftwaffe",
+      "prompt": "Luftwaffe Objektschutzregiment soldier, infantry gear, guarding posture, air force beret, german air force personnel, detailed uniform, isolated, white background"
+    },
+    {
+      "id": "luftwaffe_Eurofighter_Pilot",
+      "category": "bundeswehr_infantry_luftwaffe",
+      "prompt": "German fighter pilot, full flight suit, g-suit, helmet under arm, german air force personnel, detailed uniform, isolated, white background"
+    },
+    {
+      "id": "luftwaffe_Ground_Crew_Technician",
+      "category": "bundeswehr_infantry_luftwaffe",
+      "prompt": "Luftwaffe ground crew, safety vest, ear protection, guiding marshalling wands, german air force personnel, detailed uniform, isolated, white background"
+    },
+    {
+      "id": "marine_Seebataillon_Boarding",
+      "category": "bundeswehr_infantry_marine",
+      "prompt": "German Navy Seebataillon soldier, boarding team, dark blue/camo mix, MP7, tactical vest, german navy personnel, photorealistic character, isolated, white background"
+    },
+    {
+      "id": "marine_Marine_Officer_Dress",
+      "category": "bundeswehr_infantry_marine",
+      "prompt": "Deutsche Marine officer, service dress blue uniform, peaked cap, standing attention, german navy personnel, photorealistic character, isolated, white background"
+    },
+    {
+      "id": "marine_Deck_Crew_Sailor",
+      "category": "bundeswehr_infantry_marine",
+      "prompt": "German navy sailor, shipboard working uniform (Bordparka), life vest, german navy personnel, photorealistic character, isolated, white background"
+    },
+    {
+      "id": "marine_Combat_Swimmer_KSM",
+      "category": "bundeswehr_infantry_marine",
+      "prompt": "Kommando Spezialkr\u00e4fte Marine diver, wetsuit, rebreather, underwater gear, german navy personnel, photorealistic character, isolated, white background"
+    },
+    {
+      "id": "sanitaet_Combat_Medic_Field",
+      "category": "bundeswehr_infantry_medical",
+      "prompt": "Bundeswehr combat medic (Sanit\u00e4ter), red cross patch, medic backpack, treating kneeling posture, german medical corps, military medicine, isolated, white background"
+    },
+    {
+      "id": "sanitaet_Medical_Officer_Doctor",
+      "category": "bundeswehr_infantry_medical",
+      "prompt": "German military doctor, Flecktarn field uniform, stethoscope, standing, german medical corps, military medicine, isolated, white background"
+    },
+    {
+      "id": "skb_Feldjaeger_MP",
+      "category": "bundeswehr_infantry_support",
+      "prompt": "German Military Police (Feldj\u00e4ger), orange brassard 'MP', white belt, traffic control baton, german support troops, detailed gear, isolated, white background"
+    },
+    {
+      "id": "skb_Logistics_Soldier_Crate",
+      "category": "bundeswehr_infantry_support",
+      "prompt": "Bundeswehr logistics soldier carrying supply crate, field cap, german support troops, detailed gear, isolated, white background"
+    },
+    {
+      "id": "cir_Cyber_Ops_Soldier",
+      "category": "bundeswehr_infantry_cyber",
+      "prompt": "Bundeswehr CIR soldier, field uniform, working on rugged military laptop, tactical environment, german cyber command personnel, modern equipment, isolated, white background"
+    },
+    {
+      "id": "cir_EloKa_Specialist",
+      "category": "bundeswehr_infantry_cyber",
+      "prompt": "Electronic warfare specialist, radio equipment, antenna, headphones, german cyber command personnel, modern equipment, isolated, white background"
+    },
+    {
+      "id": "wach_Wachbataillon_Guard",
+      "category": "bundeswehr_infantry_ceremonial",
+      "prompt": "Wachbataillon soldier, ceremonial uniform, Karabiner 98k, presenting arms, drill protocol, german ceremonial guard, pristine uniform, isolated, white background"
+    }
+  ]
+}
