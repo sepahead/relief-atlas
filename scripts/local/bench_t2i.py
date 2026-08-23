@@ -110,8 +110,8 @@ def run_model(name, items, steps, guidance, size, matt):
                  "guidance": guidance, "size": size, "seed": seed}
         if matt:
             rgba, stats = matte_image(img)
-            entry["matting"] = stats
-            entry["matte_ok"] = has_object(rgba)
+            entry["matting"] = {k: float(v) for k, v in stats.items()}
+            entry["matte_ok"] = bool(has_object(rgba))
             composite_checker(rgba).save(out_dir / f"{iid}.debug.png")
         results[iid] = entry
         print(f"[{name}] {iid}: {dt:.1f}s"
