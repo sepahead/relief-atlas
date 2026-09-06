@@ -62,9 +62,13 @@ class _NoRembg:
 
 _rembg_mod.BiRefNet = _NoRembg
 
-from gs_export import export_gaussians_from_mesh_with_voxel  # noqa: E402
+from gs_export import (  # noqa: E402
+    export_gaussians_from_mesh_with_voxel, tmp_sibling,
+)
+import content_policy  # noqa: E402
 from prompt_utils import (  # noqa: E402
-    MANIFESTS, OUTPUT_DIR_NAME, clean_prompt, item_seed, load_manifest,
+    MANIFESTS, OUTPUT_DIR_NAME, clean_name, clean_prompt, item_seed,
+    load_manifest, mesh_complete,
 )
 
 OUTPUT_DIR = PROJECT_DIR / OUTPUT_DIR_NAME
@@ -86,11 +90,15 @@ def parse_args():
                     choices=[512, 1024, 2048])
     ap.add_argument("--seed", type=int, default=None,
                     help="override the per-item deterministic seed")
+    content_policy.add_policy_args(ap)
+    ap.add_argument("--ignore-image-qa", action="store_true",
+                    help="mesh images that failed or lack an image QA verdict; "
+                         "the resulting meshes are then uncertified")
     return ap.parse_args()
 
 
 def save_json_atomic(path, data):
-    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp = tmp_sibling(path)
     tmp.write_text(json.dumps(data, indent=2))
     tmp.replace(path)
 
@@ -155,7 +163,9 @@ def export_glb(mesh_out, glb_path, texture_size):
                 decimation_target=target_faces,
                 texture_size=texture_size,
             )
-            glb.export(str(glb_path))
+            # file_type is explicit: glb_path is a transient sibling name and
+            # must never rely on extension sniffing.
+            glb.export(str(glb_path), file_type="glb")
             return "metal"
         except RuntimeError as e:
             print(f"    metal bake failed ({e}); falling back to KDTree baker")
@@ -192,12 +202,16 @@ def main():
             print(f"unknown ids: {missing}")
             return
         items = [dict(by_id[i]) for i in args.ids]
+        for it in items:
+            it["prompt_clean"] = clean_prompt(it["prompt"], it["id"])
     else:
         for geo in args.geographies:
             for it in load_manifest(geo):
                 it = dict(it)
                 it["prompt_clean"] = clean_prompt(it["prompt"], it["id"])
                 items.append(it)
+        # Tier selection precedes --limit; see flux_imagegen.py for why.
+        items = content_policy.select_tier(items, args.only_policy)
         if args.limit:
             items = items[: args.limit]
 
@@ -206,22 +220,44 @@ def main():
     if retries_path.exists():
         retries = json.loads(retries_path.read_text())
 
+    def load_state(name):
+        path = STATE_DIR / name
+        return json.loads(path.read_text()) if path.exists() else {}
+
+    # The mesh phase used to gate only on "does a PNG exist", which made the
+    # image QA gate purely advisory: a QA-failed or NSFW-flagged frame would
+    # still be turned into a shipped asset. Require a passing verdict.
+    image_qa = load_state("qa_images.json")
+    quarantine = load_state("qa_quarantine.json")
+
+    # Content policy: refuse blocked subjects even if an image somehow exists.
+    items, rejected, overrides = content_policy.screen_from_args(
+        items, args, phase="mesh_gen")
+    print(content_policy.describe_screen(items, rejected, overrides))
+
     todo = []
+    n_unverified = n_quarantined = 0
     for it in items:
         out_dir = OUTPUT_DIR / it["geography"] / it["category"] / it["id"]
-        glb = out_dir / f"{it['id']}.glb"
         png = out_dir / f"{it['id']}.png"
         if not png.exists():
             continue  # image phase hasn't produced it yet
-        complete = (
-            glb.exists() and glb.stat().st_size > 1024
-            and any((out_dir / f"{it['id']}.{ext}").exists()
-                    for ext in ("spz", "splat", "ply"))
-            and (out_dir / "metadata.json").exists()
-        )
-        if not complete:
+        if it["id"] in quarantine:
+            n_quarantined += 1
+            continue
+        if not args.ignore_image_qa and not image_qa.get(it["id"], {}).get("pass"):
+            # No verdict is treated exactly like a failed verdict: an
+            # unscreened image must not become a shipped asset.
+            n_unverified += 1
+            continue
+        if not mesh_complete(out_dir, it["id"]):
             todo.append(it)
-    print(f"{len(items)} items, {len(todo)} need meshes")
+    print(f"{len(items)} items, {len(todo)} need meshes"
+          + (f", {n_unverified} blocked by image QA" if n_unverified else "")
+          + (f", {n_quarantined} quarantined" if n_quarantined else ""))
+    if n_unverified and not args.ignore_image_qa:
+        print("  run qa.py --mode images to certify them, or pass "
+              "--ignore-image-qa to bypass (uncertified)")
     if not todo:
         return
 
@@ -240,6 +276,8 @@ def main():
     failures = json.loads(failures_path.read_text()) if failures_path.exists() else {}
 
     done = 0
+    # Meshes actually written under a policy override; see flux_imagegen.py.
+    generated_overrides = []
     for it in todo:
         item_id = it["id"]
         out_dir = OUTPUT_DIR / it["geography"] / it["category"] / item_id
@@ -259,24 +297,35 @@ def main():
                 raise RuntimeError("empty mesh (possible GPU watchdog kill)")
 
             t_gen = time.time() - t0
-            # Export to temp names and atomically promote, so a crash can
-            # never leave a truncated GLB/3DGS that resume logic accepts.
-            glb_tmp = Path(str(glb_path) + ".tmp")
+            # Export to transient sibling names and atomically promote, so a
+            # crash can never leave a truncated GLB/3DGS that resume logic
+            # accepts. tmp_sibling keeps the real suffix, which the exporters
+            # need in order to pick the right container.
+            glb_tmp = tmp_sibling(glb_path)
             bake_backend = export_glb(mesh_out, glb_tmp, args.texture_size)
-            # Condensed 3DGS: .spz preferred (~10x smaller than PLY), falls
-            # back to .splat (32 B/splat). The raw float32 PLY is never kept.
-            gs_final, n_gaussians = export_gaussians_from_mesh_with_voxel(
+            # Condensed 3DGS: emits BOTH containers when the spz package is
+            # installed -- .spz (~10x smaller than PLY, preferred) plus .splat
+            # (32 B/splat, universal web fallback). Without spz, .splat only.
+            # The raw float32 PLY is never kept.
+            gs_paths, n_gaussians = export_gaussians_from_mesh_with_voxel(
                 mesh_out, str(out_dir / item_id))
+            if not n_gaussians:
+                raise RuntimeError("3DGS export produced no gaussians")
+            # Promote only once the GLB and every 3DGS container are on disk.
             glb_tmp.replace(glb_path)
-            Path(str(gs_final) + ".tmp").replace(gs_final)
+            for gs_final in gs_paths:
+                tmp_sibling(gs_final).replace(gs_final)
             t_total = time.time() - t0
 
             metadata = {
                 "id": item_id,
                 "category": it["category"],
                 "geography": it["geography"],
-                "name": it.get("name", ""),
+                "name": clean_name(it.get("name", "")),
                 "prompt": it["prompt_clean"],
+                "policy": it["policy"],
+                "image_qa": {k: image_qa.get(item_id, {}).get(k)
+                             for k in ("pass", "nsfw", "sharpness")},
                 "image_model": IMAGE_MODEL_ID,
                 "mesh_model": MESH_MODEL_ID,
                 "seed": seed,
@@ -286,7 +335,8 @@ def main():
                 "vertices": int(len(verts)),
                 "triangles": int(len(mesh_out.faces)),
                 "gaussians": int(n_gaussians),
-                "gs_format": Path(gs_final).suffix.lstrip("."),
+                "gs_format": "+".join(
+                    p.suffix.lstrip(".") for p in gs_paths),
                 "generation_seconds": round(t_gen, 1),
                 "total_seconds": round(t_total, 1),
                 "timestamp": datetime.now(timezone.utc).isoformat(),
@@ -297,13 +347,24 @@ def main():
             save_json_atomic(out_dir / "metadata.json", metadata)
             failures.pop(item_id, None)
             done += 1
+            if it["policy"]["override"]:
+                generated_overrides.append(it)
             print(f"[{done}/{len(todo)}] {item_id}: {len(verts):,} verts, "
                   f"{n_gaussians:,} gaussians, {t_total:.0f}s ({bake_backend})")
         except Exception as e:
             failures[item_id] = {"error": str(e), "at": datetime.now(timezone.utc).isoformat()}
             print(f"[{done}/{len(todo)}] {item_id} FAILED: {e}")
+            # Drop half-written transients so a 10K run cannot accumulate them.
+            for stale in out_dir.glob(f".{item_id}.tmp.*"):
+                stale.unlink(missing_ok=True)
         finally:
             save_json_atomic(failures_path, failures)
+
+    if generated_overrides:
+        path = content_policy.record_overrides(generated_overrides,
+                                              phase="mesh_gen")
+        print(f"** {len(generated_overrides)} mesh(es) generated under a policy "
+              f"override; logged to {path}")
 
     print(f"finished: {done} meshes, {len(failures)} failures")
 

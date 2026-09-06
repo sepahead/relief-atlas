@@ -9,6 +9,36 @@ PROJECT_DIR = Path(__file__).resolve().parents[2]
 MANIFEST_DIR = PROJECT_DIR / "manifests"
 OUTPUT_DIR_NAME = "outputs_relief"
 
+# 3DGS containers the mesh phase can emit, most-preferred first. Every place
+# that counts, completes or cleans a 3DGS output must read this list. It lives
+# here, in the one dependency-free module every script already imports, because
+# the alternative has already cost us a bug: run_forever.sh kept a private copy
+# that said `.ply`, so when the condensed export switched to .spz/.splat its
+# "meshes pending" count could never reach zero and the unattended multi-day
+# driver looped forever without producing anything.
+GS_EXTENSIONS = ("spz", "splat", "ply")
+
+
+def has_gaussians(item_dir, item_id: str) -> bool:
+    """Whether any recognised 3DGS container exists for an item."""
+    d = Path(item_dir)
+    return any((d / f"{item_id}.{ext}").exists() for ext in GS_EXTENSIONS)
+
+
+def mesh_complete(item_dir, item_id: str, min_glb_bytes: int = 1024) -> bool:
+    """Whether an item has a full mesh deliverable: GLB + 3DGS + metadata.
+
+    Shared by the mesh phase's resume check, the progress report and the
+    unattended driver, so "done" means the same thing to all three.
+    """
+    d = Path(item_dir)
+    glb = d / f"{item_id}.glb"
+    return (
+        glb.exists() and glb.stat().st_size > min_glb_bytes
+        and has_gaussians(d, item_id)
+        and (d / "metadata.json").exists()
+    )
+
 MANIFESTS = {
     "germany": "relief_manifest_germany.json",
     "eu": "relief_manifest_eu.json",
@@ -188,6 +218,18 @@ VARIANT_BLOCKS = [
 
 SURFACE_RE = re.compile(r"The surface (?:shows|is) ([^.:]+): ([^.]*)\.")
 
+# Variation clauses that describe finish/wear. A manifest prompt usually
+# already carries its own "The surface is/shows ..." sentence, so appending
+# one of these on top produced self-contradicting prompts such as "pristine
+# factory-new: no scratches" followed by "heavy weathering: rain stains,
+# scuffed edges". FLUX resolves that by splitting the difference, which is
+# neither state. Detecting the overlap lets the per-item clause win outright.
+WEAR_CLAUSE_RE = re.compile(
+    r"\b(?:factory finish|recently-repainted|pristine|weather(?:ed|ing)?|"
+    r"wear|scratch(?:es|ed)?|scuff(?:ed|s)?|faded|sun-bleached|oxidi[sz]ed|"
+    r"rain stain|mud splatter|chipped paint|grime|dusted|dust settled|"
+    r"touch-up|freshly-broken|soot|clean factory)\b", re.I)
+
 NEUTRAL_SURFACE = {
     "factory-new": "The surface is pristine factory-new: clean intact finish, no scratches or damage.",
     "post-deployment": "The surface shows heavy post-deployment wear: mud and grime caked in "
@@ -286,7 +328,13 @@ def clean_prompt(prompt: str, item_id: str | None = None) -> str:
     # Shared-subject rows get one deterministic appearance variation so the
     # dataset does not collapse to N near-identical assets.
     if item_id and _subject_counts().get(subject, 0) > 1:
-        p = f"{p.rstrip('. ')}. {_variation_clause(subject, item_id)}"
+        clause = _variation_clause(subject, item_id)
+        # Both the manifest sentence and the variation clause describe the
+        # finish: drop the generic manifest one so they cannot contradict.
+        # The variation clause is the per-item signal, so it wins.
+        if WEAR_CLAUSE_RE.search(clause):
+            p = SURFACE_RE.sub("", p)
+        p = f"{p.rstrip('. ').strip()}. {clause}"
 
     framing = FRAMINGS[stable_hash(item_id or prompt) % len(FRAMINGS)]
     p = re.sub(r"\s+", " ", p).strip()

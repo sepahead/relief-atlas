@@ -6,14 +6,23 @@
 #   - FLUX.2 [klein] 4B is Apache-2.0 (public download)
 #   - TRELLIS.2-4B + TRELLIS-image-large ss_dec checkpoint are MIT (public)
 #   - DINOv3-vitl16 is downloaded once into the HF cache by TRELLIS setup
+#   - BiRefNet (MIT) is the primary matting model
+#   - Falconsai/nsfw_image_detection (Apache-2.0) backs the QA safety screen
 #   - RMBG-2.0 is bypassed entirely (inputs carry their own alpha)
+#
+# The last two are not optional extras. matting.py prefers BiRefNet and only
+# falls back to chroma hysteresis, and qa.py's NSFW guard is deliberately
+# fail-CLOSED: it raises if the detector is missing rather than passing images
+# through unscreened. A workspace without these weights therefore aborts in
+# phase 1.5 instead of quietly degrading, so setup has to fetch them.
 set -euo pipefail
 
-LOCAL_DIR="$(cd "$(dirname "$0")/../meshmaker/local" 2>/dev/null && pwd || true)"
-if [ -z "${LOCAL_DIR}" ]; then
-    REPO="$(cd "$(dirname "$0")/../.." && pwd)"
-    LOCAL_DIR="$REPO/meshmaker/local"
-fi
+# scripts/local/setup_local.sh -> repo root is two levels up. The previous
+# form probed "$(dirname $0)/../meshmaker/local", i.e. scripts/meshmaker/local,
+# which never exists, so it always fell through to the branch below.
+REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+LOCAL_DIR="$REPO_ROOT/meshmaker/local"
+IMG_PYTHON="$LOCAL_DIR/imgenv/bin/python"
 mkdir -p "$LOCAL_DIR/models"
 cd "$LOCAL_DIR"
 
@@ -54,14 +63,32 @@ if "TRELLIS-image-large" in m["sparse_structure_decoder"]:
     print("pipeline.json: sparse_structure_decoder -> local ckpts")
 EOF
 
-echo "=== 3/3 Environments ==="
-# Image-gen env (FLUX.2 via diffusers on MPS)
+echo "=== 3/5 BiRefNet (matting) ==="
+BIREFNET_DIR="$LOCAL_DIR/models/BiRefNet"
+if [ ! -f "$BIREFNET_DIR/model.safetensors" ]; then
+    # trust_remote_code model: the custom BiRefNet_config.py / birefnet.py in
+    # the repo are required, so take the whole snapshot rather than one file.
+    hf download ZhengPeng7/BiRefNet --local-dir "$BIREFNET_DIR"
+fi
+
+echo "=== 4/5 NSFW image detector (QA safety screen) ==="
+NSFW_DIR="$LOCAL_DIR/models/nsfw_image_detection"
+if [ ! -f "$NSFW_DIR/config.json" ]; then
+    hf download Falconsai/nsfw_image_detection --local-dir "$NSFW_DIR"
+fi
+
+echo "=== 5/5 Environments ==="
+# Image-gen env (FLUX.2 via diffusers on MPS).
+# scipy: connected-component labelling in matting.py and qa.py.
+# imagehash: near-duplicate subject detection in the image QA gate.
+# Both are hard imports on the phase-1/1.5 path, not optional.
 if [ ! -x imgenv/bin/python ]; then
     uv venv imgenv --python python3.12
 fi
 UV_HTTP_TIMEOUT=1200 uv pip install --python imgenv/bin/python \
     torch torchvision numpy pillow accelerate safetensors \
-    huggingface_hub transformers diffusers
+    huggingface_hub transformers diffusers \
+    scipy imagehash
 
 # Mesh env (trellis-mac port: venv + Metal backends + patches)
 if [ ! -d trellis-mac ]; then
@@ -70,6 +97,61 @@ fi
 cd trellis-mac
 UV_HTTP_TIMEOUT=1200 bash setup.sh
 
+# .spz container support (official Niantic binding, github.com/nianticlabs/spz).
+# Optional: if the build fails or is skipped, the mesh phase still runs and
+# emits the universal .splat (32 B/splat) alone. Never install `spz` from PyPI
+# as a substitute: that is a third-party Rust port whose __init__ and API are
+# both broken (the exporter treats it as missing and falls back to .splat).
+TRELLIS_PY="$LOCAL_DIR/trellis-mac/.venv/bin/python"
+if ! "$TRELLIS_PY" -c "import spz" >/dev/null 2>&1; then
+    if UV_HTTP_TIMEOUT=1200 uv pip install --python "$TRELLIS_PY" \
+        "spz @ git+https://github.com/nianticlabs/spz.git"; then
+        echo "spz: Niantic binding installed (.spz + .splat per item)"
+    else
+        echo "spz: build failed -- exporting .splat only (optional feature)" >&2
+    fi
+fi
+
+# MLX: Apple-silicon on-device GPU stack (no cloud, no API keys). Used by the
+# local pipeline tooling for matrix-heavy steps; like spz it is optional and
+# a failed install must not abort setup.
+if ! "$TRELLIS_PY" -c "import mlx.core" >/dev/null 2>&1; then
+    if UV_HTTP_TIMEOUT=1200 uv pip install --python "$TRELLIS_PY" mlx; then
+        echo "mlx: installed (on-device Apple GPU acceleration)"
+    else
+        echo "mlx: install failed -- continuing CPU/MPS only (optional)" >&2
+    fi
+fi
+
+echo
+echo "=== Verifying the workspace can run the gates ==="
+cd "$REPO_ROOT"
+python3 scripts/local/content_policy.py --selftest
+"$IMG_PYTHON" - <<'EOF'
+import importlib.util
+import sys
+from pathlib import Path
+
+missing = [m for m in ("numpy", "PIL", "scipy", "imagehash", "transformers")
+           if importlib.util.find_spec(m) is None]
+models = Path("meshmaker/local/models")
+absent = [name for name, probe in (
+    ("FLUX.2-klein-4B", "transformer"),
+    ("TRELLIS.2-4B", "ckpts"),
+    ("BiRefNet", "config.json"),
+    ("nsfw_image_detection", "config.json"),
+) if not (models / name / probe).exists()]
+
+print("imgenv packages missing:", missing or "none")
+print("model weights missing:  ", absent or "none")
+# The NSFW guard is fail-closed, so a missing detector is a hard setup failure
+# rather than a warning: the pipeline would abort in phase 1.5 regardless.
+# spz is intentionally NOT required: the mesh phase falls back to .splat-only.
+sys.exit(1 if missing or absent else 0)
+EOF
+
 echo
 echo "Workspace ready."
-echo "Smoke test:  python3 scripts/local/run_all.py --limit 2"
+echo "Smoke test:      python3 scripts/local/run_all.py --limit 2"
+echo "Policy audit:    python3 scripts/local/content_policy.py --report"
+echo "Progress:        python3 scripts/local/verify_local.py"

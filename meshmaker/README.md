@@ -1,54 +1,47 @@
-# meshmaker — QUARANTINED (not part of the canonical prisoma repo)
+# meshmaker — untracked working directory
 
-This directory held cost-bearing, external asset-generation tooling (3D mesh /
-asset generation via paid cloud APIs, batch/swarm launchers, and associated
-prompts). It is **not** part of the prisoma scientific core — the estimators, run
-log, bridge, sim, harnesses, and experiments — and has been **quarantined out of
-version control**.
+This directory is **not** part of the committed relief-atlas source. `.gitignore`
+keeps everything under it out of version control except this note. It holds two
+unrelated things that both happen to be large, local-only, or sensitive:
 
-## What changed
+## 1. The local model workspace (`meshmaker/local/`)
 
-- All `meshmaker/` scripts were removed from git tracking with `git rm --cached`
-  (the working-tree files are **kept on disk**; nothing local was deleted).
-- `.gitignore` now ignores everything under `meshmaker/` except this tombstone, so
-  a fresh clone of the canonical repo does not contain the tooling, its prompts, or
-  any generated output.
-- `meshmaker/api_keys.txt` was already untracked and ignored; it must live outside
-  the repository tree before any release (see the release checklist below).
+The on-device pipeline in `scripts/local/` reads its weights and virtualenvs
+from here:
 
-## Why
-
-The whole-repo review (`../REVIEW_AND_TODO.md`, Security/Governance perspective +
-P0 item 3) flagged this tooling as:
-
-- cost-bearing (paid generation APIs; a swarm launcher that can spawn many parallel
-  cloud jobs);
-- a secret-handling risk (`api_keys.txt` in the working tree);
-- containing asset prompts unrelated to — and potentially distracting from — the
-  prisoma diagnostics;
-
-and recommended isolating it from the canonical project and from all lint / test /
-release claims. (`grandplan.md` §A.8 already records that meshmaker is not on the
-10-step critical path.)
-
-## If you need it
-
-The files are still on your disk under `meshmaker/` (just untracked). To develop it
-further, move it to its own repository, e.g.:
-
-```bash
-cp -r meshmaker ../meshmaker-standalone && (cd ../meshmaker-standalone && git init)
+```
+meshmaker/local/models/       ~38GB of weights (FLUX.2, TRELLIS.2, BiRefNet, NSFW detector)
+meshmaker/local/imgenv/       image-generation virtualenv (diffusers on MPS)
+meshmaker/local/trellis-mac/  upstream trellis-mac clone + its venv
+meshmaker/local/*.log         run logs
 ```
 
-To recover the previously tracked versions from history:
+None of this is committed, and none of it needs to be: `scripts/local/setup_local.sh`
+rebuilds the entire workspace from public model repositories, with no
+HuggingFace login required. If you are setting up a fresh clone, run that script
+rather than trying to recover anything from git history.
 
-```bash
-git log --oneline -- meshmaker/        # find a commit before the quarantine
-git checkout <commit> -- meshmaker/    # restore tracked files into the working tree
-```
+## 2. Legacy cloud generation tooling (`meshmaker/*.py`)
 
-## Release checklist (meshmaker)
+The batch/swarm launchers and manifests at the top level of this directory are
+the earlier **paid-API** generation pipeline (fal.ai / Runware), kept on disk for
+reference. They are untracked because they are:
 
-- [ ] `meshmaker/` is absent from the released source tree / wheels / app bundles.
-- [ ] `meshmaker/api_keys.txt` (and any credentials) live outside the repo tree.
-- [ ] No generated assets, prompts, or logs from `meshmaker/` ship in a release.
+- **cost-bearing** — the swarm launchers can fan out many parallel paid cloud
+  jobs, and a stray invocation spends real money;
+- **a credential risk** — they read an `api_keys.txt` from the working tree;
+- **superseded** — the maintained pipeline is the fully local one under
+  `scripts/local/`, which needs no API keys at all.
+
+`legacy_original_scripts/` contains the committed, reference-only subset of this
+same lineage.
+
+## Release checklist
+
+- [ ] `meshmaker/` is absent from any released source tree or archive.
+- [ ] No API keys (`api_keys.txt`, `config/api_keys.txt`) are inside the repo tree.
+- [ ] No generated assets or run logs from `meshmaker/` ship in a release.
+- [ ] Any asset stamped `policy.override = true` in its `metadata.json` is
+      deliberately included or deliberately removed — see the content policy
+      section of the top-level [README](../README.md) and
+      `state/content_policy_overrides.json`.
