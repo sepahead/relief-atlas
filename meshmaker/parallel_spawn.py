@@ -45,7 +45,7 @@ def load_keys():
         for line in f:
             line = line.strip()
             if line.startswith('#'):
-                # Extract name from comment (e.g., "# xerotropy" or "#sepehrmn")
+                # Extract name from comment (e.g., "# xerotropy" or "#sepahead")
                 name = line.lstrip('#').strip()
                 if name and not name.startswith('=') and not name.startswith('Add') and not name.startswith('Get') and not name.startswith('The') and not name.startswith('Paste') and not name.startswith('Example') and 'fal' not in name:
                     current_name = name

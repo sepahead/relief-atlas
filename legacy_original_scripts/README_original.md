@@ -130,5 +130,5 @@ This dataset is released under the **MIT License**.
 
 ## Links
 
-- **Author**: [github.com/sepehrmn](https://github.com/sepehrmn)
-- **Issues**: [github.com/sepehrmn/defense-meshes/issues](https://github.com/sepehrmn/defense-meshes/issues)
+- **Author**: [github.com/sepahead](https://github.com/sepahead)
+- **Issues**: [github.com/sepahead/defense-meshes/issues](https://github.com/sepahead/defense-meshes/issues)

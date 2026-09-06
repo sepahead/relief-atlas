@@ -207,7 +207,7 @@ metadata for licensing details.
 
 ## Sister Project
 
-**[cobot-atlas](https://github.com/sepehrmn/cobot-atlas)** — 2,000+ meshes for robot simulation, manipulation research, and embodied AI ([DOI: 10.5281/zenodo.20697491](https://doi.org/10.5281/zenodo.20697491)).
+**[cobot-atlas](https://github.com/sepahead/cobot-atlas)** — 2,000+ meshes for robot simulation, manipulation research, and embodied AI ([DOI: 10.5281/zenodo.20697491](https://doi.org/10.5281/zenodo.20697491)).
 
 ## Citation
 
@@ -219,6 +219,6 @@ If you use relief-atlas in your research, please cite:
   title     = {relief-atlas: 10K+ 3D Mesh Assets for Disaster Relief and Civil Protection},
   year      = {2026},
   publisher = {GitHub},
-  url       = {https://github.com/sepehrmn/relief-atlas}
+  url       = {https://github.com/sepahead/relief-atlas}
 }
 ```
