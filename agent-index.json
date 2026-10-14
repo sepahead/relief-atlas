@@ -1,0 +1,81 @@
+{
+  "schema": "sepahead.agent-index.v1",
+  "repository": "sepahead/relief-atlas",
+  "summary": "relief-atlas: the manifest of 10,079 disaster-relief, humanitarian-aid and civil-protection mesh items with pre-generated prompts, the cloud and on-device generation pipelines, their self-tests, and the metadata of 125 earlier meshes. AGENTS.md is the operating contract; this index restates its facts for tools.",
+  "entry_documents": [
+    {
+      "path": "AGENTS.md",
+      "role": "operating contract for agents"
+    },
+    {
+      "path": "README.md",
+      "role": "dataset overview, pipelines, content policy and setup"
+    },
+    {
+      "path": "CITATION.cff",
+      "role": "citation"
+    }
+  ],
+  "delivery": {
+    "default_branch": "main",
+    "merge": "Commit documentation changes and push to main after the gates pass; change the pipeline only on the owner's request.",
+    "signing": "follows the committer's configuration; not required",
+    "attribution": "no AI attribution, co-author trailers or generated-by lines",
+    "owner_only": [
+      "release",
+      "tag",
+      "citation record",
+      "dataset publication",
+      "repository setting change"
+    ]
+  },
+  "gates": [
+    {
+      "id": "pipeline-tests",
+      "when": "scripts/, meshmaker/, tests/ or a manifest changes",
+      "command": "python3 -m unittest discover -s tests",
+      "cost": "fast"
+    },
+    {
+      "id": "agent-index",
+      "when": "agent-index.json or a path it names changes",
+      "command": "python3 scripts/check_agent_index.py",
+      "cost": "fast"
+    },
+    {
+      "id": "diff-hygiene",
+      "when": "any change",
+      "command": "git diff --check",
+      "cost": "fast"
+    }
+  ],
+  "generated": [],
+  "frozen": [
+    {
+      "path": "manifests/",
+      "reason": "item definitions and pre-generated prompts; change only on the owner's request"
+    },
+    {
+      "path": "outputs_relief/",
+      "reason": "metadata of earlier generated meshes; do not rewrite"
+    },
+    {
+      "path": "legacy_original/",
+      "reason": "metadata of the first generation run; do not rewrite"
+    },
+    {
+      "path": "legacy_original_scripts/",
+      "reason": "earlier generation scripts kept for reference"
+    }
+  ],
+  "ecosystem": [
+    {
+      "repository": "sepahead/crebain",
+      "relation": "asset source for future simulation scenes; no scene uses them yet"
+    },
+    {
+      "repository": "sepahead/cobot-atlas",
+      "relation": "sibling mesh dataset for robot simulation"
+    }
+  ]
+}
