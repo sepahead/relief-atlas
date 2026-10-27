@@ -1,0 +1,119 @@
+{
+  "version": 1,
+  "purpose": "Geometry and visual-reference evidence for prompt design. Examples are not claims that a generated asset is a measured replica.",
+  "sources": {
+    "freefly_alta8_manual": {
+      "publisher": "Freefly Systems",
+      "url": "https://freeflysystems.com/wp-content/uploads/2024/09/ALTA8_Manual_RevC_01.pdf",
+      "kind": "manufacturer_manual",
+      "reviewed_at": "2026-10-26",
+      "visual_review": "Manufacturer cover illustration and specification page 16 inspected; eight motors are documented. The flat multi-boom configuration is a layout example, not a claim that the cargo-drone asset is an ALTA product.",
+      "local_source_sha256": "67fcde08e9cf9653581d601631f60a85b799725d1157a5646b805eb90d428aeb",
+      "scope": "Eight-motor radial-layout example; not applicable to coaxial quad layouts or every unnamed UAV."
+    },
+    "dji_flycart30": {
+      "publisher": "DJI",
+      "url": "https://www.dji.com/media-center/announcements/dji-launch-fly-cart-30",
+      "kind": "manufacturer_description",
+      "reviewed_at": "2026-10-26",
+      "visual_review": null,
+      "scope": "FlyCart 30 uses four coaxial axes with eight rotors. Eight rotors must not be interpreted as eight arms."
+    },
+    "dji_m350": {
+      "publisher": "DJI",
+      "url": "https://enterprise.dji.com/matrice-350-rtk/specs",
+      "kind": "manufacturer_specifications",
+      "reviewed_at": "2026-10-26",
+      "visual_review": null,
+      "scope": "Matrice 350 RTK only. A generic Matrice family label does not establish this particular airframe."
+    },
+    "franka_hand": {
+      "publisher": "Franka Robotics",
+      "url": "https://franka.de/de/franka-hand",
+      "kind": "manufacturer_product",
+      "reviewed_at": "2026-10-26",
+      "visual_review": "Official product photograph inspected: compact white housing with two opposed fingers and dark fingertips, separate from the robot arm.",
+      "scope": "Franka Hand/Panda parallel end-effector form; retain the authored model and requested finger configuration."
+    },
+    "ti_package_families": {
+      "publisher": "Texas Instruments",
+      "url": "https://www.ti.com/design-development/packaging/find-packages.html",
+      "kind": "manufacturer_package_reference",
+      "reviewed_at": "2026-10-26",
+      "visual_review": "Official package gallery inspected, including the distinct DIP lead rows, BGA underside balls and LGA contact lands.",
+      "scope": "Package-family geometry. Derive the requested pin count from the item; do not invent a package drawing, pitch or footprint."
+    },
+    "lanco_azf": {
+      "publisher": "LANCO",
+      "url": "https://www.lanco-tents.com/products/tents/inflatable-tents/azf",
+      "kind": "manufacturer_product",
+      "reviewed_at": "2026-10-26",
+      "visual_review": "Official white shelter photo inspected: opaque continuous skin, defined entrance and side windows. Product description specifies inflatable main arches and possible aluminium spacers.",
+      "scope": "Inflatable medical-shelter example; not evidence that an aluminium-frame tent has inflatable arches."
+    },
+    "unhcr_family_tent": {
+      "publisher": "UNHCR",
+      "url": "https://www.unhcr.org/in/sites/en-in/files/2025-02/family-tent-eco-design_1.pdf",
+      "kind": "humanitarian_procurement_specification",
+      "reviewed_at": "2026-10-26",
+      "visual_review": "Official general-view floor-plan drawing inspected: rectangular main floor and a separate vestibule at each end. The source explicitly covers the eco-design version without logos.",
+      "scope": "Family tent with 16 square metres of main floor plus two vestibules. Preserve the selected specification; other family tents can use other frames."
+    },
+    "sprinter_ambulance": {
+      "publisher": "Mercedes-Benz Conversion World",
+      "url": "https://conversion-world.mercedes-benz.com/en/GLOBAL/partner-produkt/12075/sprinter-ambulance",
+      "kind": "manufacturer_partner_product",
+      "reviewed_at": "2026-10-26",
+      "visual_review": null,
+      "scope": "Sprinter 907/910 panel-van ambulance example. A family reference does not establish a French Red Cross fleet vehicle or a box-body conversion."
+    },
+    "luf60_operator": {
+      "publisher": "Hong Kong Fire Services Department",
+      "url": "https://www.hkfsd.gov.hk/eng/aboutus/gallery/equip/fire/c_luf60.html",
+      "kind": "operator_equipment_reference",
+      "reviewed_at": "2026-10-26",
+      "visual_review": "Operator gallery inspected: front and oblique photographs show the large round ventilator, protective fan grille, low red body and two continuous tracks.",
+      "scope": "LUF60 tracked vehicle with a large ventilator and water-fog system; not an ordinary wheeled fire engine."
+    },
+    "brokk170": {
+      "publisher": "Brokk",
+      "url": "https://www.brokk.com/product/brokk-170/",
+      "kind": "manufacturer_product",
+      "reviewed_at": "2026-10-26",
+      "visual_review": "Manufacturer product photograph inspected: compact tracked base, deployed stabilizers, connected articulated arm and hydraulic breaker. Generic Brokk rows retain their generic identity.",
+      "scope": "Compact tracked demolition robot with articulated tool arm. A Brokk family name alone does not identify the 170 model."
+    },
+    "lanco_sg200": {
+      "publisher": "LANCO",
+      "url": "https://www.lanco-tents.com/productpdf/download/file/id/88/name/Medical_and_Accommodation_Aluminum_Frame_Tents_-_SG_200.pdf",
+      "kind": "manufacturer_specification",
+      "reviewed_at": "2026-10-26",
+      "visual_review": "First-page manufacturer photograph inspected: pitched opaque fabric shelter, front gable entrance, rectangular window panels and continuous lower hem. The following text specifies the aluminium tube frame.",
+      "scope": "Modular medical/accommodation tent example with aluminium tube frame, gable entrance and opaque fabric. The SG200 dimensions do not define the generic large field hospital."
+    },
+    "franka_arm": {
+      "publisher": "Franka Robotics",
+      "url": "https://franka.de/franka-research-3-arm",
+      "kind": "manufacturer_arm_family_reference",
+      "reviewed_at": "2026-10-26",
+      "visual_review": "Official arm photographs inspected: connected white joint housings and links, mounting structure and separate end-effector. Product text specifies seven degrees of freedom.",
+      "scope": "Research3 documents seven arm axes; use as an arm-family reference, not an exact Panda product revision or a standalone Hand reference."
+    },
+    "ycb_examples": {
+      "publisher": "Yale-CMU-Berkeley benchmarking project",
+      "url": "https://www.ycbbenchmarks.com/object-models/",
+      "kind": "dataset_author_visual_examples",
+      "reviewed_at": "2026-10-26",
+      "visual_review": "Official collection photograph and mustard-bottle/power-drill model examples inspected. The group image distinguishes real packages, vessels, tools, fruit and toys; it does not establish that every manifest item is an exact YCB scan.",
+      "scope": "Collection examples only. Match an individual object and source model before claiming a dataset replica; generated geometry and authored dimensions are not dataset ground truth."
+    },
+    "nsk_bearing_types": {
+      "publisher": "NSK",
+      "url": "https://www.nsk.com/tools-resources/abc-bearings/bearing-basics0/",
+      "kind": "manufacturer_type_reference",
+      "reviewed_at": "2026-10-26",
+      "visual_review": "Official radial-bearing classification diagrams inspected, including deep-groove and angular-contact bearing sections and the start of the roller-bearing family diagram. Retain the authored specific bearing type.",
+      "scope": "Bearing rings, rolling elements and cages; distinguish radial versus thrust and balls versus rollers. No product size or load rating is inferred."
+    }
+  }
+}

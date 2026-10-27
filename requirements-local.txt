@@ -1,0 +1,28 @@
+# Dependencies for the LOCAL (on-device) pipeline's tooling and test suite.
+#
+# requirements.txt covers only the cloud generator (requests + fal-client), so
+# the documented `python3 -m unittest discover -s tests` had no install path at
+# all: it happened to work wherever numpy/PIL/trimesh were already present and
+# silently skipped tests wherever they were not.
+#
+# This file is deliberately NOT the generation stack. The heavy runtime (torch,
+# diffusers, transformers, the TRELLIS.2 port) lives in the two virtualenvs that
+# scripts/local/setup_local.sh builds, because those need pinned MPS-capable
+# builds and ~53GB of required weights. What is listed here is only what the
+# dependency-light tooling and the self-tests import:
+#
+#   numpy, pillow  — qa.py scoring, montages, container loaders
+#   scipy          — connected-component labelling in matting.py and qa.py
+#   imagehash      — near-duplicate subject detection in the image QA gate
+#   trimesh        — GLB loading and the mesh turntable silhouettes
+#
+# Install with:  pip install -r requirements-local.txt
+#
+# Needing none of these at all: content_policy.py, prompt_utils.py, pending.py
+# and release_manifest.py are stdlib-only on purpose, so policy audits, progress
+# accounting and the release gate run on a bare interpreter.
+numpy>=1.24
+pillow>=10.0
+scipy>=1.10
+imagehash>=4.3
+trimesh>=4.0

@@ -1,0 +1,17 @@
+# Qwen-Image-2.1 image generation and QA on MPS (Python 3.12).
+torch==2.13.0
+torchvision==0.28.0
+diffusers @ https://github.com/huggingface/diffusers/archive/578c9b2c6636ab2424a0e56186268b83623656b2.tar.gz
+transformers==5.18.0
+tokenizers==0.23.1
+accelerate==1.14.0
+huggingface-hub==1.32.0
+safetensors==0.8.0
+numpy==2.5.2
+pillow==12.3.0
+scipy==1.18.0
+imagehash==4.3.2
+timm==1.0.28
+kornia==0.8.3
+einops==0.8.2
+tqdm==4.70.0

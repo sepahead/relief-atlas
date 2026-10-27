@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "geographies": ["germany", "eu", "ukraine", "general"],
+  "ids": null,
+  "limit": null,
+  "output_dir": "outputs_relief",
+  "state_dir": "state",
+  "pipeline_type": "512",
+  "texture_size": 2048,
+  "mesh_steps": null,
+  "target_faces": 200000,
+  "gs_format": "spz",
+  "image_steps": 40,
+  "image_guidance": 1.0,
+  "image_size": 1024,
+  "structure_guides": true,
+  "guided_pipeline_type": "1024_cascade",
+  "disk_reserve_gb": 12,
+  "low_battery_percent": 15,
+  "resume_battery_percent": 25,
+  "max_item_attempts": 3,
+  "retry_seconds": 60
+}

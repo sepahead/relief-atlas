@@ -39,10 +39,20 @@ containers and metadata so the mesh phase regenerates with the perturbed seed.
 Verdicts land in state/qa_images.json / state/qa_meshes.json /
 state/qa_gaussians.json.
 
+Prune mode (any interpreter): drops QA state that no longer describes anything
+live -- verdicts from a retired QA contract, the retry counters those verdicts
+charged (which permanently perturb the per-item seed), and failure-ledger
+entries for items that have since completed. Reports unless given --apply.
+
+Verdicts are stamped with prompt_utils.QA_VERSION and consumed through
+certified(), so a pass issued by a retired threshold never lets an item skip the
+gate that runs today.
+
 Run with:
     imgenv/bin/python scripts/local/qa.py --mode images
     trellis-mac/.venv/bin/python scripts/local/qa.py --mode meshes
     trellis-mac/.venv/bin/python scripts/local/qa.py --mode gaussians
+    python3 scripts/local/qa.py --mode prune [--apply]
 """
 
 import argparse
@@ -59,17 +69,22 @@ from PIL import Image
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import content_policy  # noqa: E402
 from prompt_utils import (  # noqa: E402
-    GS_EXTENSIONS, MANIFESTS, PROJECT_DIR, load_manifest,
+    GS_EXTENSIONS, MANIFESTS, OUTPUT_DIR, PROJECT_DIR, QA_VERSION, STATE_DIR,
+    current_verdicts, load_manifest, mesh_complete, select_manifest_items,
+    verdict_is_current,
 )
-
-OUTPUT_DIR = PROJECT_DIR / "outputs_relief"
-STATE_DIR = PROJECT_DIR / "state"
+from pipeline_utils import artifact_fingerprints, verdict_matches  # noqa: E402
 
 # Image thresholds
 FG_MIN, FG_MAX = 0.03, 0.75          # object coverage of frame
 MAIN_PART_MIN = 0.90                 # largest connected component share of fg
 BORDER_TOUCH_MAX = 0.02              # fraction of perimeter pixels that are fg
-SHARPNESS_MIN = 55.0                 # Laplacian variance on masked gray
+FRAME_MARGIN_MIN = 0.005            # foreground bounds need 0.5% clearance on every side
+# Mean squared gradient magnitude over the masked (foreground-only) gray image.
+# Named for the quantity, not for "Laplacian variance": this is a first-order
+# gradient-energy measure, and calling it a Laplacian variance made the
+# threshold impossible to reason about against the usual published values.
+SHARPNESS_MIN = 55.0
 DUP_HAMMING = 6                      # phash distance for near-duplicate flag
 NSFW_THRESHOLD = 0.50
 MAX_QA_RETRIES = 3                   # regeneration attempts before quarantine
@@ -138,21 +153,78 @@ def select_items(args):
     """The items this QA pass covers, honouring the same scoping as the phases.
 
     qa.py used to always walk all 10,079 rows, so `run_all.py --limit 2` still
-    re-examined the entire corpus. The selection flags mirror flux_imagegen so
+    re-examined the entire corpus. The selection flags mirror qwen_imagegen so
     the orchestrator can forward one set of arguments.
     """
-    if args.ids:
-        wanted = set(args.ids)
-        return [it for it in all_items() if it["id"] in wanted]
-    items = all_items(args.geographies)
-    items = content_policy.select_tier(items, args.only_policy)
-    if args.limit:
-        items = items[: args.limit]
-    return items
+    return select_manifest_items(getattr(args, "geographies", None),
+                                 getattr(args, "ids", None),
+                                 getattr(args, "limit", None),
+                                 getattr(args, "only_policy", None))
 
 
 def load_json(path):
     return json.loads(path.read_text()) if path.exists() else {}
+
+
+def report_stale_verdicts(path, verdicts):
+    """Say how much of a ledger predates the current QA contract.
+
+    Reports only. The ledger is deliberately NOT filtered here: these files are
+    loaded, added to and written back, so dropping entries on load would make
+    every ordinary run silently perform the deletion that `--mode prune --apply`
+    exists to do explicitly. Worse, it would be unrecoverable -- a stale verdict
+    is only re-derived if the artifact still exists, and for the 57 items whose
+    PNGs the gate already wiped there is nothing left to re-measure.
+
+    Staleness is enforced at the point of USE instead, by certified().
+    """
+    stale = len(verdicts) - len(current_verdicts(verdicts))
+    if stale:
+        print(f"{Path(path).name}: {stale} verdict(s) predate QA contract "
+              f"v{QA_VERSION} and will be re-judged "
+              f"(clear them with --mode prune --apply)")
+
+
+def certified(verdict) -> bool:
+    """A stored PASS that the QA contract running today actually produced.
+
+    Absent, stale and failing verdicts are the same answer, so a certification
+    issued by a retired threshold can never let an item skip the live gate.
+    """
+    return bool(verdict_is_current(verdict) and verdict.get("pass"))
+
+
+def mesh_failure_action(reasons, no_wipe: bool) -> str:
+    """What to do with a mesh that failed QA: "wipe" or "keep".
+
+    Every failure wipes, as in the gaussian pass. This is a named function so a
+    test can pin the rule, because the bug it replaces was invisible: a prefix
+    tuple ("white slab", "magenta", "empty", "load error") matched four of the
+    seven reasons mesh_pass and mesh_view_reasons can emit, so an aspect,
+    dim_ratio or view-consistency failure left the rejected GLB and its metadata
+    on disk -- and prompt_utils.mesh_complete() then reported it as a finished
+    deliverable.
+    """
+    if not reasons:
+        return "keep"
+    return "keep" if no_wipe else "wipe"
+
+
+def justified_retries(retries: dict, current_ids, quarantine) -> dict:
+    """The retry counters that some live record still justifies.
+
+    A counter feeds `item_seed(id) + 7919 * retries`, so an obsolete charge moves
+    an item permanently off its deterministic seed. Only a current-contract
+    verdict or an active quarantine entry justifies keeping one.
+    """
+    keep = set(current_ids) | set(quarantine)
+    return {k: v for k, v in retries.items() if k in keep}
+
+
+def stamp(verdict: dict) -> dict:
+    """Tag a verdict with the QA contract that produced it."""
+    verdict["qa_version"] = QA_VERSION
+    return verdict
 
 
 def save_json(path, data):
@@ -181,6 +253,7 @@ def quarantine_if_exhausted(retries, quarantine, item_id, reasons) -> bool:
     if bump_retry(retries, item_id):
         return False
     quarantine[item_id] = {
+        "qa_version": QA_VERSION,
         "reasons": reasons,
         "retries": retries[item_id],
         "at": datetime.now(timezone.utc).isoformat(),
@@ -208,11 +281,17 @@ def image_scores(png: Path):
     fg = alpha > 0.5
     h, w = fg.shape
     perimeter = np.concatenate([fg[0], fg[-1], fg[:, 0], fg[:, -1]])
+    ys, xs = np.nonzero(fg)
+    margin = min(xs.min() / w, (w - 1 - xs.max()) / w,
+                 ys.min() / h, (h - 1 - ys.max()) / h) if len(xs) else 0.0
 
+    # Gradient energy inside the matte only: measuring the whole frame would
+    # score the flat backdrop, which is uniform by construction and would drag
+    # every image below any useful threshold.
     gray = rgba[..., :3].mean(axis=-1)
     gy, gx = np.gradient(gray)
-    lap = gx**2 + gy**2
-    sharpness = float(lap[fg].mean()) if fg.any() else 0.0
+    grad_energy = gx**2 + gy**2
+    sharpness = float(grad_energy[fg].mean()) if fg.any() else 0.0
 
     try:
         import imagehash
@@ -224,6 +303,7 @@ def image_scores(png: Path):
         "fg_fraction": round(float(fg.mean()), 4),
         "main_part_share": round(largest_component_share(fg), 4),
         "border_touch": round(float(perimeter.mean()), 4),
+        "frame_margin": round(float(margin), 4),
         "sharpness": round(sharpness, 1),
         "phash": phash,
     }
@@ -237,6 +317,8 @@ def image_pass(scores, category_peers):
         reasons.append(f"fragmented matte {scores['main_part_share']}")
     if scores["border_touch"] > BORDER_TOUCH_MAX:
         reasons.append(f"touches border {scores['border_touch']}")
+    elif scores.get("frame_margin", 1.0) < FRAME_MARGIN_MIN:
+        reasons.append(f"touches border (foreground margin {scores['frame_margin']})")
     if scores["sharpness"] < SHARPNESS_MIN:
         reasons.append(f"blurry {scores['sharpness']}")
     if scores.get("phash") and category_peers:
@@ -288,11 +370,21 @@ def wipe_image(d: Path, item_id: str):
     (d / f"{item_id}.png").unlink(missing_ok=True)
     (d / f"{item_id}.raw.jpg").unlink(missing_ok=True)
     (d / f"{item_id}.debug.png").unlink(missing_ok=True)
+    (d / "image_meta.json").unlink(missing_ok=True)
+    # A new reference cannot certify geometry decoded from the rejected one.
+    wipe_mesh(d, item_id)
+
+
+def image_peer_hashes(peers, category, item_id):
+    """Never compare an image with its own cached perceptual hash."""
+    return [value for peer_id, value in peers.get(category, {}).items()
+            if peer_id != item_id]
 
 
 def run_images(args):
     items = select_items(args)
     verdicts = load_json(STATE_DIR / "qa_images.json")
+    report_stale_verdicts(STATE_DIR / "qa_images.json", verdicts)
     retries = load_json(STATE_DIR / "qa_retries.json")
     quarantine = load_json(STATE_DIR / "qa_quarantine.json")
 
@@ -323,12 +415,16 @@ def run_images(args):
     else:
         guard = NsfwGuard()
 
-    # peer phashes per category for duplicate detection among ALREADY-passed items
+    # Compare against certified live images across the corpus, including other
+    # batches. Keys preserve identity so a rescan cannot match itself. Hashes
+    # attached to missing or replaced PNGs are not valid duplicate references.
     peers = {}
-    for it in items:
+    for it in all_items():
         v = verdicts.get(it["id"])
-        if v and v.get("pass") and v.get("phash"):
-            peers.setdefault(it["category"], []).append(v["phash"])
+        d = OUTPUT_DIR / it["geography"] / it["category"] / it["id"]
+        if (v and v.get("phash")
+                and verdict_matches(v, d, it["id"], "images", require_nsfw=False)):
+            peers.setdefault(it["category"], {})[it["id"]] = v["phash"]
 
     n_fail = 0
     n_quarantined = 0
@@ -338,10 +434,10 @@ def run_images(args):
         if not png.exists():
             continue
         prev = verdicts.get(it["id"], {})
-        if prev.get("pass") and not args.rescan:
+        if verdict_matches(prev, d, it["id"], "images") and not args.rescan:
             continue
         s = image_scores(png)
-        reasons = image_pass(s, peers.get(it["category"], []))
+        reasons = image_pass(s, image_peer_hashes(peers, it["category"], it["id"]))
 
         policy_reason = policy_reasons.get(it["id"])
         if policy_reason:
@@ -354,22 +450,30 @@ def run_images(args):
                 reasons.append(f"NSFW {nsfw:.2f}")
 
         passed = not reasons
-        verdicts[it["id"]] = {
+        verdicts[it["id"]] = stamp({
             "pass": passed, **s,
             "nsfw": round(nsfw, 4) if nsfw is not None else None,
+            "nsfw_screened": guard is not None,
+            "artifacts": artifact_fingerprints(d, it["id"], "images"),
             "policy": it["policy"],
             "reasons": reasons,
             "at": datetime.now(timezone.utc).isoformat(),
-        }
+        })
         if passed:
             if s.get("phash"):
-                peers.setdefault(it["category"], []).append(s["phash"])
+                peers.setdefault(it["category"], {})[it["id"]] = s["phash"]
         else:
             n_fail += 1
+            peers.get(it["category"], {}).pop(it["id"], None)
+            if getattr(args, "no_wipe", False):
+                print(f"{it['id']}: FAIL {'; '.join(reasons)} (kept for review)")
+                save_json(STATE_DIR / "qa_images.json", verdicts)
+                continue
             if policy_reason and not _regenerable(reasons):
                 # Policy failures are inherent to the prompt: regenerating
                 # cannot help, and we do not delete existing artifacts.
                 quarantine[it["id"]] = {
+                    "qa_version": QA_VERSION,
                     "reasons": reasons, "retries": retries.get(it["id"], 0),
                     "at": datetime.now(timezone.utc).isoformat(),
                 }
@@ -402,11 +506,25 @@ def run_images(args):
 def glb_scores(glb_path: Path):
     import trimesh
     m = trimesh.load(glb_path, force="scene")
-    geoms = list(m.geometry.values()) if hasattr(m, "geometry") else [m]
+    if isinstance(m, trimesh.Scene):
+        geoms = []
+        for node in m.graph.nodes_geometry:
+            transform, name = m.graph[node]
+            geom = m.geometry[name].copy()
+            if isinstance(geom, trimesh.Trimesh):
+                geom.apply_transform(transform)
+                geoms.append(geom)
+    else:
+        geoms = [m]
+    if not geoms or not any(len(g.vertices) for g in geoms):
+        raise ValueError("empty mesh")
     verts = np.vstack([g.vertices for g in geoms])
+    if not np.isfinite(verts).all():
+        raise ValueError("non-finite mesh vertices")
     ext = verts.max(axis=0) - verts.min(axis=0)
-    footprint = float(np.prod(np.sort(ext)[:2]) ** 0.5) + 1e-9
-    aspect = float(ext[2] / footprint) if len(ext) == 3 else 1.0
+    # glTF uses +Y for height; the ground plane is XZ.
+    footprint = float((ext[0] * ext[2]) ** 0.5) + 1e-9
+    aspect = float(ext[1] / footprint)
 
     tex_white = tex_magenta = 0.0
     degenerate = 0.0
@@ -416,7 +534,8 @@ def glb_scores(glb_path: Path):
             if img is not None:
                 arr = np.asarray(img.convert("RGB"), dtype=np.float32)
                 white = np.all(arr > 240, axis=-1).mean()
-                mx = arr.max(axis=-1); mn = arr.min(axis=-1)
+                mx = arr.max(axis=-1)
+                mn = arr.min(axis=-1)
                 sat = (mx - mn) / (mx + 1e-6)
                 r, gr, b = arr[..., 0], arr[..., 1], arr[..., 2]
                 magenta = ((r > 120) & (b > 120) & (gr < 90) & (sat > 0.45)).mean()
@@ -435,6 +554,14 @@ def glb_scores(glb_path: Path):
     }, geoms
 
 
+def reference_white_fraction(png):
+    """White source objects are valid; white backdrop geometry is a regression."""
+    with Image.open(png) as image:
+        arr = np.asarray(image.convert("RGBA"))
+    foreground = arr[..., 3] > 200
+    return float(np.all(arr[..., :3][foreground] > 240, axis=-1).mean()) if foreground.any() else 0.0
+
+
 def mesh_pass(s):
     reasons = []
     if s["vertices"] == 0:
@@ -443,10 +570,13 @@ def mesh_pass(s):
         reasons.append(f"aspect {s['aspect']}")
     if s["dim_ratio"] > DIM_RATIO_MAX:
         reasons.append(f"dim_ratio {s['dim_ratio']}")
-    if s["tex_white"] > WHITE_TEX_MAX:
+    if (s["tex_white"] > WHITE_TEX_MAX
+            and s["tex_white"] > s.get("source_white_frac", 0.0) + 0.20):
         reasons.append(f"white slab? tex_white {s['tex_white']}")
     if s["tex_magenta"] > MAGENTA_TEX_MAX:
         reasons.append(f"magenta residue {s['tex_magenta']}")
+    if s.get("degenerate_frac", 0.0) > 0.01:
+        reasons.append(f"degenerate triangles {s['degenerate_frac']}")
     return reasons
 
 
@@ -467,6 +597,9 @@ def mesh_silhouettes(geoms, res=96):
     if len(mesh.faces) > MESH_RAY_MAX_FACES:
         mesh = mesh.simplify_quadric_decimation(MESH_RAY_DECIMATE)
     V = np.asarray(mesh.vertices, dtype=np.float64)
+    # The shared orbit rig is Z-up. Undo the GLB export's [x,z,-y]
+    # conversion so mesh and native-voxel splat views use the same rig.
+    V = V[:, [0, 2, 1]] * np.array([1.0, -1.0, 1.0])
     F = np.asarray(mesh.faces)
     center, radius = _obj_rig(V)
     focal = 1.5 * res
@@ -483,6 +616,8 @@ def mesh_silhouettes(geoms, res=96):
         good = np.isfinite(V).all(axis=1)      # legacy GLBs can carry NaNs
         img = Image.new("L", (res, res), 0)
         dr = ImageDraw.Draw(img)
+        mask_img = Image.new("L", (res, res), 0)
+        mask_draw = ImageDraw.Draw(mask_img)
         zmin = 0.05 * radius  # drop anything touching the camera plane
         keep = [k for k, (i0, i1, i2) in enumerate(F)
                 if good[i0] and good[i1] and good[i2]
@@ -491,12 +626,18 @@ def mesh_silhouettes(geoms, res=96):
             zf = np.array([z[F[k]].mean() for k in keep])
             lo, hi = float(zf.min()), float(zf.max())
             span = (hi - lo) or 1.0
-            for k, shade in zip(keep, (255 * (1 - (zf - lo) / span)).astype(int)):
+            # Coverage is independent of shading. The old preview painted
+            # unsorted depths over each other and used shade=0 as background,
+            # creating false holes and face-order-dependent measurements.
+            shades_for_faces = (64 + 191 * (1 - (zf - lo) / span)).astype(int)
+            for index in np.argsort(-zf, kind="stable"):
+                k, shade = keep[index], shades_for_faces[index]
                 i0, i1, i2 = F[k]
                 a, b, c = P[i0], P[i1], P[i2]
-                dr.polygon([(a[0], a[1]), (b[0], b[1]), (c[0], c[1])],
-                           fill=int(shade))
-        m = np.asarray(img) > 0
+                polygon = [(a[0], a[1]), (b[0], b[1]), (c[0], c[1])]
+                mask_draw.polygon(polygon, fill=255)
+                dr.polygon(polygon, fill=int(shade))
+        m = np.asarray(mask_img) > 0
         masks.append(m)
         shades.append(np.asarray(img))
     return masks, shades
@@ -516,26 +657,50 @@ def mesh_view_reasons(stats):
     return reasons
 
 
+def wipe_mesh(d: Path, item_id: str):
+    """Delete every mesh-phase artifact so the mesh phase regenerates the item
+    with the perturbed retry seed.
+
+    A partial wipe is worse than no wipe. This used to delete the GLB and the
+    3DGS containers for four of its reasons and nothing at all for the other
+    three (aspect, dim_ratio, inconsistent views), which left a rejected mesh on
+    disk with its metadata intact -- so prompt_utils.mesh_complete() reported it
+    as done, verify_local counted it, and a mesh the gate had just failed shipped
+    as though it had passed.
+    """
+    (d / f"{item_id}.glb").unlink(missing_ok=True)
+    for ext in GS_EXTENSIONS:
+        (d / f"{item_id}.{ext}").unlink(missing_ok=True)
+    (d / f"{item_id}.{GS_MONTAGE}").unlink(missing_ok=True)
+    (d / f"{item_id}.{MESH_MONTAGE}").unlink(missing_ok=True)
+    (d / "metadata.json").unlink(missing_ok=True)
+
+
 def run_meshes(args):
     # Mesh QA judges geometry that already exists, so it does not re-run the
     # policy gate; select_items only scopes which items it looks at.
     items = select_items(args)
     verdicts = load_json(STATE_DIR / "qa_meshes.json")
+    report_stale_verdicts(STATE_DIR / "qa_meshes.json", verdicts)
     retries = load_json(STATE_DIR / "qa_retries.json")
     quarantine = load_json(STATE_DIR / "qa_quarantine.json")
     n_fail = 0
     n_quarantined = 0
+    infrastructure_errors = []
     for it in items:
         d = OUTPUT_DIR / it["geography"] / it["category"] / it["id"]
         glb = d / f"{it['id']}.glb"
         if not glb.exists():
             continue
         prev = verdicts.get(it["id"], {})
-        if prev.get("pass") and not args.rescan:
+        if verdict_matches(prev, d, it["id"], "meshes") and not args.rescan:
             continue
         view_stats = {}
         try:
             s, geoms = glb_scores(glb)
+            png = d / f"{it['id']}.png"
+            if png.is_file():
+                s["source_white_frac"] = round(reference_white_fraction(png), 4)
             reasons = mesh_pass(s)
             try:
                 masks, shades = mesh_silhouettes(geoms)
@@ -544,31 +709,41 @@ def run_meshes(args):
                 write_view_montage(
                     shades,
                     d / f"{it['id']}.{MESH_MONTAGE}",
-                    f"{it['id']} mesh turntable", 128,
+                    f"{it['id']} silhouette/depth diagnostic", 128,
                     [str(i + 1) for i in range(len(masks))])
             except Exception as ve:
+                # A QA-infrastructure failure is not an asset defect, so it does
+                # not fail the item -- but it is recorded in the verdict and
+                # said out loud, because a silently unrendered turntable means
+                # the coverage and consistency gates did not actually run.
                 view_stats = {"view_error": str(ve)}
+                infrastructure_errors.append(f"{it['id']}: {ve}")
+                print(f"  warning: {it['id']} turntable did not render: {ve}")
         except Exception as e:
             s, reasons = {}, [f"load error: {e}"]
         passed = not reasons
-        verdicts[it["id"]] = {"pass": passed, **s, "reasons": reasons,
-                              "at": datetime.now(timezone.utc).isoformat()}
+        # view_stats is merged in: the turntable metrics behind the verdict used
+        # to be computed, used for the pass/fail decision, and then dropped on
+        # the floor, so qa_meshes.json recorded no coverage or iou at all and a
+        # verdict could not be audited after the fact.
+        verdicts[it["id"]] = stamp({"pass": passed, **s, **view_stats,
+                                    "artifacts": artifact_fingerprints(d, it["id"], "meshes"),
+                                    "reasons": reasons,
+                                    "at": datetime.now(timezone.utc).isoformat()})
         if not passed:
             n_fail += 1
-            if any(r.startswith(("white slab", "magenta", "empty", "load error"))
-                   for r in reasons):
-                # geometry-level regression: wipe mesh artifacts so the mesh
-                # phase retries with the perturbed seed. Every 3DGS container
-                # goes, otherwise a stale splat from the rejected geometry
-                # outlives the mesh it was decoded with.
-                (d / f"{it['id']}.glb").unlink(missing_ok=True)
-                for ext in GS_EXTENSIONS:
-                    (d / f"{it['id']}.{ext}").unlink(missing_ok=True)
-                if getattr(args, "no_wipe", False):
-                    continue
-                (d / f"{it['id']}.{GS_MONTAGE}").unlink(missing_ok=True)
-                (d / f"{it['id']}.{MESH_MONTAGE}").unlink(missing_ok=True)
-                (d / "metadata.json").unlink(missing_ok=True)
+            # The flag is consulted BEFORE any unlink. The previous order deleted
+            # the GLB and every 3DGS container first and only then honoured
+            # --no-wipe, so calibration mode destroyed exactly what it exists to
+            # preserve; the `continue` that followed also skipped the verdict
+            # print and save, losing the last failing item's verdict entirely.
+            if mesh_failure_action(reasons, getattr(args, "no_wipe", False)) == "wipe":
+                # Every failure is worth another decode, as in the gaussian pass.
+                # For reasons a fresh seed cannot fix (a genuinely tall object
+                # failing `aspect`) the retry budget runs out and the item lands
+                # in state/qa_quarantine.json for human review -- the correct
+                # terminal state, and the one the old partial wipe never reached.
+                wipe_mesh(d, it["id"])
                 if quarantine_if_exhausted(retries, quarantine, it["id"], reasons):
                     n_quarantined += 1
         print(f"{it['id']}: {'PASS' if passed else 'FAIL ' + '; '.join(reasons)}")
@@ -577,6 +752,8 @@ def run_meshes(args):
     save_json(STATE_DIR / "qa_quarantine.json", quarantine)
     print(f"mesh QA: {len(verdicts)} verdicts, {n_fail} new failures, "
           f"{n_quarantined} newly quarantined ({len(quarantine)} total)")
+    if infrastructure_errors:
+        raise RuntimeError("Mesh QA renderer failed; assets retained: " + "; ".join(infrastructure_errors))
 
 
 # ------------------------------------------------- 3DGS (spz/splat) mode
@@ -635,7 +812,7 @@ def _obj_rig(points):
 
 def _load_spz_gaussians(path):
     """Niantic binding: flat arrays, scales are logs, rotations xyzw,
-    colors RGB 0..1, alphas pre-sigmoid logits. Convert to the internal
+    colors are SH DC, alphas pre-sigmoid logits. Convert to the internal
     g dict (rotations wxyz, f_dc SH DC, opacity logit)."""
     import spz
     cloud = spz.load_spz(str(path))
@@ -644,13 +821,14 @@ def _load_spz_gaussians(path):
         raise ValueError(f"empty spz: {path}")
     pos = np.asarray(cloud.positions).reshape(n, 3)
     rot = np.asarray(cloud.rotations).reshape(n, 4)  # xyzw
-    rgb = np.asarray(cloud.colors).reshape(n, 3)
+    dc = np.asarray(cloud.colors).reshape(n, 3)
     return {
         "x": pos[:, 0], "y": pos[:, 1], "z": pos[:, 2],
+        "sh_degree": int(cloud.sh_degree),
         "scale": np.asarray(cloud.scales).reshape(n, 3).astype(np.float32),
         "rot": np.stack([rot[:, 3], rot[:, 0], rot[:, 1], rot[:, 2]],
                         axis=1).astype(np.float32),  # -> wxyz
-        "f_dc": ((np.clip(rgb, 0.0, 1.0) - 0.5) / SH_C0).astype(np.float32),
+        "f_dc": dc.astype(np.float32),
         "opacity": np.asarray(cloud.alphas).reshape(n, 1).astype(np.float32),
     }
 
@@ -670,9 +848,11 @@ def _load_splat_gaussians(path):
     rgb = buf[:, 24:27].astype(np.float32) / 255.0
     alpha = buf[:, 27].astype(np.float32) / 255.0
     alpha = np.clip(alpha, 1e-6, 1.0 - 1e-6)
+    with np.errstate(divide="ignore", invalid="ignore"):
+        log_scales = np.log(scl)
     return {
         "x": pos[:, 0], "y": pos[:, 1], "z": pos[:, 2],
-        "scale": np.log(np.clip(scl, 1e-8, None)),
+        "scale": log_scales,
         "rot": rot.astype(np.float32),
         "f_dc": ((rgb - 0.5) / SH_C0).astype(np.float32),
         "opacity": np.log(alpha / (1.0 - alpha)).reshape(n, 1).astype(np.float32),
@@ -704,7 +884,7 @@ def load_gaussians(item_dir, item_id):
 
     Returns (gaussians_dict, container_extension) or (None, None)."""
     d = Path(item_dir)
-    for ext in ("spz", "splat", "ply"):
+    for ext in GS_EXTENSIONS:
         p = d / f"{item_id}.{ext}"
         if not p.exists():
             continue
@@ -725,18 +905,22 @@ def gaussian_primitive_stats(g):
     finite = np.isfinite(pos).all(axis=1)
     nan_frac = float((~finite).mean())
 
-    scale = np.exp(np.clip(np.asarray(g["scale"], dtype=np.float32), -30, 30))
-    deg_frac = float(((~np.isfinite(scale)).any(axis=1)
-                      | (scale <= 0).any(axis=1)
+    log_scale = np.asarray(g["scale"], dtype=np.float32)
+    scale = np.exp(np.clip(log_scale, -30, 30))
+    deg_frac = float(((~np.isfinite(log_scale)).any(axis=1)
+                      | (scale < 1e-8).any(axis=1)
                       | (scale > 100).any(axis=1)).mean())
 
     alpha = 1.0 / (1.0 + np.exp(-np.clip(
         np.asarray(g["opacity"], dtype=np.float32).ravel(), -30, 30)))
-    dead_frac = float((alpha < 0.01).mean())
-    mean_alpha = float(alpha.mean())
+    dead_frac = float(((alpha < 0.01) | ~np.isfinite(alpha)).mean())
+    mean_alpha = float(np.nan_to_num(alpha, nan=0.0).mean())
 
     rgb = np.asarray(g["f_dc"], dtype=np.float32) * SH_C0 + 0.5
     col_frac = float((~np.isfinite(rgb)).any(axis=1).mean())
+    rot = np.asarray(g["rot"], dtype=np.float32)
+    rot_frac = float(((~np.isfinite(rot)).any(axis=1)
+                      | (np.linalg.norm(rot, axis=1) < 1e-6)).mean())
 
     stats = {
         "gaussians": int(len(pos)),
@@ -745,6 +929,7 @@ def gaussian_primitive_stats(g):
         "dead_frac": round(dead_frac, 5),
         "mean_opacity": round(mean_alpha, 4),
         "bad_color_frac": round(col_frac, 6),
+        "bad_rotation_frac": round(rot_frac, 6),
     }
     reasons = []
     if nan_frac > GS_NAN_TOL:
@@ -755,6 +940,8 @@ def gaussian_primitive_stats(g):
         reasons.append(f"dead splats {dead_frac:.2f}")
     if col_frac > GS_BAD_COLOR_MAX:
         reasons.append(f"bad colors {col_frac:.4f}")
+    if rot_frac > GS_NAN_TOL:
+        reasons.append(f"bad rotations {rot_frac:.4f}")
     return stats, reasons
 
 
@@ -773,6 +960,14 @@ def _rot_matrices_wxyz(quat):
                      1 - 2 * (x * x + y * y)], dim=1),
     ], dim=1)
     return r
+
+
+def gaussian_covariance(scale, quat):
+    """Rotate squared standard deviations into a world-space covariance."""
+    import torch
+    rotation = _rot_matrices_wxyz(quat)
+    scaled = rotation * scale.unsqueeze(1)
+    return torch.bmm(scaled, scaled.transpose(1, 2))
 
 
 def render_splat_views(g, res=GS_VIEW_RES, max_gaussians=GS_MAX_GAUSSIANS):
@@ -811,7 +1006,7 @@ def render_splat_views(g, res=GS_VIEW_RES, max_gaussians=GS_MAX_GAUSSIANS):
 
     center, radius = _obj_rig(pos)
     cams = _turntable_cameras(center, radius)
-    focal = float(GS_FOCAL)
+    focal = float(GS_FOCAL) * res / GS_VIEW_RES
     offs = [(dy, dx) for dy in range(-(GS_KERNEL // 2), GS_KERNEL // 2 + 1)
             for dx in range(-(GS_KERNEL // 2), GS_KERNEL // 2 + 1)]
 
@@ -819,9 +1014,7 @@ def render_splat_views(g, res=GS_VIEW_RES, max_gaussians=GS_MAX_GAUSSIANS):
     scale_t = torch.from_numpy(scale)
     rgb_t = torch.from_numpy(rgb)
     alpha_t = torch.from_numpy(alpha)
-    R = _rot_matrices_wxyz(torch.from_numpy(quat))
-    S = scale_t.unsqueeze(2) * R          # scale rows of R
-    cov3d = torch.bmm(S, R.transpose(1, 2))  # R diag(s)^2 R^T
+    cov3d = gaussian_covariance(scale_t, torch.from_numpy(quat))
 
     masks, weights, colours = [], [], []
     pix_area = res * res
@@ -833,7 +1026,8 @@ def render_splat_views(g, res=GS_VIEW_RES, max_gaussians=GS_MAX_GAUSSIANS):
         ok = (zc > 0.05) & (zc < 1e3) & torch.isfinite(dcam).all(dim=1)
         zc_safe = torch.clamp(zc, 0.05, None)
         u = focal * dcam[:, 0] / zc_safe + res / 2
-        v = focal * dcam[:, 1] / zc_safe + res / 2
+        # Camera up increases upward, while image rows increase downward.
+        v = -focal * dcam[:, 1] / zc_safe + res / 2
 
         # 2D screen covariance: top-left 2x2 of Rc cov3d Rc^T scaled by (f/z)^2.
         # @ broadcasts the 3x3 camera rotation against the (n,3,3) cloud.
@@ -894,7 +1088,6 @@ def enclosed_hole_frac(mask):
     border[:, -1] = bg[:, -1]
     frontier = set(zip(*np.nonzero(border)))
     interior = set(zip(*np.nonzero(bg))) - frontier
-    reachable = set(frontier)
     while frontier:
         nxt = set()
         for y, x in frontier:
@@ -1045,44 +1238,76 @@ def run_gaussians(args):
     regenerates; repeated failures quarantine the item."""
     items = select_items(args)
     verdicts = load_json(STATE_DIR / "qa_gaussians.json")
+    report_stale_verdicts(STATE_DIR / "qa_gaussians.json", verdicts)
     retries = load_json(STATE_DIR / "qa_retries.json")
     quarantine = load_json(STATE_DIR / "qa_quarantine.json")
     n_fail = 0
     n_quarantined = 0
+    infrastructure_errors = []
     for it in items:
         d = OUTPUT_DIR / it["geography"] / it["category"] / it["id"]
-        g, ext = load_gaussians(d, it["id"])
-        if g is None:
+        if not any((d / f"{it['id']}.{ext}").exists() for ext in GS_EXTENSIONS):
             continue
         prev = verdicts.get(it["id"], {})
-        if prev.get("pass") and not args.rescan:
+        if verdict_matches(prev, d, it["id"], "gaussians") and not args.rescan:
             continue
         view_stats = {}
-        montage_ok = False
+        ext = None
+        metadata = load_json(d / "metadata.json")
+        if ((d / f"{it['id']}.spz").exists()
+                and metadata.get("mesh_model") == "local/trellis.2-4b"
+                and metadata.get("gs_color_encodings", {}).get("spz") != "sh_dc"):
+            error = "SPZ colour encoding is unverified; repair the legacy export before certification"
+            verdicts[it["id"]] = stamp({"pass": False, "container": "spz", "view_error": error,
+                "reasons": [error], "artifacts": artifact_fingerprints(d, it["id"], "gaussians"),
+                "at": datetime.now(timezone.utc).isoformat()})
+            infrastructure_errors.append(f"{it['id']}: {error}")
+            n_fail += 1
+            save_json(STATE_DIR / "qa_gaussians.json", verdicts)
+            print(f"{it['id']}: NEEDS REPAIR: {error}")
+            continue
         try:
+            g, ext = load_gaussians(d, it["id"])
             prim_stats, reasons = gaussian_primitive_stats(g)
-            rendered = render_splat_views(g)
-            if rendered is None:
-                reasons.append("no renderable gaussians")
-            else:
-                masks, weights, colours = rendered
-                view_stats = silhouette_view_metrics(masks, weights, colours)
-                reasons += gaussians_view_reasons(view_stats)
-                labels = [f"{i+1}" for i in range(len(masks))]
-                write_view_montage(
-                    colours, d / f"{it['id']}.{GS_MONTAGE}",
-                    f"{it['id']} 3DGS turntable", GS_VIEW_RES, labels)
-                montage_ok = True
+            try:
+                rendered = render_splat_views(g)
+                if rendered is None:
+                    reasons.append("no renderable gaussians")
+                else:
+                    masks, weights, colours = rendered
+                    view_stats = silhouette_view_metrics(masks, weights, colours)
+                    view_stats["rendered_gaussians"] = min(len(g["x"]), GS_MAX_GAUSSIANS)
+                    # Removing most voxels can turn a dense, valid surface
+                    # into apparent holes. Confirm any sampled-render defect
+                    # against the complete cloud before charging a retry.
+                    if (gaussians_view_reasons(view_stats)
+                            and len(g["x"]) > GS_MAX_GAUSSIANS):
+                        masks, weights, colours = render_splat_views(g, max_gaussians=len(g["x"]))
+                        view_stats = silhouette_view_metrics(masks, weights, colours)
+                        view_stats.update(refined_render=True, rendered_gaussians=len(g["x"]))
+                    reasons += gaussians_view_reasons(view_stats)
+                    labels = [f"{i+1}" for i in range(len(masks))]
+                    write_view_montage(
+                        colours, d / f"{it['id']}.{GS_MONTAGE}",
+                        f"{it['id']} 3DGS turntable", GS_VIEW_RES, labels)
+            except Exception as exc:
+                view_stats = {"view_error": str(exc)}
+                infrastructure_errors.append(f"{it['id']}: {exc}")
+        except ImportError as exc:
+            prim_stats, reasons = {}, []
+            view_stats = {"view_error": str(exc)}
+            infrastructure_errors.append(f"{it['id']}: {exc}")
         except Exception as e:
             prim_stats = {}
             reasons = [f"load error: {e}"]
         passed = not reasons
-        verdicts[it["id"]] = {
+        verdicts[it["id"]] = stamp({
             "pass": passed, "container": ext,
+            "artifacts": artifact_fingerprints(d, it["id"], "gaussians"),
             **prim_stats, **view_stats,
             "reasons": reasons,
             "at": datetime.now(timezone.utc).isoformat(),
-        }
+        })
         if not passed:
             n_fail += 1
             if getattr(args, "no_wipe", False):
@@ -1100,11 +1325,102 @@ def run_gaussians(args):
     save_json(STATE_DIR / "qa_quarantine.json", quarantine)
     print(f"gaussians QA: {len(verdicts)} verdicts, {n_fail} new failures, "
           f"{n_quarantined} newly quarantined ({len(quarantine)} total)")
+    if infrastructure_errors:
+        raise RuntimeError("Gaussian QA infrastructure failed; assets retained: " + "; ".join(infrastructure_errors))
+
+
+# ----------------------------------------------------------------- prune mode
+
+def run_prune(args):
+    """Drop QA state that no longer describes anything live.
+
+    Three kinds of stale state accumulate over a long project, and all three
+    actively mislead:
+
+      * verdicts from an older QA contract (prompt_utils.QA_VERSION). Normal
+        passes already ignore these; this removes them from the ledger so the
+        counts in verify_local stop reporting failures nothing can act on.
+      * retry counters charged by those obsolete verdicts. This is the one that
+        matters: a retry counter permanently perturbs the per-item seed
+        (item_seed + 7919 * retries), so 61 items currently derive their seed
+        from rejections issued by a matting implementation that no longer
+        exists. That silently breaks the reproducibility the deterministic seed
+        exists to provide.
+      * failure-ledger entries for items that have since completed.
+
+    Reports by default; pass --apply to actually write.
+    """
+    changes = []
+
+    verdict_files = ("qa_images.json", "qa_meshes.json", "qa_gaussians.json")
+    keep_ids = set()
+    for name in verdict_files:
+        path = STATE_DIR / name
+        raw = load_json(path)
+        fresh = current_verdicts(raw)
+        keep_ids |= set(fresh)
+        if len(fresh) != len(raw):
+            changes.append((path, fresh,
+                            f"{len(raw) - len(fresh)} stale verdict(s) of "
+                            f"{len(raw)}"))
+
+    quarantine_path = STATE_DIR / "qa_quarantine.json"
+    old_quarantine = load_json(quarantine_path)
+    quarantine = current_verdicts(old_quarantine)
+    if len(quarantine) != len(old_quarantine):
+        changes.append((quarantine_path, quarantine,
+                        f"{len(old_quarantine) - len(quarantine)} obsolete quarantine entry(s)"))
+    retries = load_json(STATE_DIR / "qa_retries.json")
+    kept_retries = justified_retries(retries, keep_ids, quarantine)
+    if len(kept_retries) != len(retries):
+        changes.append((STATE_DIR / "qa_retries.json", kept_retries,
+                        f"{len(retries) - len(kept_retries)} unjustified retry "
+                        f"counter(s) of {len(retries)} (restores the "
+                        f"deterministic seed for those items)"))
+
+    by_id = {it["id"]: it for geo in MANIFESTS for it in load_manifest(geo)}
+
+    def item_dir(item_id):
+        it = by_id.get(item_id)
+        return (OUTPUT_DIR / it["geography"] / it["category"] / item_id
+                if it else None)
+
+    for name, done in (("local_image_failures.json",
+                        lambda d, i: (d / f"{i}.png").exists()),
+                       ("local_mesh_failures.json", mesh_complete)):
+        path = STATE_DIR / name
+        fails = load_json(path)
+        kept = {}
+        for item_id, entry in fails.items():
+            d = item_dir(item_id)
+            if d is None or not d.exists() or not done(d, item_id):
+                kept[item_id] = entry
+        if len(kept) != len(fails):
+            changes.append((path, kept,
+                            f"{len(fails) - len(kept)} failure(s) of "
+                            f"{len(fails)} for items that have since completed"))
+
+    if not changes:
+        print(f"prune: nothing stale (QA contract v{QA_VERSION})")
+        return
+    for path, _data, what in changes:
+        print(f"  {path.name}: {what}")
+    if not args.apply:
+        print("prune: report only — re-run with --apply to write")
+        return
+    for path, data, _what in changes:
+        save_json(path, data)
+    print(f"prune: applied to {len(changes)} ledger(s)")
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--mode", choices=["images", "meshes", "gaussians"], required=True)
+    ap.add_argument("--mode",
+                    choices=["images", "meshes", "gaussians", "prune"],
+                    required=True)
+    ap.add_argument("--apply", action="store_true",
+                    help="with --mode prune, write the pruned ledgers "
+                         "instead of only reporting")
     ap.add_argument("--geographies", nargs="*", default=None,
                     choices=list(MANIFESTS))
     ap.add_argument("--limit", type=int, default=None)
@@ -1122,7 +1438,7 @@ def main():
     args = ap.parse_args()
     STATE_DIR.mkdir(parents=True, exist_ok=True)
     {"images": run_images, "meshes": run_meshes,
-     "gaussians": run_gaussians}[args.mode](args)
+     "gaussians": run_gaussians, "prune": run_prune}[args.mode](args)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "models": {
+    "qwen": {
+      "repo_id": "Qwen/Qwen-Image-2.1",
+      "revision": "d26bb61231c349cf6b7896fa83353113880e1ba3",
+      "directory": "Qwen-Image-2.1",
+      "allow_patterns": ["model_index.json", "scheduler/*", "processor/*", "text_encoder/*", "transformer/*", "vae/*", "LICENSE*"],
+      "required": ["model_index.json", "scheduler/scheduler_config.json", "processor/preprocessor_config.json", "processor/tokenizer_config.json", "processor/tokenizer.json", "processor/chat_template.jinja", "text_encoder/config.json", "text_encoder/model.safetensors.index.json", "transformer/config.json", "transformer/diffusion_pytorch_model.safetensors.index.json", "vae/config.json"],
+      "weight_directories": ["text_encoder", "transformer", "vae"],
+      "checkpoint_sha256": {
+        "text_encoder/model-00001-of-00004.safetensors": "dde00291b5f7fb92013895310a3da0ddba78674df9f10d505d375243dc01fc6f",
+        "text_encoder/model-00002-of-00004.safetensors": "9047faccc0a6d98496a52d55f27be1c94a9c259d1e283fbea0128d054a948d42",
+        "text_encoder/model-00003-of-00004.safetensors": "8c54187654c0176b73ae73785bf791dc9a14c9df7fb4310083a09d42048cb57e",
+        "text_encoder/model-00004-of-00004.safetensors": "5311532aaaeae3259eb6a7b2c600636be1159adf7ded35f53579f7d0e7d43cdd",
+        "transformer/diffusion_pytorch_model-00001-of-00002.safetensors": "9e6bc2d641e67bf277895ea8777141044a38f3edb7101bc469b2961dd7c36b4b",
+        "transformer/diffusion_pytorch_model-00002-of-00002.safetensors": "3aaf234dcbe128530479735854a346b5e3e66283b7c11db56f836bbd1c13ebaa",
+        "vae/diffusion_pytorch_model.safetensors": "a07a1b7c4ee2966a1b3bdc37de9b4f983d56937e46619f709a80b6e490675417"
+      },
+      "weight_mirror": {
+        "repo_id": "Qwen/Qwen-Image-2.1",
+        "file_revisions": {
+          "text_encoder/model-00001-of-00004.safetensors": "6f1cd504c877d99559f9a3ced7dda142aae0323d",
+          "text_encoder/model-00002-of-00004.safetensors": "2156ab73fdb7b906f1cd6caede80a48fd3fef36b",
+          "text_encoder/model-00003-of-00004.safetensors": "2156ab73fdb7b906f1cd6caede80a48fd3fef36b",
+          "text_encoder/model-00004-of-00004.safetensors": "c3044be3c937b069766ffebdac6a2ca2c4167d48",
+          "transformer/diffusion_pytorch_model-00001-of-00002.safetensors": "359ec3f6ddda04d299fbfe4a2ceaddd0ff5e4d82",
+          "transformer/diffusion_pytorch_model-00002-of-00002.safetensors": "359ec3f6ddda04d299fbfe4a2ceaddd0ff5e4d82",
+          "vae/diffusion_pytorch_model.safetensors": "66d272689d7420e93994c642cbc35107b48f05eb"
+        }
+      }
+    },
+    "trellis": {
+      "repo_id": "microsoft/TRELLIS.2-4B",
+      "revision": "af44b45f2e35a493886929c6d786e563ec68364d",
+      "directory": "TRELLIS.2-4B",
+      "allow_patterns": ["pipeline.json", "ckpts/*", "LICENSE*"],
+      "required": ["pipeline.json"],
+      "weight_directories": ["ckpts"]
+    },
+    "decoder": {
+      "repo_id": "microsoft/TRELLIS-image-large",
+      "revision": "25e0d31ffbebe4b5a97464dd851910efc3002d96",
+      "directory": "TRELLIS.2-4B",
+      "allow_patterns": ["ckpts/ss_dec_conv3d_16l8_fp16.json", "ckpts/ss_dec_conv3d_16l8_fp16.safetensors"],
+      "required": ["ckpts/ss_dec_conv3d_16l8_fp16.json", "ckpts/ss_dec_conv3d_16l8_fp16.safetensors"],
+      "weight_directories": []
+    },
+    "dino": {
+      "repo_id": "facebook/dinov3-vitl16-pretrain-lvd1689m",
+      "revision": "ea8dc2863c51be0a264bab82070e3e8836b02d51",
+      "directory": "DINOv3-vitl16",
+      "allow_patterns": ["config.json", "model.safetensors", "LICENSE*"],
+      "required": ["config.json", "model.safetensors"],
+      "weight_directories": [],
+      "gated": true
+    },
+    "matting": {
+      "repo_id": "ZhengPeng7/BiRefNet",
+      "revision": "e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4",
+      "directory": "BiRefNet",
+      "allow_patterns": ["*.json", "*.py", "*.safetensors", "LICENSE*"],
+      "required": ["config.json", "model.safetensors", "BiRefNet_config.py", "birefnet.py"],
+      "weight_directories": ["."]
+    },
+    "nsfw": {
+      "repo_id": "Falconsai/nsfw_image_detection",
+      "revision": "96cb0d0342c7afb80cab76ecc58b265fa44da256",
+      "directory": "nsfw_image_detection",
+      "allow_patterns": ["*.json", "*.safetensors", "pytorch_model.bin", "LICENSE*"],
+      "required": ["config.json", "preprocessor_config.json"],
+      "weight_directories": ["."]
+    }
+  }
+}

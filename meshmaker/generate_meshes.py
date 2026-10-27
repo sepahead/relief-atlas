@@ -26,6 +26,9 @@ from typing import Optional, List, Dict, Any, Tuple
 from datetime import datetime
 
 # Use official fal_client
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts/local"))
+from generation_prompts import normalize_generation_prompt  # noqa: E402
+
 try:
     import fal_client
 except ImportError:
@@ -39,17 +42,8 @@ except ImportError:
 
 
 def enhance_image_prompt(base_prompt: str) -> str:
-    """Create prompt optimized for 3D conversion."""
-    enhancements = [
-        "single object centered in frame",
-        "pure white background",
-        "professional product photography",
-        "studio lighting",
-        "high resolution",
-        "sharp focus",
-        "isolated object",
-    ]
-    return f"{base_prompt}, {', '.join(enhancements)}"
+    """Use the shared reference recipe without contradictory style suffixes."""
+    return normalize_generation_prompt(base_prompt)
 
 
 # ============================================================================

@@ -1,10 +1,10 @@
-"""Export TRELLIS.2 decoded voxels as a 3D Gaussian Splatting PLY.
+"""Export TRELLIS.2 decoded voxels as Gaussian splat containers.
 
 TRELLIS.2 decodes to a mesh plus a sparse voxel grid of PBR attributes
 (MeshWithVoxel). There is no gaussian decoder in TRELLIS.2, so we convert the
 voxel grid directly: one gaussian per active voxel, centered in the voxel,
 sized to the voxel, colored by the decoded base color. The result is a
-standard INRIA-format 3DGS PLY that loads in any splat viewer.
+compact SPZ or universal SPLAT. The optional PLY writer uses the INRIA layout.
 """
 
 from pathlib import Path
@@ -12,6 +12,11 @@ from pathlib import Path
 import numpy as np
 
 C0 = 0.2820947917738949  # zeroth SH basis value
+
+
+def gltf_vertices(vertices):
+    """Rotate TRELLIS's Z-up vertices into glTF's Y-up coordinates."""
+    return np.asarray(vertices)[:, [0, 2, 1]] * np.array([1, 1, -1])
 
 
 def tmp_sibling(final_path) -> Path:
@@ -155,7 +160,7 @@ def write_splat(path: str, g: dict) -> int:
     buf[:, 24:28] = rgba
 
     # .splat wants (w,x,y,z); ours is identity (1,0,0,0) from voxels_to_gaussians
-    rot = np.clip(g["rot"][:, [3, 0, 1, 2]] * 128 + 128, 0, 255).astype(np.uint8)
+    rot = np.clip(g["rot"] * 128 + 128, 0, 255).astype(np.uint8)
     buf[:, 28:32] = rot
 
     with open(path, "wb") as f:
@@ -182,7 +187,7 @@ def write_spz(path: str, g: dict) -> int:
       positions  (n*3) xyz
       scales     (n*3) log scale -- voxels_to_gaussians already stores logs
       rotations  (n*4) xyzw    -- internal order is wxyz, so columns rotate
-      colors     (n*3) base RGB (SH DC), 0..1
+      colors     (n*3) SH DC coefficients; display RGB is 0.5 + C0 * DC
       alphas     (n,)  opacity BEFORE sigmoid -- voxels_to_gaussians stores
                  the inverse sigmoid (logit), which is exactly this
     """
@@ -201,17 +206,21 @@ def write_spz(path: str, g: dict) -> int:
         cloud.rotations = np.stack(
             [rot[:, 1], rot[:, 2], rot[:, 3], rot[:, 0]],
             axis=1).astype(np.float32).reshape(-1)
-        cloud.colors = np.clip(np.asarray(g["f_dc"], dtype=np.float32) * C0
-                               + 0.5, 0.0, 1.0).reshape(-1)
+        # Niantic GaussianCloud stores SH coefficients, including negative
+        # values for dark colours. Passing display RGB here makes external
+        # viewers render everything between middle grey and pale grey.
+        # Pinned contract: nianticlabs/spz, src/cc/splat-types.h, GaussianCloud.
+        cloud.colors = np.asarray(g["f_dc"], dtype=np.float32).reshape(-1)
         cloud.alphas = np.asarray(g["opacity"], dtype=np.float32).reshape(-1)
-        ok = spz.save_spz(cloud, spz.PackOptions(), path)
+        ok = spz.save_spz(cloud, spz.PackOptions(), str(path))
     except Exception:
         return 0
     return n if ok else 0
 
 
 def export_gaussians_from_mesh_with_voxel(mesh_out, path_stem: str,
-                                          condensed: bool = True):
+                                          condensed: bool = True,
+                                          gs_format: str = "both"):
     """Convenience wrapper taking a TRELLIS.2 MeshWithVoxel object.
 
     Condensed mode writes BOTH containers so every item carries the compact
@@ -231,6 +240,8 @@ def export_gaussians_from_mesh_with_voxel(mesh_out, path_stem: str,
     are the final (pre-promotion) names, ordered .spz before .splat when both
     were written.
     """
+    if gs_format not in ("spz", "splat", "both"):
+        raise ValueError(f"Unknown Gaussian format: {gs_format}")
     g = voxels_to_gaussians(
         coords=mesh_out.coords.cpu().numpy(),
         attrs=mesh_out.attrs.cpu().numpy(),
@@ -245,7 +256,7 @@ def export_gaussians_from_mesh_with_voxel(mesh_out, path_stem: str,
     written = []
     spz_path = Path(f"{path_stem}.spz")
     spz_tmp = tmp_sibling(spz_path)
-    n_spz = write_spz(str(spz_tmp), g)
+    n_spz = write_spz(str(spz_tmp), g) if gs_format != "splat" else 0
     if n_spz:
         written.append(spz_path)
     else:
@@ -253,7 +264,11 @@ def export_gaussians_from_mesh_with_voxel(mesh_out, path_stem: str,
         # .splat-only path. The .splat count below is the source of truth.
         spz_tmp.unlink(missing_ok=True)
 
-    splat_path = Path(f"{path_stem}.splat")
-    n_splat = write_splat(str(tmp_sibling(splat_path)), g)
-    written.append(splat_path)  # universal fallback: always present
-    return tuple(written), n_splat
+    if gs_format != "spz" or not n_spz:
+        if gs_format == "spz" and not n_spz:
+            print("    SPZ unavailable; exporting SPLAT fallback")
+        splat_path = Path(f"{path_stem}.splat")
+        n_splat = write_splat(str(tmp_sibling(splat_path)), g)
+        written.append(splat_path)
+        return tuple(written), n_splat
+    return tuple(written), n_spz

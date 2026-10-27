@@ -201,7 +201,7 @@ class TestPolicyFlagContract(unittest.TestCase):
     def _calls_add_policy_args(self, filename):
         """True if the module calls content_policy.add_policy_args anywhere.
 
-        Parsed rather than imported: flux_imagegen and trellis_meshgen import
+        Parsed rather than imported: qwen_imagegen and trellis_meshgen import
         scipy / trellis2 at module level, which a bare interpreter lacks.
         """
         tree = ast.parse((SCRIPTS_LOCAL / filename).read_text())
@@ -214,7 +214,7 @@ class TestPolicyFlagContract(unittest.TestCase):
         return False
 
     def test_all_phases_register_the_shared_flags(self):
-        for filename in ("flux_imagegen.py", "qa.py", "trellis_meshgen.py",
+        for filename in ("qwen_imagegen.py", "qa.py", "trellis_meshgen.py",
                          "run_all.py"):
             with self.subTest(script=filename):
                 self.assertTrue(
@@ -399,7 +399,7 @@ class TestGsExport(unittest.TestCase):
         (GaussianCloud().albedos/opacities + saveSplatToPath), so the write
         always raised and the .splat fallback hid it: zero .spz ever shipped.
         Against the real binding the pack must save and load back the same
-        cloud, with opacity surviving as a pre-sigmoid logit and colors as RGB.
+        cloud, with opacity as a pre-sigmoid logit and colours as SH DC.
         """
         import numpy as np
         if not self._spz_available():
@@ -419,7 +419,28 @@ class TestGsExport(unittest.TestCase):
             # pack quantizes; sign/magnitude must survive, not exact bits
             np.testing.assert_allclose(np.asarray(cloud.alphas), 2.0, atol=0.25)
             np.testing.assert_allclose(
-                np.asarray(cloud.colors).reshape(n, 3)[0], rgb, atol=0.06)
+                np.asarray(cloud.colors).reshape(n, 3)[0] * self.gs.C0 + 0.5, rgb, atol=0.01)
+
+    def test_spz_black_grey_white_match_splat_in_an_external_decoder(self):
+        import numpy as np
+        if not self._spz_available():
+            self.skipTest("spz (Niantic binding) not installed")
+        import spz
+        g = self._gaussians(3)
+        rgb = np.repeat(np.array([[0.0], [0.5], [1.0]], dtype=np.float32), 3, axis=1)
+        g["f_dc"] = (rgb - 0.5) / self.gs.C0
+        with tempfile.TemporaryDirectory() as root:
+            spz_path, splat_path = Path(root) / "g.spz", Path(root) / "g.splat"
+            self.assertEqual(self.gs.write_spz(spz_path, g), 3)
+            self.gs.write_splat(splat_path, g)
+            # Use Niantic's decoder directly, independently of our QA reader.
+            dc = np.asarray(spz.load_spz(str(spz_path)).colors).reshape(3, 3)
+            external_rgb = dc * self.gs.C0 + 0.5
+            splat_rgb = np.frombuffer(splat_path.read_bytes(), dtype=np.uint8).reshape(3, 32)[:, 24:27] / 255.0
+        self.assertLess(float(dc[0, 0]), -1.0)
+        self.assertGreater(float(dc[2, 0]), 1.0)
+        np.testing.assert_allclose(external_rgb, rgb, atol=0.01)
+        np.testing.assert_allclose(external_rgb, splat_rgb, atol=0.01)
 
     def _stub_voxel(self, n=20):
         """Duck-typed MeshWithVoxel: tensors expose cpu().numpy()."""
@@ -470,6 +491,30 @@ class TestGsExport(unittest.TestCase):
             for p in paths:
                 self.assertGreater(p.stat().st_size, 0)
 
+    def test_compact_export_keeps_only_spz_when_supported(self):
+        if not self._spz_available():
+            self.skipTest("spz (Niantic binding) not installed")
+        with tempfile.TemporaryDirectory() as td:
+            paths, count = self.gs.export_gaussians_from_mesh_with_voxel(
+                self._stub_voxel(), str(Path(td) / "item"), gs_format="spz")
+            self.assertGreater(count, 0)
+            self.assertEqual([p.suffix for p in paths], [".spz"])
+            self.assertFalse((Path(td) / ".item.tmp.splat").exists())
+
+    def test_compact_export_falls_back_without_a_partial_spz(self):
+        from unittest.mock import patch
+
+        def failed_pack(path, cloud):
+            Path(path).write_bytes(b"partial")
+            return 0
+
+        with tempfile.TemporaryDirectory() as td, patch.object(self.gs, "write_spz", side_effect=failed_pack):
+            paths, count = self.gs.export_gaussians_from_mesh_with_voxel(
+                self._stub_voxel(), str(Path(td) / "item"), gs_format="spz")
+            self.assertEqual([p.suffix for p in paths], [".splat"])
+            self.assertEqual(self.gs.tmp_sibling(paths[0]).stat().st_size, count * 32)
+            self.assertFalse((Path(td) / ".item.tmp.spz").exists())
+
 
 class TestPromptCleaning(unittest.TestCase):
     def test_deterministic(self):
@@ -488,11 +533,11 @@ class TestPromptCleaning(unittest.TestCase):
         self.assertIn("neutral gray", out)
         self.assertIn("no floor", out)
 
-    def test_wear_clause_detection(self):
-        """Used to drop the manifest surface sentence when the per-item clause
-        also describes finish, so the two cannot contradict each other."""
-        for clause in prompt_utils.FALLBACK_VARIATIONS:
-            self.assertTrue(prompt_utils.WEAR_CLAUSE_RE.search(clause), clause)
+    def test_shared_subject_has_one_surface_condition(self):
+        row = prompt_utils.select_manifest_items(ids=["gen_med_0001"])[0]
+        out = prompt_utils.clean_prompt(row["prompt"], row["id"])
+        self.assertEqual(out.count("The surface "), 1)
+        self.assertNotIn("zero wear on tires", out)
 
     def test_rotorcraft_gets_the_stationary_rotor_clause(self):
         out = prompt_utils.clean_prompt(
@@ -558,6 +603,25 @@ class TestGaussianQA(unittest.TestCase):
         self.assertEqual(stats["nan_frac"], 0.0)
         self.assertGreater(stats["mean_opacity"], 0.8)
 
+    def test_spz_loader_reads_independently_encoded_sh_coefficients(self):
+        if not _have("spz"):
+            self.skipTest("spz (Niantic binding) not installed")
+        import spz
+        import numpy as np
+        dc = np.repeat(np.array([[-0.5 / self.qa.SH_C0], [0.0], [0.5 / self.qa.SH_C0]],
+                                dtype=np.float32), 3, axis=1)
+        native = spz.GaussianCloud()
+        native.positions = np.zeros(9, dtype=np.float32)
+        native.scales = np.full(9, -3.0, dtype=np.float32)
+        native.rotations = np.tile(np.array([0, 0, 0, 1], dtype=np.float32), 3)
+        native.colors = dc.ravel()
+        native.alphas = np.full(3, 2.0, dtype=np.float32)
+        with tempfile.TemporaryDirectory() as root:
+            path = Path(root) / "native.spz"
+            self.assertTrue(spz.save_spz(native, spz.PackOptions(), str(path)))
+            loaded = self.qa._load_spz_gaussians(path)
+        np.testing.assert_allclose(loaded["f_dc"], dc, atol=0.03)
+
     def test_nan_positions_fail(self):
         import numpy as np
         g = _healthy_gaussians()
@@ -566,14 +630,12 @@ class TestGaussianQA(unittest.TestCase):
         self.assertTrue(any("non-finite" in r for r in reasons))
 
     def test_dead_splats_fail(self):
-        import numpy as np
         g = _healthy_gaussians()
         g["opacity"][:] = -20.0  # sigmoid ~= 0
         _, reasons = self.qa.gaussian_primitive_stats(g)
         self.assertTrue(any("dead splats" in r for r in reasons))
 
     def test_degenerate_scales_fail(self):
-        import numpy as np
         g = _healthy_gaussians()
         g["scale"][:, 0] = 30.0  # exp -> astronomically large
         _, reasons = self.qa.gaussian_primitive_stats(g)
@@ -630,7 +692,6 @@ class TestGaussianQA(unittest.TestCase):
                             for r in self.qa.gaussians_view_reasons(stats)))
 
     def test_montage_writes_a_contact_sheet(self):
-        import numpy as np
         from PIL import Image
         with tempfile.TemporaryDirectory() as td:
             p = Path(td) / "views.png"
@@ -659,6 +720,23 @@ class TestGaussianQA(unittest.TestCase):
         for c in colours:
             self.assertTrue(np.isfinite(c).all())
 
+    def test_gaussian_camera_up_projects_toward_the_top_of_the_image(self):
+        if not _have("torch"):
+            self.skipTest("torch unavailable")
+        import numpy as np
+        cloud = _healthy_gaussians(6000)
+        rgb = np.zeros((len(cloud["z"]), 3), dtype=np.float32)
+        rgb[cloud["z"] >= 0, 0] = 1
+        rgb[cloud["z"] < 0, 2] = 1
+        cloud["f_dc"] = (rgb - 0.5) / self.qa.SH_C0
+        _, _, colours = self.qa.render_splat_views(cloud)
+        for view in colours[:8]:
+            rows = np.arange(view.shape[0])[:, None]
+            red, blue = view[..., 0].astype(float), view[..., 2].astype(float)
+            red_center = (rows * red).sum() / red.sum()
+            blue_center = (rows * blue).sum() / blue.sum()
+            self.assertLess(red_center, blue_center - 2)
+
 
 class TestMeshViews(unittest.TestCase):
     """Turntable polygon-raster silhouettes for the mesh pass."""
@@ -670,8 +748,16 @@ class TestMeshViews(unittest.TestCase):
         import qa
         cls.qa = qa
 
-    def test_box_renders_from_all_views(self):
+    def test_gltf_y_up_mesh_stays_vertical_in_ring_views(self):
         import numpy as np
+        import trimesh
+        box = trimesh.creation.box(extents=(0.3, 2.0, 0.3))
+        masks, _ = self.qa.mesh_silhouettes([box])
+        for mask in masks[:8]:
+            rows, columns = np.nonzero(mask)
+            self.assertGreater(np.ptp(rows), 2 * np.ptp(columns))
+
+    def test_box_renders_from_all_views(self):
         import trimesh
         box = trimesh.creation.box(extents=(2.0, 1.0, 0.8))
         masks, shades = self.qa.mesh_silhouettes([box])
@@ -681,6 +767,19 @@ class TestMeshViews(unittest.TestCase):
         self.assertLess(max(covs), self.qa.GS_COV_MAX)
         stats = self.qa.silhouette_view_metrics(masks)
         self.assertEqual(self.qa.mesh_view_reasons(stats), [])
+
+    def test_silhouette_is_solid_and_independent_of_face_order(self):
+        import numpy as np
+        import trimesh
+        from scipy.ndimage import binary_fill_holes
+        box = trimesh.creation.box(extents=(2.0, 1.0, 0.8))
+        masks, shades = self.qa.mesh_silhouettes([box])
+        box.faces = box.faces[::-1]
+        reordered, _ = self.qa.mesh_silhouettes([box])
+        for mask, shade, other in zip(masks, shades, reordered):
+            np.testing.assert_array_equal(mask, other)
+            np.testing.assert_array_equal(mask, binary_fill_holes(mask))
+            self.assertTrue(np.all(shade[mask] > 0))
 
     def test_degenerate_flat_mesh_fails_view_consistency(self):
         """A mesh collapsed to a single plane looks like a wall from some

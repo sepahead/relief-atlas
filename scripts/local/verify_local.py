@@ -2,8 +2,10 @@
 
 Counts items with completed images and completed meshes (GLB + 3DGS) across all
 manifest geographies, then reports what the pipeline's gates are doing: QA
-verdicts, quarantined items, content-policy refusals, and any assets that only
-exist because someone passed an override flag.
+verdicts, quarantined items, content-policy refusals, any assets that only exist
+because someone passed an override flag, and — the more alarming inverse — any
+refused subject with artifacts on disk that NO override ever authorised, which is
+what pre-policy output looks like.
 
 The 3DGS column counts an item once any container the mesh phase can emit is
 present -- .spz (preferred), .splat (universal fallback) or .ply (only with
@@ -17,12 +19,11 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import content_policy  # noqa: E402
 from prompt_utils import (  # noqa: E402
-    MANIFESTS, PROJECT_DIR, has_gaussians, load_manifest,
+    MANIFESTS, OUTPUT_DIR, STATE_DIR, has_gaussians, load_manifest,
+    verdict_is_current,
 )
-
-OUTPUT_DIR = PROJECT_DIR / "outputs_relief"
-STATE_DIR = PROJECT_DIR / "state"
 
 
 def load(name: str):
@@ -70,8 +71,9 @@ def report_qa():
         if not verdicts:
             continue
         passed = sum(1 for v in verdicts.values() if v.get("pass"))
+        stale = sum(not verdict_is_current(v) for v in verdicts.values())
         print(f"{mode} QA: {len(verdicts):6d} verdicts | pass {passed:6d} | "
-              f"fail {len(verdicts) - passed:6d}")
+              f"fail {len(verdicts) - passed:6d} | stale {stale:6d}")
 
     quarantine = load("qa_quarantine.json")
     if quarantine:
@@ -123,11 +125,63 @@ def report_policy():
               "state/content_policy_overrides.json")
 
 
+def report_output_policy():
+    """Re-screen what is actually ON DISK, not just what the gate permitted.
+
+    The policy reports and refuses but never deletes existing artifacts, which
+    is the right call — and it means anything produced BEFORE the gate existed
+    sits in outputs_relief unmentioned by every counter. Three restricted
+    legacy_* items were found exactly this way.
+
+    An override run is accounted for by its ledger. Artifacts that the policy
+    refuses and that NO ledger entry authorises are pre-policy output: nobody
+    ever passed a flag for them, so they must not ride along into a release
+    unnoticed.
+    """
+    if not OUTPUT_DIR.exists():
+        return
+    overrides = load("content_policy_overrides.json")
+    unaccounted = []
+    for geo in MANIFESTS:
+        for it in load_manifest(geo):
+            d = OUTPUT_DIR / geo / it["category"] / it["id"]
+            if not d.is_dir():
+                continue
+            artifacts = [p for p in d.iterdir() if p.is_file()]
+            if not artifacts:
+                continue
+            verdict = content_policy.classify_item(it)
+            if verdict.classification == content_policy.ALLOWED:
+                continue
+            if it["id"] in overrides:
+                continue  # an override run owns this one; report_policy says so
+            unaccounted.append((verdict, it["id"], len(artifacts)))
+
+    if not unaccounted:
+        return
+    n_blocked = sum(1 for v, _, _ in unaccounted
+                    if v.classification == content_policy.BLOCKED)
+    print(f"** UNACCOUNTED: {len(unaccounted)} item(s) have artifacts on disk "
+          f"that the policy refuses and no override authorised "
+          f"({n_blocked} blocked) — pre-policy output, review before release:")
+    for verdict, item_id, n_files in sorted(unaccounted, key=lambda r: r[1]):
+        print(f"   {verdict.classification:10s} {verdict.category:20s} "
+              f"{item_id:32s} {n_files} file(s)")
+
+
 def report_stale():
-    stale = sorted(OUTPUT_DIR.glob("*/*/*/.*.tmp.*")) if OUTPUT_DIR.exists() else []
+    if not OUTPUT_DIR.exists():
+        return
+    stale = sorted(OUTPUT_DIR.glob("*/*/*/.*.tmp.*"))
     if stale:
         print(f"warning: {len(stale)} stale transient export(s), "
               f"e.g. {stale[0].name} — safe to delete")
+    # Finder droppings are not dataset artifacts and would otherwise be uploaded
+    # alongside the meshes.
+    junk = sorted(OUTPUT_DIR.rglob(".DS_Store"))
+    if junk:
+        print(f"warning: {len(junk)} .DS_Store file(s) under {OUTPUT_DIR.name}/ "
+              f"— safe to delete")
 
 
 def main():
@@ -136,6 +190,7 @@ def main():
     report_qa()
     print()
     report_policy()
+    report_output_policy()
     report_stale()
 
 

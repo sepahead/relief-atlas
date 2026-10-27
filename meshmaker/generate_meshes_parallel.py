@@ -28,6 +28,9 @@ from queue import Queue
 import traceback
 
 # Use official fal_client
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts/local"))
+from generation_prompts import normalize_generation_prompt  # noqa: E402
+
 try:
     import fal_client
 except ImportError:
@@ -56,17 +59,8 @@ INTER_REQUEST_DELAY = 0.5  # seconds between requests per worker
 # ============================================================================
 
 def enhance_prompt(base_prompt: str) -> str:
-    """Enhance prompt for better 3D conversion results."""
-    enhancements = [
-        "single object centered in frame",
-        "pure white background",
-        "professional product photography",
-        "studio lighting",
-        "high resolution",
-        "sharp focus",
-        "isolated object",
-    ]
-    return f"{base_prompt}, {', '.join(enhancements)}"
+    """Use the shared reference recipe without contradictory style suffixes."""
+    return normalize_generation_prompt(base_prompt)
 
 
 # ============================================================================

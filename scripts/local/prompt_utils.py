@@ -2,11 +2,16 @@
 
 import hashlib
 import json
+import os
 import re
 from pathlib import Path
 
-PROJECT_DIR = Path(__file__).resolve().parents[2]
-MANIFEST_DIR = PROJECT_DIR / "manifests"
+from generation_prompts import is_optimized_prompt, normalize_generation_prompt
+from pipeline_utils import (
+    GS_EXTENSIONS, OUTPUT_DIR as OUTPUT_DIR, PROJECT_DIR, QA_VERSION, STATE_DIR as STATE_DIR,
+)
+
+MANIFEST_DIR = Path(os.environ.get("RELIEF_MANIFEST_DIR", PROJECT_DIR / "manifests")).resolve()
 OUTPUT_DIR_NAME = "outputs_relief"
 
 # 3DGS containers the mesh phase can emit, most-preferred first. Every place
@@ -16,13 +21,48 @@ OUTPUT_DIR_NAME = "outputs_relief"
 # that said `.ply`, so when the condensed export switched to .spz/.splat its
 # "meshes pending" count could never reach zero and the unattended multi-day
 # driver looped forever without producing anything.
-GS_EXTENSIONS = ("spz", "splat", "ply")
+
+# QA contract version. Bump whenever a gate's thresholds or measurements change
+# in a way that makes an older verdict uninterpretable, so stored verdicts are
+# re-judged instead of being trusted forever.
+#
+# It lives here for the same reason GS_EXTENSIONS does: qa.py imports numpy and
+# PIL at module scope, so anything that only needs to reason ABOUT verdicts
+# (release_manifest.py, tooling, tests on a bare interpreter) cannot import the
+# constant from there.
+#
+# Version 2 is the first version to be recorded at all, which is the point. At
+# v1 (unstamped) state/qa_images.json held 57 failures measuring fg_fraction=1.0
+# from the pre-BiRefNet matting era, indistinguishable from current verdicts
+# except by timestamp -- and those obsolete failures had already charged retry
+# budget against items, permanently perturbing the "deterministic" per-item seed.
+# v3 binds passes to artifact hashes and records whether NSFW screening ran.
+# v5 rejects localized frame clipping and measures mesh coverage independently
+# of face ordering and depth-preview shading.
+# v6 reads SPZ colours as SH DC, matching external viewers, and prevents
+# unverified legacy local SPZ encodings from being recertified automatically.
+
+
+def verdict_is_current(verdict) -> bool:
+    """Whether a stored QA verdict was produced by the current QA contract.
+
+    Unstamped (pre-v2) verdicts are NOT current: they were measured by code that
+    no longer exists, so trusting them would admit assets no live gate ever saw.
+    """
+    return isinstance(verdict, dict) and verdict.get("qa_version") == QA_VERSION
+
+
+def current_verdicts(verdicts: dict) -> dict:
+    """Drop verdicts from an older QA contract, so callers re-judge them."""
+    return {k: v for k, v in (verdicts or {}).items() if verdict_is_current(v)}
 
 
 def has_gaussians(item_dir, item_id: str) -> bool:
     """Whether any recognised 3DGS container exists for an item."""
     d = Path(item_dir)
-    return any((d / f"{item_id}.{ext}").exists() for ext in GS_EXTENSIONS)
+    return any((d / f"{item_id}.{ext}").is_file()
+               and (d / f"{item_id}.{ext}").stat().st_size > 0
+               for ext in GS_EXTENSIONS)
 
 
 def mesh_complete(item_dir, item_id: str, min_glb_bytes: int = 1024) -> bool:
@@ -36,7 +76,7 @@ def mesh_complete(item_dir, item_id: str, min_glb_bytes: int = 1024) -> bool:
     return (
         glb.exists() and glb.stat().st_size > min_glb_bytes
         and has_gaussians(d, item_id)
-        and (d / "metadata.json").exists()
+        and (d / "metadata.json").is_file()
     )
 
 MANIFESTS = {
@@ -61,10 +101,12 @@ def item_seed(item_id: str) -> int:
 # splices the same subject into many rows) still render as visibly different
 # assets, and a slight elevation shows top surfaces to the image-to-3D model.
 FRAMINGS = [
-    "a slightly elevated three-quarter front view",
-    "a straight-on eye-level side view",
-    "a three-quarter front view",
-    "a slightly elevated side view",
+    "a slightly elevated three-quarter front-left view",
+    "a slightly elevated three-quarter front-right view",
+    "a straight-on eye-level left side view",
+    "a straight-on eye-level right side view",
+    "a three-quarter rear-left view",
+    "a three-quarter rear-right view",
 ]
 
 ROTORCRAFT_RE = re.compile(
@@ -119,17 +161,17 @@ VARIATION_GROUPS = [
     ]),
     (re.compile(r"truck|van|ambulance|vehicle|carrier|transporter|bus|tanker|"
                 r"bulldozer|excavator|loader|tractor|crane|robot", re.I), [
-        "This particular vehicle has a clean recently-repainted body with crisp markings.",
-        "This particular vehicle shows heavy field use: chipped paint, mud splatter on the lower panels and dusty windows.",
+        "This particular vehicle has finely textured body panels with clearly visible seams and recessed fasteners.",
+        "This particular vehicle has contrasting protective trim around exposed panel edges.",
         "This particular vehicle carries a roof-mounted light bar and antenna mast.",
         "This particular vehicle has a reinforced bull bar front bumper and auxiliary driving lamps.",
         "This particular vehicle has rear-mounted storage racks loaded with strapped equipment cases.",
     ]),
-    (re.compile(r"drone|quadcopter|aircraft|plane|helicopter|vtol", re.I), [
-        "This particular aircraft has a matte gray airframe with orange high-visibility accents.",
-        "This particular aircraft has a white body with red stripe markings and dark sensor gimbal.",
-        "This particular aircraft has a compact folding-arm design with the arms folded inward.",
-        "This particular aircraft has oversized bulbous sensor housings under the nose.",
+    (re.compile(r"drone|quadcopter|hexacopter|octocopter|multirotor|uav|aircraft|plane|helicopter|vtol", re.I), [
+        "This particular aircraft has narrow reflective high-visibility strips along the airframe edges.",
+        "This particular aircraft has contrasting safety markings around access panels.",
+        "This particular aircraft has clearly defined panel seams and recessed fastening points.",
+        "This particular aircraft has dark protective edge trim and crisp contrasting identification bands.",
     ]),
     (re.compile(r"bridge", re.I), [
         "This particular bridge section has an open truss lattice deck surface.",
@@ -144,16 +186,16 @@ VARIATION_GROUPS = [
     ]),
 ]
 FALLBACK_VARIATIONS = [
-    "This particular unit has a clean factory finish with crisp unmarked surfaces.",
-    "This particular unit shows light service wear: fine scratches, slightly faded color and dust settled in crevices.",
-    "This particular unit shows heavy weathering: rain stains, scuffed edges and a dull oxidized sheen.",
-    "This particular unit has a few worn touch-up patches and a slightly sun-bleached finish.",
+    "This particular unit has a fine matte surface texture.",
+    "This particular unit has a subtle satin surface texture.",
+    "This particular unit has a lightly stippled surface texture.",
+    "This particular unit has a smooth low-sheen surface texture.",
 ]
 
 STUDIO_SPLIT = "The object stands alone"
 
 
-def _studio_tail(framing: str) -> str:
+def _studio_tail(framing: str, transparent=False) -> str:
     """Controlled studio framing that replaces the manifest boilerplate.
 
     The original boilerplate demanded a pure white seamless backdrop under
@@ -164,6 +206,17 @@ def _studio_tail(framing: str) -> str:
     subject (saturated backdrops tinted it), matches the neutral-studio
     distribution TRELLIS.2 was trained on, and BiRefNet mattes it cleanly.
     """
+    if transparent:
+        return (
+            f"The object stands alone, perfectly centered, fully visible and uncropped, "
+            f"photographed from {framing}. Leave at least a 10% empty margin on every side, "
+            f"including all propeller tips, antennas and protruding parts. "
+            f"The image has alpha channel and the background "
+            f"is transparent. No floor plane, horizon line, cast shadow or backdrop. "
+            f"Even diffuse studio lighting, crisp edges, deep focus keeping the entire object "
+            f"sharp. Professional product reference photograph for 3D model generation. "
+            f"Medium-format camera, 85mm lens. No watermark, no extra objects, no text overlays."
+        )
     return (
         f"The object stands alone, perfectly centered, fully visible and "
         f"uncropped, photographed from {framing}, isolated on a completely "
@@ -222,7 +275,7 @@ SURFACE_RE = re.compile(r"The surface (?:shows|is) ([^.:]+): ([^.]*)\.")
 # already carries its own "The surface is/shows ..." sentence, so appending
 # one of these on top produced self-contradicting prompts such as "pristine
 # factory-new: no scratches" followed by "heavy weathering: rain stains,
-# scuffed edges". FLUX resolves that by splitting the difference, which is
+# scuffed edges". Image models resolve that by splitting the difference, which is
 # neither state. Detecting the overlap lets the per-item clause win outright.
 WEAR_CLAUSE_RE = re.compile(
     r"\b(?:factory finish|recently-repainted|pristine|weather(?:ed|ing)?|"
@@ -259,16 +312,43 @@ PART_WORDS_RE = re.compile(
 )
 
 
-def _variation_clause(subject: str, item_id: str) -> str:
-    """Deterministic per-item appearance variation for a shared subject."""
+def _variation_choices(subject: str) -> list[str]:
+    # Match the asset noun, rather than incidental cargo or operating context.
+    # A cargo drone delivering supplies must not receive a pallet variation.
+    asset = subject.split(",", 1)[0]
     for pattern, clauses in VARIATION_GROUPS:
-        if pattern.search(subject):
-            return clauses[stable_hash(f"relief-atlas/var/{item_id}") % len(clauses)]
-    return FALLBACK_VARIATIONS[
-        stable_hash(f"relief-atlas/var/{item_id}") % len(FALLBACK_VARIATIONS)]
+        if pattern.search(asset):
+            return clauses
+    return FALLBACK_VARIATIONS
+
+
+def _variation_clause(subject: str, item_id: str) -> str:
+    clauses = _variation_choices(subject)
+    index = _subject_ordinals().get(item_id, stable_hash(f"relief-atlas/var/{item_id}"))
+    return clauses[index % len(clauses)]
 
 
 _SUBJECT_COUNTS: dict[str, int] | None = None
+_SUBJECT_ORDINALS: dict[str, int] | None = None
+
+
+def _subject_key(prompt: str) -> str:
+    p = re.sub(r"\)\s*The surface is", ". The surface is", prompt.strip())
+    p = TRANSLUCENT_PROP_RE.sub("solid matte carbon-fiber propeller blades", p)
+    return TEMPLATE_START_RE.split(p, maxsplit=1)[0]
+
+
+def _subject_ordinals() -> dict[str, int]:
+    """Allocate combinations without hash collisions within a shared subject."""
+    global _SUBJECT_ORDINALS
+    if _SUBJECT_ORDINALS is None:
+        groups: dict[str, list[str]] = {}
+        for it in all_items():
+            subject = _subject_key(it["prompt"])
+            groups.setdefault(subject, []).append(it["id"])
+        _SUBJECT_ORDINALS = {item_id: index for ids in groups.values()
+                             for index, item_id in enumerate(sorted(ids))}
+    return _SUBJECT_ORDINALS
 
 
 def _subject_counts() -> dict[str, int]:
@@ -277,21 +357,23 @@ def _subject_counts() -> dict[str, int]:
     if _SUBJECT_COUNTS is None:
         counts: dict[str, int] = {}
         for it in all_items():
-            subj = TEMPLATE_START_RE.split(it["prompt"].strip(), maxsplit=1)[0]
+            subj = _subject_key(it["prompt"])
             counts[subj] = counts.get(subj, 0) + 1
         _SUBJECT_COUNTS = counts
     return _SUBJECT_COUNTS
 
 
-def clean_prompt(prompt: str, item_id: str | None = None) -> str:
-    """Normalize a manifest prompt for local FLUX.2 generation.
+def clean_prompt(prompt: str, item_id: str | None = None, *, transparent=False) -> str:
+    """Normalize a manifest prompt for isolated product-reference generation.
 
     Replaces the white-backdrop studio boilerplate with the controlled solid
-    magenta framing, strips vehicle-only variant text spliced into non-vehicle
+    neutral gray framing, strips vehicle-only variant text spliced into non-vehicle
     items, and hardens rotorcraft prompts (solid props, stationary blades) so
     thin translucent parts matte cleanly and TRELLIS.2 never receives a
     motion-blurred prop disc.
     """
+    if is_optimized_prompt(prompt):
+        return normalize_generation_prompt(prompt, transparent=transparent)
     p = prompt.strip()
     p = re.sub(r"\)\s*The surface is", ". The surface is", p)
     p = TRANSLUCENT_PROP_RE.sub("solid matte carbon-fiber propeller blades", p)
@@ -321,25 +403,38 @@ def clean_prompt(prompt: str, item_id: str | None = None) -> str:
         ]
         p = " ".join(sentences)
         p = p.replace("..", ".")
+    if flies:
+        p = p.replace("visible hydraulic cylinders and hoses, ", "")
+        p = p.replace("heavy-gauge welded steel construction", "lightweight aerospace alloy and composite construction")
 
     if ROTORCRAFT_RE.search(p):
         p = f"{p.rstrip('. ')}. {ROTOR_CLAUSE}"
 
     # Shared-subject rows get one deterministic appearance variation so the
     # dataset does not collapse to N near-identical assets.
-    if item_id and _subject_counts().get(subject, 0) > 1:
-        clause = _variation_clause(subject, item_id)
-        # Both the manifest sentence and the variation clause describe the
-        # finish: drop the generic manifest one so they cannot contradict.
-        # The variation clause is the per-item signal, so it wins.
-        if WEAR_CLAUSE_RE.search(clause):
-            p = SURFACE_RE.sub("", p)
-        p = f"{p.rstrip('. ').strip()}. {clause}"
-
     framing = FRAMINGS[stable_hash(item_id or prompt) % len(FRAMINGS)]
+    if item_id and _subject_counts().get(subject, 0) > 1:
+        index = _subject_ordinals().get(item_id, stable_hash(f"relief-atlas/var/{item_id}"))
+        choices = _variation_choices(subject)
+        clause = _variation_clause(subject, item_id)
+        framing = FRAMINGS[(index // len(choices)) % len(FRAMINGS)]
+        condition = (index // (len(choices) * len(FRAMINGS))) % 4
+        if re.search(r"rubble|debris|demolition", subject.split(",", 1)[0], re.I):
+            p = SURFACE_RE.sub("", p)
+            conditions = [
+                "The fragments form a low broad mound with a loose irregular perimeter.",
+                "The fragments form a tall compact mound with clustered edges.",
+                "The fragments form a lopsided heap with one noticeably higher side.",
+                "The fragments form a layered heap with clearly separated tiers.",
+            ]
+        else:
+            conditions = list(NEUTRAL_SURFACE.values())
+            p = SURFACE_RE.sub("", p)
+        p = f"{p.rstrip('. ').strip()}. {clause} {conditions[condition]}"
     p = re.sub(r"\s+", " ", p).strip()
     p = re.sub(r"[.\s]+$", "", p)
-    return f"{p}.\n{_studio_tail(framing)}"
+    result = f"{p}.\n{_studio_tail(framing, transparent)}"
+    return f"This is an RGBA image with transparency. {result}" if transparent else result
 
 
 def load_manifest(geography: str) -> list[dict]:
@@ -354,6 +449,32 @@ def all_items() -> list[dict]:
     for geo in MANIFESTS:
         items.extend(load_manifest(geo))
     return items
+
+
+def select_manifest_items(geographies=None, ids=None, limit=None, only_policy=None):
+    """One selection contract for generators, QA, accounting and orchestration.
+
+    Explicit IDs preserve requested order and override geography/limit. Tier
+    filtering precedes the limit, as documented by the generation CLI.
+    """
+    import content_policy
+
+    if limit is not None and limit < 1:
+        raise ValueError("--limit must be positive")
+    if ids:
+        by_id = {it["id"]: it for it in all_items()}
+        missing = [item_id for item_id in ids if item_id not in by_id]
+        if missing:
+            raise ValueError(f"Unknown item IDs: {', '.join(missing)}")
+        items = [dict(by_id[item_id]) for item_id in dict.fromkeys(ids)]
+    else:
+        geographies = list(MANIFESTS) if geographies is None else geographies
+        unknown = set(geographies) - set(MANIFESTS)
+        if unknown:
+            raise ValueError(f"Unknown geographies: {', '.join(sorted(unknown))}")
+        items = [dict(it) for geo in geographies for it in load_manifest(geo)]
+    items = content_policy.select_tier(items, only_policy)
+    return items[:limit] if limit is not None and not ids else items
 
 
 if __name__ == "__main__":

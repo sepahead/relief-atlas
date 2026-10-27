@@ -1,75 +1,69 @@
 #!/usr/bin/env bash
-# Headless full-run driver: keeps re-running both pipeline phases until every
-# manifest item has outputs (or only hard failures remain). Designed to be
-# launched detached, e.g.:
-#   nohup scripts/local/run_forever.sh > state/full_run.log 2>&1 &
-#
-# Any arguments are forwarded verbatim to run_all.py, so policy overrides and
-# scoping work here too:
-#   nohup scripts/local/run_forever.sh --allow-restricted > state/full_run.log 2>&1 &
-#
-# Termination is the whole point of this script, so the pending-work count has
-# to agree with the pipeline about what "done" and "never going to finish" mean:
-#   * a finished item is GLB + a 3DGS container + metadata.json, where the
-#     container may be .spz/.splat/.ply (prompt_utils.GS_EXTENSIONS). This file
-#     used to hardcode `.ply`, which the condensed-export change stopped
-#     emitting -- so the count never reached zero and this loop ran forever,
-#     re-launching a full no-op pass every 60 seconds indefinitely.
-#   * items QA has quarantined, or that lack a passing image-QA verdict, cannot
-#     progress no matter how many passes run, so they are not pending work.
-set -uo pipefail
+# Run full, certified batches until the scoped selection is complete, or stop
+# after repeated passes without progress. Quarantine is reported as incomplete.
+# Example: nohup scripts/local/run_forever.sh > state/full_run.log 2>&1 &
+set -euo pipefail
 cd "$(dirname "$0")/../.."
+mkdir -p "${RELIEF_STATE_DIR:-state}"
 
-mkdir -p state
+STALL_LIMIT="${STALL_LIMIT:-3}"
+SLEEP_SECONDS="${SLEEP_SECONDS:-60}"
+[[ "$STALL_LIMIT" =~ ^[1-9][0-9]*$ ]] || { echo "STALL_LIMIT must be positive" >&2; exit 2; }
+[[ "$SLEEP_SECONDS" =~ ^[0-9]+$ ]] || { echo "SLEEP_SECONDS must be nonnegative" >&2; exit 2; }
 
-PENDING_PY=$(cat <<'EOF'
-import json
-import sys
-from pathlib import Path
+# This driver promises a certified full deliverable. Diagnostic and partial
+# runs belong in run_all.py, where their completion rules are explicit.
+expect_phase=0
+for arg in "$@"; do
+    if [ "$expect_phase" -eq 1 ]; then
+        [ "$arg" = all ] || { echo "run_forever.sh requires --phase all" >&2; exit 2; }
+        expect_phase=0
+    fi
+    case "$arg" in
+        --phase) expect_phase=1 ;;
+        --phase=all) ;;
+        --phase=*) echo "run_forever.sh requires --phase all" >&2; exit 2 ;;
+        --skip-*-qa|--skip-preflight|--preflight-only|--dry-run)
+            echo "run_forever.sh requires generation and every certification gate" >&2; exit 2 ;;
+    esac
+done
 
-sys.path.insert(0, "scripts/local")
-from prompt_utils import MANIFESTS, load_manifest, mesh_complete
+# Fail once on missing models/packages/GPU/disk instead of repeatedly launching
+# an expensive run that cannot make progress.
+python3 scripts/local/run_all.py --preflight-only "$@"
 
-out = Path("outputs_relief")
-state = Path("state")
-
-
-def load(name):
-    p = state / name
-    return json.loads(p.read_text()) if p.exists() else {}
-
-
-hard_fails = set(load("local_mesh_failures.json"))
-quarantine = set(load("qa_quarantine.json"))
-image_qa = load("qa_images.json")
-
-pending = 0
-for geo in MANIFESTS:
-    for it in load_manifest(geo):
-        item_id = it["id"]
-        d = out / geo / it["category"] / item_id
-        if not (d / f"{item_id}.png").exists():
-            continue                      # image phase has not produced it yet
-        if item_id in quarantine or item_id in hard_fails:
-            continue                      # will never progress
-        if not image_qa.get(item_id, {}).get("pass"):
-            continue                      # mesh phase refuses it by design
-        if not mesh_complete(d, item_id):
-            pending += 1
-print(pending)
-EOF
-)
-
+best_pending=-1
+stalls=0
+pass=0
 while true; do
-    python3 scripts/local/run_all.py "$@"
-    echo "=== pass finished"
+    pass=$((pass + 1))
+    echo "pass $pass starting"
+    if ! python3 scripts/local/run_all.py --skip-preflight "$@"; then
+        echo "pass $pass: incomplete; checking whether progress warrants a retry"
+    fi
     python3 scripts/local/verify_local.py
-    MESHES_LEFT=$(python3 -c "$PENDING_PY")
-    echo "=== meshes pending: $MESHES_LEFT"
-    if ! [ "$MESHES_LEFT" -eq "$MESHES_LEFT" ] 2>/dev/null; then
-        echo "=== could not compute pending count; stopping rather than spinning"
+    PENDING=$(python3 scripts/local/pending.py --certified --count "$@")
+    [[ "$PENDING" =~ ^[0-9]+$ ]] || { echo "Invalid pending count: $PENDING" >&2; exit 1; }
+    echo "items pending certification: $PENDING"
+    if [ "$PENDING" -eq 0 ]; then
+        if python3 scripts/local/pending.py --certified --require-complete "$@"; then
+            echo "all selected, permitted assets certified"
+            exit 0
+        fi
+        echo "stopped with quarantined items; inspect state/qa_quarantine.json" >&2
         exit 1
     fi
-    [ "$MESHES_LEFT" -eq 0 ] && { echo "=== all done"; break; }
-    sleep 60
+    if [ "$best_pending" -lt 0 ] || [ "$PENDING" -lt "$best_pending" ]; then
+        best_pending="$PENDING"
+        stalls=0
+    else
+        stalls=$((stalls + 1))
+        echo "no progress ($stalls/$STALL_LIMIT; best pending count $best_pending)"
+        if [ "$stalls" -ge "$STALL_LIMIT" ]; then
+            echo "stopped: $PENDING items still need certification" >&2
+            python3 scripts/local/pending.py --certified "$@"
+            exit 1
+        fi
+    fi
+    sleep "$SLEEP_SECONDS"
 done

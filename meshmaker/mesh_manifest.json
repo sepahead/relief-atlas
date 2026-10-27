@@ -2,7 +2,6 @@
   "version": "1.0",
   "description": "PID-VLA Simulation Environment - Required 3D Mesh Assets",
   "notes": "All meshes should be exported as GLB/GLTF with Z-up, meters as units. These are used for physics collision proxies and visual rendering.",
-  
   "meshes": [
     {
       "id": "red_cube",
@@ -12,8 +11,50 @@
       "mass_kg": 0.1,
       "material": "plastic_red",
       "purpose": "Primary manipulation target for pick-and-place experiments (Exp1, Exp2)",
-      "text_prompt": "A simple solid red plastic cube, 5cm on each side, matte finish, photorealistic, product photography style, clean white background, studio lighting, no shadows on background",
-      "image_prompt": "Solid red matte plastic cube toy block, clean edges, photorealistic rendering, white studio background, soft shadows"
+      "text_prompt": "Subject: A simple solid red plastic cube, 5cm on each side, matte finish.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "image_prompt": "Subject: Solid red matte plastic cube toy block, clean edges.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "text_prompt": "A simple solid red plastic cube, 5cm on each side, matte finish, photorealistic, product photography style, clean white background, studio lighting, no shadows on background",
+          "image_prompt": "Solid red matte plastic cube toy block, clean edges, photorealistic rendering, white studio background, soft shadows"
+        },
+        "source_sha256": {
+          "text_prompt": "871e618d819159c4ac5bceefcfc785f47650890bc5a1fb4295daf868462a6c85",
+          "image_prompt": "b444d7b6066622086001ef774292916b51758bae7ad54cbf163069bc72a0b8e0"
+        },
+        "subject": "A simple solid red plastic cube, 5cm on each side, matte finish",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "text_prompt": {
+            "profile": "authored_manipulation_object",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          },
+          "image_prompt": {
+            "profile": "authored_manipulation_object",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "blue_cube",
@@ -23,8 +64,50 @@
       "mass_kg": 0.1,
       "material": "plastic_blue",
       "purpose": "Stacking experiments (Exp2) - middle layer",
-      "text_prompt": "A simple solid blue plastic cube, 5cm on each side, matte finish, photorealistic, product photography style, clean white background, studio lighting",
-      "image_prompt": "Solid blue matte plastic cube toy block, clean edges, photorealistic rendering, white studio background, soft shadows"
+      "text_prompt": "Subject: A simple solid blue plastic cube, 5cm on each side, matte finish.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "image_prompt": "Subject: Solid blue matte plastic cube toy block, clean edges.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "text_prompt": "A simple solid blue plastic cube, 5cm on each side, matte finish, photorealistic, product photography style, clean white background, studio lighting",
+          "image_prompt": "Solid blue matte plastic cube toy block, clean edges, photorealistic rendering, white studio background, soft shadows"
+        },
+        "source_sha256": {
+          "text_prompt": "cc2049e3a0f01653c1884a9e52b27b872c3d549a5f48d90320f5616c5e57590c",
+          "image_prompt": "04b3a4467a418b9b8d315a75a8b0c8869ffc271032680dfd969a15f493dba7d7"
+        },
+        "subject": "A simple solid blue plastic cube, 5cm on each side, matte finish",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "text_prompt": {
+            "profile": "authored_manipulation_object",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          },
+          "image_prompt": {
+            "profile": "authored_manipulation_object",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "green_cube",
@@ -34,8 +117,50 @@
       "mass_kg": 0.1,
       "material": "plastic_green",
       "purpose": "Stacking experiments (Exp2) - top layer",
-      "text_prompt": "A simple solid green plastic cube, 5cm on each side, matte finish, photorealistic, product photography style, clean white background, studio lighting",
-      "image_prompt": "Solid green matte plastic cube toy block, clean edges, photorealistic rendering, white studio background, soft shadows"
+      "text_prompt": "Subject: A simple solid green plastic cube, 5cm on each side, matte finish.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "image_prompt": "Subject: Solid green matte plastic cube toy block, clean edges.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "text_prompt": "A simple solid green plastic cube, 5cm on each side, matte finish, photorealistic, product photography style, clean white background, studio lighting",
+          "image_prompt": "Solid green matte plastic cube toy block, clean edges, photorealistic rendering, white studio background, soft shadows"
+        },
+        "source_sha256": {
+          "text_prompt": "d327a6e5ac4d949f38e6d270b38655e5afd9b44bb8509933d00858ead01da4db",
+          "image_prompt": "00420d69dd7a168ccfcd3f7d61eb59623960e0a60045f7c65ae6f15c38fb81f0"
+        },
+        "subject": "A simple solid green plastic cube, 5cm on each side, matte finish",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "text_prompt": {
+            "profile": "authored_manipulation_object",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          },
+          "image_prompt": {
+            "profile": "authored_manipulation_object",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "blue_cylinder",
@@ -45,8 +170,50 @@
       "mass_kg": 0.15,
       "material": "plastic_blue",
       "purpose": "Distractor object and manipulation target",
-      "text_prompt": "A solid blue plastic cylinder, 3cm radius and 8cm tall, matte finish, photorealistic, product photography, clean white background, studio lighting",
-      "image_prompt": "Blue matte plastic cylinder standing upright, 8cm tall 6cm diameter, photorealistic rendering, white studio background"
+      "text_prompt": "Subject: A solid blue plastic cylinder, 3cm radius and 8cm tall, matte finish.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "image_prompt": "Subject: Blue matte plastic cylinder standing upright, 8cm tall 6cm diameter.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "text_prompt": "A solid blue plastic cylinder, 3cm radius and 8cm tall, matte finish, photorealistic, product photography, clean white background, studio lighting",
+          "image_prompt": "Blue matte plastic cylinder standing upright, 8cm tall 6cm diameter, photorealistic rendering, white studio background"
+        },
+        "source_sha256": {
+          "text_prompt": "c77123f943ea29301d38f5b93fa82837e8ac8e39e21c94f377e45ab862e59330",
+          "image_prompt": "41877bd98f4fb6995ac74d361022ab77e48088b39bd70aa0bee10c68c6180c62"
+        },
+        "subject": "A solid blue plastic cylinder, 3cm radius and 8cm tall, matte finish",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "text_prompt": {
+            "profile": "authored_manipulation_object",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          },
+          "image_prompt": {
+            "profile": "authored_manipulation_object",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "green_sphere",
@@ -56,8 +223,50 @@
       "mass_kg": 0.2,
       "material": "plastic_green",
       "purpose": "Spherical manipulation target for grasping experiments",
-      "text_prompt": "A solid green plastic sphere, 4cm radius (8cm diameter), matte finish, photorealistic, product photography, clean white background, studio lighting",
-      "image_prompt": "Green matte plastic ball sphere, 8cm diameter, photorealistic rendering, white studio background, soft shadows"
+      "text_prompt": "Subject: A solid green plastic sphere, 4cm radius (8cm diameter), matte finish.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "image_prompt": "Subject: Green matte plastic ball sphere, 8cm diameter.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "text_prompt": "A solid green plastic sphere, 4cm radius (8cm diameter), matte finish, photorealistic, product photography, clean white background, studio lighting",
+          "image_prompt": "Green matte plastic ball sphere, 8cm diameter, photorealistic rendering, white studio background, soft shadows"
+        },
+        "source_sha256": {
+          "text_prompt": "764663943d3306ac80cc281847fa099c25fa292cab4dde2d6a5764b28f808d03",
+          "image_prompt": "f43f068b0a22258d65c8057d65e6cc1078b09d8bbdf6a253618f314dde9a88e2"
+        },
+        "subject": "A solid green plastic sphere, 4cm radius (8cm diameter), matte finish",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "text_prompt": {
+            "profile": "authored_manipulation_object",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          },
+          "image_prompt": {
+            "profile": "authored_manipulation_object",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "blue_plate",
@@ -67,8 +276,52 @@
       "mass_kg": 0.25,
       "material": "ceramic_blue",
       "purpose": "Placement target for pick-and-place experiments",
-      "text_prompt": "A flat circular blue ceramic plate, 20cm diameter and 1cm thick, matte glaze finish, photorealistic, product photography, clean white background, studio lighting",
-      "image_prompt": "Blue ceramic dinner plate, flat circular, 20cm diameter, matte glaze, photorealistic rendering, white studio background"
+      "text_prompt": "Subject: A flat circular blue ceramic plate, 20cm diameter and 1cm thick, matte glaze finish.\nGeometry: Preserve the shallow concave or flat form specified, its rim, underside and material. Compartments or perforations appear only where described; retain the intended open upper surface.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: Face the specified target surface squarely, with its complete outline and undistorted printed pattern visible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "image_prompt": "Subject: Blue ceramic dinner plate, flat circular, 20cm diameter, matte glaze.\nGeometry: Preserve the shallow concave or flat form specified, its rim, underside and material. Compartments or perforations appear only where described; retain the intended open upper surface.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: Face the specified target surface squarely, with its complete outline and undistorted printed pattern visible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "text_prompt": "A flat circular blue ceramic plate, 20cm diameter and 1cm thick, matte glaze finish, photorealistic, product photography, clean white background, studio lighting",
+          "image_prompt": "Blue ceramic dinner plate, flat circular, 20cm diameter, matte glaze, photorealistic rendering, white studio background"
+        },
+        "source_sha256": {
+          "text_prompt": "cdef8719768abc7547f862b7f10edca7ec5b6f0e908452000a473344d1193361",
+          "image_prompt": "da64eafcf88c2664ebf8d57542fa19b6b55973a56ab5286f2e960dc02b317eb8"
+        },
+        "subject": "A flat circular blue ceramic plate, 20cm diameter and 1cm thick, matte glaze finish",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "text_prompt": {
+            "profile": "plate_tray",
+            "geometry": "Preserve the shallow concave or flat form specified, its rim, underside and material. Compartments or perforations appear only where described; retain the intended open upper surface.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": "Use an elevated oblique view to reveal the upper surface and rim thickness.",
+            "description": null,
+            "reference_evidence": {}
+          },
+          "image_prompt": {
+            "profile": "plate_tray",
+            "geometry": "Preserve the shallow concave or flat form specified, its rim, underside and material. Compartments or perforations appear only where described; retain the intended open upper surface.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": "Use an elevated oblique view to reveal the upper surface and rim thickness.",
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "wooden_block_A",
@@ -78,8 +331,50 @@
       "mass_kg": 0.12,
       "material": "wood_natural",
       "purpose": "Stacking base for assembly experiments",
-      "text_prompt": "A natural wood rectangular block, 10cm x 5cm x 3cm, light oak color, visible wood grain, photorealistic, product photography, clean white background, studio lighting",
-      "image_prompt": "Natural wooden rectangular block, light oak wood grain texture, 10x5x3cm, photorealistic rendering, white studio background"
+      "text_prompt": "Subject: A natural wood rectangular block, 10cm x 5cm x 3cm, light oak color, visible wood grain.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "image_prompt": "Subject: Natural wooden rectangular block, light oak wood grain texture, 10x5x3cm.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "text_prompt": "A natural wood rectangular block, 10cm x 5cm x 3cm, light oak color, visible wood grain, photorealistic, product photography, clean white background, studio lighting",
+          "image_prompt": "Natural wooden rectangular block, light oak wood grain texture, 10x5x3cm, photorealistic rendering, white studio background"
+        },
+        "source_sha256": {
+          "text_prompt": "d110d845fd45bdd47aacde646d0d5e7bb41d26dddd4f27707d528ab7a74ae262",
+          "image_prompt": "77504d59422e294cf95b9e12f1c20ea3dccaa7b186b0af050c4c12fcc775158b"
+        },
+        "subject": "A natural wood rectangular block, 10cm x 5cm x 3cm, light oak color, visible wood grain",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "text_prompt": {
+            "profile": "authored_manipulation_object",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          },
+          "image_prompt": {
+            "profile": "authored_manipulation_object",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "wooden_block_B",
@@ -89,8 +384,50 @@
       "mass_kg": 0.1,
       "material": "wood_natural",
       "purpose": "Mid-level stacking block",
-      "text_prompt": "A natural wood rectangular block, 8cm x 4cm x 4cm, light oak color, visible wood grain, photorealistic, product photography, clean white background, studio lighting",
-      "image_prompt": "Natural wooden block, light oak wood grain texture, 8x4x4cm, photorealistic rendering, white studio background"
+      "text_prompt": "Subject: A natural wood rectangular block, 8cm x 4cm x 4cm, light oak color, visible wood grain.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "image_prompt": "Subject: Natural wooden block, light oak wood grain texture, 8x4x4cm.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "text_prompt": "A natural wood rectangular block, 8cm x 4cm x 4cm, light oak color, visible wood grain, photorealistic, product photography, clean white background, studio lighting",
+          "image_prompt": "Natural wooden block, light oak wood grain texture, 8x4x4cm, photorealistic rendering, white studio background"
+        },
+        "source_sha256": {
+          "text_prompt": "670b4682443959e0308432c47aec82a0b8ef70fdfea0f63d62c1f9c19e57b11d",
+          "image_prompt": "5b5c0e0ef97490d505038885f73e1bfcbe407989a6e37c8f632d3b8e5330f885"
+        },
+        "subject": "A natural wood rectangular block, 8cm x 4cm x 4cm, light oak color, visible wood grain",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "text_prompt": {
+            "profile": "authored_manipulation_object",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          },
+          "image_prompt": {
+            "profile": "authored_manipulation_object",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "ycb_mustard",
@@ -100,8 +437,68 @@
       "mass_kg": 0.6,
       "material": "plastic_yellow",
       "purpose": "YCB benchmark object for real-world manipulation comparison",
-      "text_prompt": "A yellow plastic mustard squeeze bottle, realistic YCB dataset style, 19cm tall, product photography, clean white background, studio lighting, photorealistic",
-      "image_prompt": "Yellow plastic mustard squeeze bottle, French's mustard style, 19cm tall, photorealistic product shot, white studio background"
+      "text_prompt": "Subject: A yellow plastic mustard squeeze bottle, realistic YCB dataset style, 19cm tall.\nGeometry: Keep the stated vessel profile, neck, base and cap or stopper. An open vessel has a real mouth; a closed one retains its closure. Preserve explicit glass or plastic transparency and contents.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: Show the neck, closure state and complete base in one view. Show one view from the left, about 25 degrees around and 20 degrees above level, while retaining any explicitly requested pose or view.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "image_prompt": "Subject: Yellow plastic mustard squeeze bottle, French's mustard style, 19cm tall, photorealistic product shot.\nGeometry: Keep the stated vessel profile, neck, base and cap or stopper. An open vessel has a real mouth; a closed one retains its closure. Preserve explicit glass or plastic transparency and contents.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: Show the neck, closure state and complete base in one view. Show one view from the left, about 25 degrees around and 20 degrees above level, while retaining any explicitly requested pose or view.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "text_prompt": "A yellow plastic mustard squeeze bottle, realistic YCB dataset style, 19cm tall, product photography, clean white background, studio lighting, photorealistic",
+          "image_prompt": "Yellow plastic mustard squeeze bottle, French's mustard style, 19cm tall, photorealistic product shot, white studio background"
+        },
+        "source_sha256": {
+          "text_prompt": "e55cedbc1cc857dd903363f3d943e4513e5d5c7a210b008df3c0325541bbc5ba",
+          "image_prompt": "7334c3f7f1124fbcbc7996e88656dd1be4d71841c9653ab58e79141970939352"
+        },
+        "subject": "A yellow plastic mustard squeeze bottle, realistic YCB dataset style, 19cm tall",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "text_prompt": {
+            "profile": "bottle",
+            "geometry": "Keep the stated vessel profile, neck, base and cap or stopper. An open vessel has a real mouth; a closed one retains its closure. Preserve explicit glass or plastic transparency and contents.",
+            "sources": [
+              "ycb_examples"
+            ],
+            "scope": "authored_type_with_family_example",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": "Show the neck, closure state and complete base in one view.",
+            "description": null,
+            "reference_evidence": {
+              "ycb_examples": {
+                "url": "https://www.ycbbenchmarks.com/object-models/",
+                "record_sha256": "37493fad12fc0b2e1f4b86e5aed31e1aa1af051584a63fb9eca4c8e883013a8c",
+                "visual_example_reviewed": true
+              }
+            }
+          },
+          "image_prompt": {
+            "profile": "bottle",
+            "geometry": "Keep the stated vessel profile, neck, base and cap or stopper. An open vessel has a real mouth; a closed one retains its closure. Preserve explicit glass or plastic transparency and contents.",
+            "sources": [
+              "ycb_examples"
+            ],
+            "scope": "authored_type_with_family_example",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": "Show the neck, closure state and complete base in one view.",
+            "description": null,
+            "reference_evidence": {
+              "ycb_examples": {
+                "url": "https://www.ycbbenchmarks.com/object-models/",
+                "record_sha256": "37493fad12fc0b2e1f4b86e5aed31e1aa1af051584a63fb9eca4c8e883013a8c",
+                "visual_example_reviewed": true
+              }
+            }
+          }
+        }
+      }
     },
     {
       "id": "ycb_spam",
@@ -111,8 +508,68 @@
       "mass_kg": 0.35,
       "material": "metal_can",
       "purpose": "YCB benchmark object, distractor",
-      "text_prompt": "A SPAM canned meat rectangular tin, 9x8x6cm, realistic product packaging, product photography, clean white background, studio lighting, photorealistic",
-      "image_prompt": "SPAM canned meat tin, blue and yellow packaging, rectangular shape, photorealistic product shot, white studio background"
+      "text_prompt": "Subject: A SPAM canned meat rectangular tin, 9x8x6cm, realistic product packaging.\nGeometry: Preserve the specifically named everyday object, its authored package shape, material and label layout. Keep actual openings, closures and functional features coherent; do not substitute a generic object solely from its colour.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "image_prompt": "Subject: SPAM canned meat tin, blue and yellow packaging, rectangular shape, photorealistic product shot.\nGeometry: Preserve the specifically named everyday object, its authored package shape, material and label layout. Keep actual openings, closures and functional features coherent; do not substitute a generic object solely from its colour.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "text_prompt": "A SPAM canned meat rectangular tin, 9x8x6cm, realistic product packaging, product photography, clean white background, studio lighting, photorealistic",
+          "image_prompt": "SPAM canned meat tin, blue and yellow packaging, rectangular shape, photorealistic product shot, white studio background"
+        },
+        "source_sha256": {
+          "text_prompt": "22a1526f40a841b934b042c7145cd29e9472e0e54843ab1b3155ddece975cffb",
+          "image_prompt": "a8c4dd2e99809fb86dd1d512836746667ab45e7b92330d14b3213ca6d4b324a8"
+        },
+        "subject": "A SPAM canned meat rectangular tin, 9x8x6cm, realistic product packaging",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "text_prompt": {
+            "profile": "ycb_authored_object",
+            "geometry": "Preserve the specifically named everyday object, its authored package shape, material and label layout. Keep actual openings, closures and functional features coherent; do not substitute a generic object solely from its colour.",
+            "sources": [
+              "ycb_examples"
+            ],
+            "scope": "collection_example_requires_exact_item_check",
+            "checks": [
+              "exact named object",
+              "package geometry and closure",
+              "authored label layout"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {
+              "ycb_examples": {
+                "url": "https://www.ycbbenchmarks.com/object-models/",
+                "record_sha256": "37493fad12fc0b2e1f4b86e5aed31e1aa1af051584a63fb9eca4c8e883013a8c",
+                "visual_example_reviewed": true
+              }
+            }
+          },
+          "image_prompt": {
+            "profile": "ycb_authored_object",
+            "geometry": "Preserve the specifically named everyday object, its authored package shape, material and label layout. Keep actual openings, closures and functional features coherent; do not substitute a generic object solely from its colour.",
+            "sources": [
+              "ycb_examples"
+            ],
+            "scope": "collection_example_requires_exact_item_check",
+            "checks": [
+              "exact named object",
+              "package geometry and closure",
+              "authored label layout"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {
+              "ycb_examples": {
+                "url": "https://www.ycbbenchmarks.com/object-models/",
+                "record_sha256": "37493fad12fc0b2e1f4b86e5aed31e1aa1af051584a63fb9eca4c8e883013a8c",
+                "visual_example_reviewed": true
+              }
+            }
+          }
+        }
+      }
     },
     {
       "id": "ycb_bowl",
@@ -122,8 +579,50 @@
       "mass_kg": 0.18,
       "material": "ceramic_white",
       "purpose": "YCB benchmark object, containment target",
-      "text_prompt": "A simple white ceramic bowl, 16cm diameter and 5cm deep, smooth matte finish, product photography, clean white background, studio lighting, photorealistic",
-      "image_prompt": "White ceramic bowl, simple round shape, 16cm diameter 5cm deep, matte finish, photorealistic rendering, white studio background"
+      "text_prompt": "Subject: A simple white ceramic bowl, 16cm diameter and 5cm deep, smooth matte finish.\nGeometry: A household vessel with a continuous wall, defined rim and real interior cavity. Keep the stated handle, lid, material and opening; preserve an explicitly inverted, tilted or sideways pose.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: A three-quarter view making the rim, cavity and any handle visible, while preserving the authored pose. Show one view from the left, about 25 degrees around and 20 degrees above level, while retaining any explicitly requested pose or view.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "image_prompt": "Subject: White ceramic bowl, simple round shape, 16cm diameter 5cm deep, matte finish.\nGeometry: A household vessel with a continuous wall, defined rim and real interior cavity. Keep the stated handle, lid, material and opening; preserve an explicitly inverted, tilted or sideways pose.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: A three-quarter view making the rim, cavity and any handle visible, while preserving the authored pose. Show one view from the left, about 25 degrees around and 20 degrees above level, while retaining any explicitly requested pose or view.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "text_prompt": "A simple white ceramic bowl, 16cm diameter and 5cm deep, smooth matte finish, product photography, clean white background, studio lighting, photorealistic",
+          "image_prompt": "White ceramic bowl, simple round shape, 16cm diameter 5cm deep, matte finish, photorealistic rendering, white studio background"
+        },
+        "source_sha256": {
+          "text_prompt": "fdcd8bb22d5b48b1b7d914fe498f4aef2d5bbadabeaaa798137ceb6fa7e33091",
+          "image_prompt": "6b94ca8760bb0a601102ed702172d60866c5a67b0dfe8e24c987fd8f0919953e"
+        },
+        "subject": "A simple white ceramic bowl, 16cm diameter and 5cm deep, smooth matte finish",
+        "ordinal": 0,
+        "family": "vessel",
+        "specifications": {
+          "text_prompt": {
+            "profile": "hollow_household_vessel",
+            "geometry": "A household vessel with a continuous wall, defined rim and real interior cavity. Keep the stated handle, lid, material and opening; preserve an explicitly inverted, tilted or sideways pose.",
+            "sources": [],
+            "scope": "authored_description",
+            "checks": [
+              "open cavity where specified",
+              "requested handle and pose"
+            ],
+            "view": "A three-quarter view making the rim, cavity and any handle visible, while preserving the authored pose.",
+            "description": null,
+            "reference_evidence": {}
+          },
+          "image_prompt": {
+            "profile": "hollow_household_vessel",
+            "geometry": "A household vessel with a continuous wall, defined rim and real interior cavity. Keep the stated handle, lid, material and opening; preserve an explicitly inverted, tilted or sideways pose.",
+            "sources": [],
+            "scope": "authored_description",
+            "checks": [
+              "open cavity where specified",
+              "requested handle and pose"
+            ],
+            "view": "A three-quarter view making the rim, cavity and any handle visible, while preserving the authored pose.",
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "red_zone_marker",
@@ -133,8 +632,52 @@
       "mass_kg": 0.01,
       "material": "plastic_red_translucent",
       "purpose": "Visual target zone for sorting experiments",
-      "text_prompt": "A flat circular red translucent plastic marker disc, 16cm diameter and 1mm thick, semi-transparent red, product photography, clean white background",
-      "image_prompt": "Flat circular red translucent acrylic disc, 16cm diameter, very thin 1mm, semi-transparent, white background"
+      "text_prompt": "Subject: A flat circular red translucent plastic marker disc, 16cm diameter and 1mm thick, semi-transparent red.\nGeometry: A thin planar marker with the specified outline, thickness, material, colour and opacity. Keep its perimeter regular and its surface pattern undistorted.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: Face the specified target surface squarely, with its complete outline and undistorted printed pattern visible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "image_prompt": "Subject: Flat circular red translucent acrylic disc, 16cm diameter, very thin 1mm, semi-transparent.\nGeometry: A thin planar marker with the specified outline, thickness, material, colour and opacity. Keep its perimeter regular and its surface pattern undistorted.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: Face the specified target surface squarely, with its complete outline and undistorted printed pattern visible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "text_prompt": "A flat circular red translucent plastic marker disc, 16cm diameter and 1mm thick, semi-transparent red, product photography, clean white background",
+          "image_prompt": "Flat circular red translucent acrylic disc, 16cm diameter, very thin 1mm, semi-transparent, white background"
+        },
+        "source_sha256": {
+          "text_prompt": "c11b1e0774a9e68792d005b653c4b6cf751c1281766ee59804fcd1f5a2e034b1",
+          "image_prompt": "af0a87b38805f2f2944c9fb5546b7cfac14c1c55d746282873c246ccabb4193d"
+        },
+        "subject": "A flat circular red translucent plastic marker disc, 16cm diameter and 1mm thick, semi-transparent red",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "text_prompt": {
+            "profile": "target_marker",
+            "geometry": "A thin planar marker with the specified outline, thickness, material, colour and opacity. Keep its perimeter regular and its surface pattern undistorted.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          },
+          "image_prompt": {
+            "profile": "target_marker",
+            "geometry": "A thin planar marker with the specified outline, thickness, material, colour and opacity. Keep its perimeter regular and its surface pattern undistorted.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "blue_zone_marker",
@@ -144,8 +687,52 @@
       "mass_kg": 0.01,
       "material": "plastic_blue_translucent",
       "purpose": "Visual target zone for sorting experiments",
-      "text_prompt": "A flat circular blue translucent plastic marker disc, 16cm diameter and 1mm thick, semi-transparent blue, product photography, clean white background",
-      "image_prompt": "Flat circular blue translucent acrylic disc, 16cm diameter, very thin 1mm, semi-transparent, white background"
+      "text_prompt": "Subject: A flat circular blue translucent plastic marker disc, 16cm diameter and 1mm thick, semi-transparent blue.\nGeometry: A thin planar marker with the specified outline, thickness, material, colour and opacity. Keep its perimeter regular and its surface pattern undistorted.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: Face the specified target surface squarely, with its complete outline and undistorted printed pattern visible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "image_prompt": "Subject: Flat circular blue translucent acrylic disc, 16cm diameter, very thin 1mm, semi-transparent.\nGeometry: A thin planar marker with the specified outline, thickness, material, colour and opacity. Keep its perimeter regular and its surface pattern undistorted.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: Face the specified target surface squarely, with its complete outline and undistorted printed pattern visible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "text_prompt": "A flat circular blue translucent plastic marker disc, 16cm diameter and 1mm thick, semi-transparent blue, product photography, clean white background",
+          "image_prompt": "Flat circular blue translucent acrylic disc, 16cm diameter, very thin 1mm, semi-transparent, white background"
+        },
+        "source_sha256": {
+          "text_prompt": "fedde7b98eeaa18513cdd9f23990047265799d3e5b3009b6efa5274f81df0822",
+          "image_prompt": "9626e89409a39123373c0e355bc083c29761a125a6dd2f8eb73f159bfbe29c45"
+        },
+        "subject": "A flat circular blue translucent plastic marker disc, 16cm diameter and 1mm thick, semi-transparent blue",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "text_prompt": {
+            "profile": "target_marker",
+            "geometry": "A thin planar marker with the specified outline, thickness, material, colour and opacity. Keep its perimeter regular and its surface pattern undistorted.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          },
+          "image_prompt": {
+            "profile": "target_marker",
+            "geometry": "A thin planar marker with the specified outline, thickness, material, colour and opacity. Keep its perimeter regular and its surface pattern undistorted.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "target_marker",
@@ -155,8 +742,52 @@
       "mass_kg": 0.005,
       "material": "plastic_gray_matte",
       "purpose": "Generic stacking target marker",
-      "text_prompt": "A flat circular gray matte plastic marker disc, 8cm diameter and 1mm thick, neutral gray color, product photography, clean white background",
-      "image_prompt": "Flat circular gray matte plastic disc marker, 8cm diameter, very thin, neutral gray, white background"
+      "text_prompt": "Subject: A flat circular gray matte plastic marker disc, 8cm diameter and 1mm thick, neutral gray color.\nGeometry: A thin planar marker with the specified outline, thickness, material, colour and opacity. Keep its perimeter regular and its surface pattern undistorted.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: Face the specified target surface squarely, with its complete outline and undistorted printed pattern visible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "image_prompt": "Subject: Flat circular gray matte plastic disc marker, 8cm diameter, very thin, neutral gray.\nGeometry: A thin planar marker with the specified outline, thickness, material, colour and opacity. Keep its perimeter regular and its surface pattern undistorted.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: Face the specified target surface squarely, with its complete outline and undistorted printed pattern visible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "text_prompt": "A flat circular gray matte plastic marker disc, 8cm diameter and 1mm thick, neutral gray color, product photography, clean white background",
+          "image_prompt": "Flat circular gray matte plastic disc marker, 8cm diameter, very thin, neutral gray, white background"
+        },
+        "source_sha256": {
+          "text_prompt": "caa3efacc0b1455373755a225cfa96a23d98e7f66fa2717b3a26f54aef6e761d",
+          "image_prompt": "f46732a347f3912ad5314b29b24a224a829271c8a1832629f83068f7ce8c0176"
+        },
+        "subject": "A flat circular gray matte plastic marker disc, 8cm diameter and 1mm thick, neutral gray color",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "text_prompt": {
+            "profile": "target_marker",
+            "geometry": "A thin planar marker with the specified outline, thickness, material, colour and opacity. Keep its perimeter regular and its surface pattern undistorted.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          },
+          "image_prompt": {
+            "profile": "target_marker",
+            "geometry": "A thin planar marker with the specified outline, thickness, material, colour and opacity. Keep its perimeter regular and its surface pattern undistorted.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "hollow_cylinder",
@@ -166,8 +797,52 @@
       "mass_kg": 0.08,
       "material": "plastic_orange",
       "purpose": "Novel geometry challenge for Exp7 - hollow tube for peg insertion",
-      "text_prompt": "An orange plastic hollow tube/cylinder, outer diameter 6cm, inner hole 4cm, 8cm tall, like a pipe section, product photography, clean white background, studio lighting",
-      "image_prompt": "Orange plastic hollow cylinder tube, pipe-like with visible hole through center, 6cm outer 4cm inner diameter, 8cm tall, photorealistic, white background"
+      "text_prompt": "Subject: An orange plastic hollow tube/cylinder, outer diameter 6cm, inner hole 4cm, 8cm tall, like a pipe section.\nGeometry: An open tube with a continuous wall and a genuine through-bore. Preserve the authored inner and outer diameters, length and material; both rims have readable thickness.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: Look obliquely through one open end so the bore and wall thickness are readable. Show one view from the left, about 25 degrees around and 20 degrees above level, while retaining any explicitly requested pose or view.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "image_prompt": "Subject: Orange plastic hollow cylinder tube, pipe-like with visible hole through center, 6cm outer 4cm inner diameter, 8cm tall.\nGeometry: An open tube with a continuous wall and a genuine through-bore. Preserve the authored inner and outer diameters, length and material; both rims have readable thickness.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: Look obliquely through one open end so the bore and wall thickness are readable. Show one view from the left, about 25 degrees around and 20 degrees above level, while retaining any explicitly requested pose or view.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "text_prompt": "An orange plastic hollow tube/cylinder, outer diameter 6cm, inner hole 4cm, 8cm tall, like a pipe section, product photography, clean white background, studio lighting",
+          "image_prompt": "Orange plastic hollow cylinder tube, pipe-like with visible hole through center, 6cm outer 4cm inner diameter, 8cm tall, photorealistic, white background"
+        },
+        "source_sha256": {
+          "text_prompt": "d6df0b5f837f25cb8fdfd36bd6a88275eba664b3a23989432f39bb436bbb74ec",
+          "image_prompt": "7e7ecf72658993757216000d64b16e03f813fbd927dc613420366e928f3d354a"
+        },
+        "subject": "An orange plastic hollow tube/cylinder, outer diameter 6cm, inner hole 4cm, 8cm tall, like a pipe section",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "text_prompt": {
+            "profile": "hollow_tube",
+            "geometry": "An open tube with a continuous wall and a genuine through-bore. Preserve the authored inner and outer diameters, length and material; both rims have readable thickness.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": "Look obliquely through one open end so the bore and wall thickness are readable.",
+            "description": null,
+            "reference_evidence": {}
+          },
+          "image_prompt": {
+            "profile": "hollow_tube",
+            "geometry": "An open tube with a continuous wall and a genuine through-bore. Preserve the authored inner and outer diameters, length and material; both rims have readable thickness.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": "Look obliquely through one open end so the bore and wall thickness are readable.",
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "dice_cup",
@@ -177,8 +852,50 @@
       "mass_kg": 0.05,
       "material": "leather_brown",
       "purpose": "Containment target for weighted die (Exp7)",
-      "text_prompt": "A brown leather dice cup, 8cm diameter and 6cm tall, open at top, classic bar dice cup style, product photography, clean white background, studio lighting",
-      "image_prompt": "Brown leather dice shaker cup, classic bar style, 8cm diameter 6cm tall, open top, photorealistic, white studio background"
+      "text_prompt": "Subject: A brown leather dice cup, 8cm diameter and 6cm tall, open at top, classic bar dice cup style.\nGeometry: A household vessel with a continuous wall, defined rim and real interior cavity. Keep the stated handle, lid, material and opening; preserve an explicitly inverted, tilted or sideways pose.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: A three-quarter view making the rim, cavity and any handle visible, while preserving the authored pose. Show one view from the left, about 25 degrees around and 20 degrees above level, while retaining any explicitly requested pose or view.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "image_prompt": "Subject: Brown leather dice shaker cup, classic bar style, 8cm diameter 6cm tall, open top.\nGeometry: A household vessel with a continuous wall, defined rim and real interior cavity. Keep the stated handle, lid, material and opening; preserve an explicitly inverted, tilted or sideways pose.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: A three-quarter view making the rim, cavity and any handle visible, while preserving the authored pose. Show one view from the left, about 25 degrees around and 20 degrees above level, while retaining any explicitly requested pose or view.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "text_prompt": "A brown leather dice cup, 8cm diameter and 6cm tall, open at top, classic bar dice cup style, product photography, clean white background, studio lighting",
+          "image_prompt": "Brown leather dice shaker cup, classic bar style, 8cm diameter 6cm tall, open top, photorealistic, white studio background"
+        },
+        "source_sha256": {
+          "text_prompt": "ddc289bb61b2fa8b7cf74dc6dd7ee683e902795436e7dbdfc43b3eebfcfed939",
+          "image_prompt": "33cd489250604c32a15a07ad401f5e0d3c63285c01b0fd9a796d124c8639eda2"
+        },
+        "subject": "A brown leather dice cup, 8cm diameter and 6cm tall, open at top, classic bar dice cup style",
+        "ordinal": 0,
+        "family": "vessel",
+        "specifications": {
+          "text_prompt": {
+            "profile": "hollow_household_vessel",
+            "geometry": "A household vessel with a continuous wall, defined rim and real interior cavity. Keep the stated handle, lid, material and opening; preserve an explicitly inverted, tilted or sideways pose.",
+            "sources": [],
+            "scope": "authored_description",
+            "checks": [
+              "open cavity where specified",
+              "requested handle and pose"
+            ],
+            "view": "A three-quarter view making the rim, cavity and any handle visible, while preserving the authored pose.",
+            "description": null,
+            "reference_evidence": {}
+          },
+          "image_prompt": {
+            "profile": "hollow_household_vessel",
+            "geometry": "A household vessel with a continuous wall, defined rim and real interior cavity. Keep the stated handle, lid, material and opening; preserve an explicitly inverted, tilted or sideways pose.",
+            "sources": [],
+            "scope": "authored_description",
+            "checks": [
+              "open cavity where specified",
+              "requested handle and pose"
+            ],
+            "view": "A three-quarter view making the rim, cavity and any handle visible, while preserving the authored pose.",
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "l_block",
@@ -188,8 +905,50 @@
       "mass_kg": 0.15,
       "material": "wood_natural",
       "purpose": "Compound geometry grasp planning challenge (Exp7)",
-      "text_prompt": "An L-shaped wooden block, natural oak wood, formed from two rectangular pieces joined at right angle, total size approximately 8x8x4cm, product photography, clean white background",
-      "image_prompt": "L-shaped natural wooden block, light oak color, two perpendicular rectangular pieces forming L shape, photorealistic, white studio background"
+      "text_prompt": "Subject: An L-shaped wooden block, natural oak wood, formed from two rectangular pieces joined at right angle, total size approximately 8x8x4cm.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "image_prompt": "Subject: L-shaped natural wooden block, light oak color, two perpendicular rectangular pieces forming L shape.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "text_prompt": "An L-shaped wooden block, natural oak wood, formed from two rectangular pieces joined at right angle, total size approximately 8x8x4cm, product photography, clean white background",
+          "image_prompt": "L-shaped natural wooden block, light oak color, two perpendicular rectangular pieces forming L shape, photorealistic, white studio background"
+        },
+        "source_sha256": {
+          "text_prompt": "1132ad1b48e01b649d2bba3a7655e92c2db6ef1cecfb12fb7219f7ead0dda951",
+          "image_prompt": "f530dde6f386306767c139bb3f280ccaa4dd36ba0a9246f52324129760419ed6"
+        },
+        "subject": "An L-shaped wooden block, natural oak wood, formed from two rectangular pieces joined at right angle, total size approximately 8x8x4cm",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "text_prompt": {
+            "profile": "authored_novel_geometry",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          },
+          "image_prompt": {
+            "profile": "authored_novel_geometry",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "target_platform",
@@ -199,8 +958,50 @@
       "mass_kg": 0.02,
       "material": "plastic_matte_gray",
       "purpose": "Standard placement target platform",
-      "text_prompt": "A flat square gray matte plastic platform, 8cm x 8cm and 1cm thick, neutral gray color, product photography, clean white background, studio lighting",
-      "image_prompt": "Flat square gray plastic platform tile, 8x8x1cm, matte finish, neutral gray, photorealistic, white background"
+      "text_prompt": "Subject: A flat square gray matte plastic platform, 8cm x 8cm and 1cm thick, neutral gray color.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: Face the specified target surface squarely, with its complete outline and undistorted printed pattern visible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "image_prompt": "Subject: Flat square gray plastic platform tile, 8x8x1cm, matte finish, neutral gray.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: Face the specified target surface squarely, with its complete outline and undistorted printed pattern visible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "text_prompt": "A flat square gray matte plastic platform, 8cm x 8cm and 1cm thick, neutral gray color, product photography, clean white background, studio lighting",
+          "image_prompt": "Flat square gray plastic platform tile, 8x8x1cm, matte finish, neutral gray, photorealistic, white background"
+        },
+        "source_sha256": {
+          "text_prompt": "8f3a00d69feadc0a2f73bd8a8c4de41b4be099d7194d29c2872c3f06b3e16729",
+          "image_prompt": "6f3110595c5317c79eecd99fc7ae022985897bab64cb08a794430ba19abea2c9"
+        },
+        "subject": "A flat square gray matte plastic platform, 8cm x 8cm and 1cm thick, neutral gray color",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "text_prompt": {
+            "profile": "authored_target_surface",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          },
+          "image_prompt": {
+            "profile": "authored_target_surface",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "metal_peg",
@@ -210,8 +1011,50 @@
       "mass_kg": 0.3,
       "material": "metal_steel",
       "purpose": "Precision alignment target for hollow cylinder insertion",
-      "text_prompt": "A polished steel metal peg/cylinder, 3cm diameter and 6cm tall, shiny metallic surface, industrial look, product photography, clean white background, studio lighting",
-      "image_prompt": "Polished steel metal cylindrical peg, shiny chrome finish, 3cm diameter 6cm tall, photorealistic, white studio background"
+      "text_prompt": "Subject: A polished steel metal peg/cylinder, 3cm diameter and 6cm tall, shiny metallic surface, industrial look.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "image_prompt": "Subject: Polished steel metal cylindrical peg, shiny chrome finish, 3cm diameter 6cm tall.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "text_prompt": "A polished steel metal peg/cylinder, 3cm diameter and 6cm tall, shiny metallic surface, industrial look, product photography, clean white background, studio lighting",
+          "image_prompt": "Polished steel metal cylindrical peg, shiny chrome finish, 3cm diameter 6cm tall, photorealistic, white studio background"
+        },
+        "source_sha256": {
+          "text_prompt": "3d8be75bc5a7a0a96c29c3b3cc0740c4bd899d9cf1fab18929f61e7c155df1a5",
+          "image_prompt": "f5f0c724afe9056d087037635c9773ed21debb5fc14c7c47feacda6a57304091"
+        },
+        "subject": "A polished steel metal peg/cylinder, 3cm diameter and 6cm tall, shiny metallic surface, industrial look",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "text_prompt": {
+            "profile": "authored_novel_geometry",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          },
+          "image_prompt": {
+            "profile": "authored_novel_geometry",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "glass_cube",
@@ -221,8 +1064,50 @@
       "mass_kg": 0.25,
       "material": "glass_transparent",
       "purpose": "Transparent object physics proxy challenge (Exp7)",
-      "text_prompt": "A transparent glass cube, 6cm on each side, clear glass with visible edges and slight refraction, product photography, clean white background, studio lighting",
-      "image_prompt": "Clear transparent glass cube paperweight, 6cm sides, visible edges and refraction, photorealistic, white studio background with caustics"
+      "text_prompt": "Subject: A transparent glass cube, 6cm on each side, clear glass with visible edges and slight refraction.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "image_prompt": "Subject: Clear transparent glass cube paperweight, 6cm sides, visible edges and refraction, white studio background with caustics.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "text_prompt": "A transparent glass cube, 6cm on each side, clear glass with visible edges and slight refraction, product photography, clean white background, studio lighting",
+          "image_prompt": "Clear transparent glass cube paperweight, 6cm sides, visible edges and refraction, photorealistic, white studio background with caustics"
+        },
+        "source_sha256": {
+          "text_prompt": "7c3d30ea482481a9d716de0c8bec770536e4e6f595e9db64e946260323dde807",
+          "image_prompt": "8494e024d6f41585c2be2be675927910eb34e3a3b29c488747c1d69469f4bdba"
+        },
+        "subject": "A transparent glass cube, 6cm on each side, clear glass with visible edges and slight refraction",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "text_prompt": {
+            "profile": "authored_novel_geometry",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          },
+          "image_prompt": {
+            "profile": "authored_novel_geometry",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "tabletop_scene",
@@ -232,8 +1117,52 @@
       "mass_kg": null,
       "material": "wood_oak_laminate",
       "purpose": "Primary environment - lab table surface",
-      "text_prompt": "A standard laboratory table, 120cm x 80cm surface, 75cm tall, light oak wood laminate top with metal legs, clean modern style, product photography, clean white background",
-      "image_prompt": "Modern laboratory work table, light oak laminate top 120x80cm, metal frame legs, 75cm height, photorealistic, clean studio setting"
+      "text_prompt": "Subject: A standard laboratory table, 120cm x 80cm surface, 75cm tall, light oak wood laminate top with metal legs, clean modern style.\nGeometry: A continuous tabletop with the authored thickness and support structure. Legs or pedestals meet the underside at coherent joints; retain the described footprint, shelves and material.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: Show the top and supporting structure with the entire footprint visible. Show one view from the left, about 25 degrees around and 20 degrees above level, while retaining any explicitly requested pose or view.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "image_prompt": "Subject: Modern laboratory work table, light oak laminate top 120x80cm, metal frame legs, 75cm height, clean studio setting.\nGeometry: A continuous tabletop with the authored thickness and support structure. Legs or pedestals meet the underside at coherent joints; retain the described footprint, shelves and material.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: Show the top and supporting structure with the entire footprint visible. Show one view from the left, about 25 degrees around and 20 degrees above level, while retaining any explicitly requested pose or view.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "text_prompt": "A standard laboratory table, 120cm x 80cm surface, 75cm tall, light oak wood laminate top with metal legs, clean modern style, product photography, clean white background",
+          "image_prompt": "Modern laboratory work table, light oak laminate top 120x80cm, metal frame legs, 75cm height, photorealistic, clean studio setting"
+        },
+        "source_sha256": {
+          "text_prompt": "b3a1863ea7207f540a3270116525415699e512e5bb0aa66bd0a860952ed0caea",
+          "image_prompt": "c633deba3c985dc1c0232591fd8c7bbbc4fbc3a81a02dc431bdb126e822a4b2d"
+        },
+        "subject": "A standard laboratory table, 120cm x 80cm surface, 75cm tall, light oak wood laminate top with metal legs, clean modern style",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "text_prompt": {
+            "profile": "table",
+            "geometry": "A continuous tabletop with the authored thickness and support structure. Legs or pedestals meet the underside at coherent joints; retain the described footprint, shelves and material.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": "Show the top and supporting structure with the entire footprint visible.",
+            "description": null,
+            "reference_evidence": {}
+          },
+          "image_prompt": {
+            "profile": "table",
+            "geometry": "A continuous tabletop with the authored thickness and support structure. Legs or pedestals meet the underside at coherent joints; retain the described footprint, shelves and material.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": "Show the top and supporting structure with the entire footprint visible.",
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "franka_panda_gripper",
@@ -243,8 +1172,68 @@
       "mass_kg": null,
       "material": "metal_white_plastic",
       "purpose": "Franka Panda robot gripper for manipulation",
-      "text_prompt": "A Franka Emika Panda robot parallel gripper, white and gray industrial robot end-effector, two finger gripper, product photography, clean white background",
-      "image_prompt": "Franka Panda robot gripper end-effector, white plastic and metal, two-finger parallel gripper, industrial robot part, photorealistic, white background"
+      "text_prompt": "Subject: A Franka Emika Panda robot parallel gripper, white and gray industrial robot end-effector, two finger gripper.\nGeometry: The end-effector alone: compact white and gray housing, two opposed parallel fingers with dark gripping pads, and its mounting flange. Fingers connect to the housing and face each other across one open grasping gap.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "image_prompt": "Subject: Franka Panda robot gripper end-effector, white plastic and metal, two-finger parallel gripper, industrial robot part.\nGeometry: The end-effector alone: compact white and gray housing, two opposed parallel fingers with dark gripping pads, and its mounting flange. Fingers connect to the housing and face each other across one open grasping gap.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "text_prompt": "A Franka Emika Panda robot parallel gripper, white and gray industrial robot end-effector, two finger gripper, product photography, clean white background",
+          "image_prompt": "Franka Panda robot gripper end-effector, white plastic and metal, two-finger parallel gripper, industrial robot part, photorealistic, white background"
+        },
+        "source_sha256": {
+          "text_prompt": "012df6666bc25c9031257758e583ed9adce078aa46df056b7df763d9e1b21618",
+          "image_prompt": "53d814c0c03fcafdeb1976b9a7b3e80e1e63e63b50abd753b39cc6c5ab233212"
+        },
+        "subject": "A Franka Emika Panda robot parallel gripper, white and gray industrial robot end-effector, two finger gripper",
+        "ordinal": 0,
+        "family": "gripper",
+        "specifications": {
+          "text_prompt": {
+            "profile": "franka_parallel_hand",
+            "geometry": "The end-effector alone: compact white and gray housing, two opposed parallel fingers with dark gripping pads, and its mounting flange. Fingers connect to the housing and face each other across one open grasping gap.",
+            "sources": [
+              "franka_hand"
+            ],
+            "scope": "model_family_reference",
+            "checks": [
+              "two opposed fingers",
+              "open grasping gap",
+              "end-effector, not a whole robot arm"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {
+              "franka_hand": {
+                "url": "https://franka.de/de/franka-hand",
+                "record_sha256": "a35a29a54b127c7064fb3fa6bbc78ac1d3f05abe2e9ee7f8f8702e38130a96d5",
+                "visual_example_reviewed": true
+              }
+            }
+          },
+          "image_prompt": {
+            "profile": "franka_parallel_hand",
+            "geometry": "The end-effector alone: compact white and gray housing, two opposed parallel fingers with dark gripping pads, and its mounting flange. Fingers connect to the housing and face each other across one open grasping gap.",
+            "sources": [
+              "franka_hand"
+            ],
+            "scope": "model_family_reference",
+            "checks": [
+              "two opposed fingers",
+              "open grasping gap",
+              "end-effector, not a whole robot arm"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {
+              "franka_hand": {
+                "url": "https://franka.de/de/franka-hand",
+                "record_sha256": "a35a29a54b127c7064fb3fa6bbc78ac1d3f05abe2e9ee7f8f8702e38130a96d5",
+                "visual_example_reviewed": true
+              }
+            }
+          }
+        }
+      }
     },
     {
       "id": "black_panel_occluder",
@@ -254,8 +1243,51 @@
       "mass_kg": 0.05,
       "material": "plastic_matte_black",
       "purpose": "Floating occluder for visual perturbation experiments",
-      "text_prompt": "A flat square black matte plastic panel, 20cm x 20cm and 0.5cm thick, solid black color, product photography, clean gray background",
-      "image_prompt": "Flat square matte black plastic panel, 20x20cm, thin 5mm, solid black, photorealistic, gray background"
+      "text_prompt": "Subject: A flat square black matte plastic panel, 20cm x 20cm and 0.5cm thick, solid black color.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "image_prompt": "Subject: Flat square matte black plastic panel, 20x20cm, thin 5mm, solid black.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "text_prompt": "A flat square black matte plastic panel, 20cm x 20cm and 0.5cm thick, solid black color, product photography, clean gray background",
+          "image_prompt": "Flat square matte black plastic panel, 20x20cm, thin 5mm, solid black, photorealistic, gray background"
+        },
+        "source_sha256": {
+          "text_prompt": "b5f6a8ecb017d232f100ac52f873d9252d7c274b9000b8a21ce98346ee8c4de2",
+          "image_prompt": "538797471b1d5275ab13e73167f8ae1e12cc8b39920ab870ca2125c48d69e3dd"
+        },
+        "subject": "A flat square black matte plastic panel, 20cm x 20cm and 0.5cm thick, solid black color",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "text_prompt": {
+            "profile": "authored_perturbation",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          },
+          "image_prompt": {
+            "profile": "authored_perturbation",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     }
-  ]
+  ],
+  "generation_prompt_version": 2
 }

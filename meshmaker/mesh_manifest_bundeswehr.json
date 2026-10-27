@@ -5,172 +5,1091 @@
     {
       "id": "vehicle_Leopard_2A7",
       "category": "bundeswehr_vehicles",
-      "prompt": "German main battle tank Leopard 2A7, desert camo, photorealistic, isolated, white background, military vehicle"
+      "prompt": "Subject: German main battle tank Leopard 2A7, desert camo, military vehicle.\nGeometry: Preserve the stated chassis and body type. Straight axles, aligned wheels, correctly centered wheel hubs and a continuous body shell. Doors and service panels are closed unless the subject explicitly requires them open. Interior fittings appear through genuine windows or openings, without cutaways or missing body panels.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "German main battle tank Leopard 2A7, desert camo, photorealistic, isolated, white background, military vehicle"
+        },
+        "source_sha256": {
+          "prompt": "8fb84e8cde7a17223ffb9b99f88eddaab00c4b5ecfac23c242e48069ec9a45b2"
+        },
+        "subject": "German main battle tank Leopard 2A7, desert camo, military vehicle",
+        "ordinal": 0,
+        "family": "vehicle",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_vehicles",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "vehicle_Puma_IFV",
       "category": "bundeswehr_vehicles",
-      "prompt": "Bundeswehr Puma infantry fighting vehicle, forest camo, photorealistic, isolated, white background, military vehicle"
+      "prompt": "Subject: Bundeswehr Puma infantry fighting vehicle, forest camo, military vehicle.\nGeometry: Preserve the stated chassis and body type. Straight axles, aligned wheels, correctly centered wheel hubs and a continuous body shell. Doors and service panels are closed unless the subject explicitly requires them open. Interior fittings appear through genuine windows or openings, without cutaways or missing body panels.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Bundeswehr Puma infantry fighting vehicle, forest camo, photorealistic, isolated, white background, military vehicle"
+        },
+        "source_sha256": {
+          "prompt": "879e375eca240a59e41be4bfe723e1b3b3f815a210f66fd5127f44b150353c0a"
+        },
+        "subject": "Bundeswehr Puma infantry fighting vehicle, forest camo, military vehicle",
+        "ordinal": 0,
+        "family": "vehicle",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_vehicles",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "vehicle_Boxer_GTK",
       "category": "bundeswehr_vehicles",
-      "prompt": "GTK Boxer armored transport vehicle, modular mission module, photorealistic, isolated, white background, military vehicle"
+      "prompt": "Subject: GTK Boxer armored transport vehicle, modular mission module, military vehicle.\nGeometry: Preserve the stated chassis and body type. Straight axles, aligned wheels, correctly centered wheel hubs and a continuous body shell. Doors and service panels are closed unless the subject explicitly requires them open. Interior fittings appear through genuine windows or openings, without cutaways or missing body panels.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "GTK Boxer armored transport vehicle, modular mission module, photorealistic, isolated, white background, military vehicle"
+        },
+        "source_sha256": {
+          "prompt": "c237ca03bb9c9c253b3f21484c53b89dd2f8dbffd3ca4bc932c978268c00518d"
+        },
+        "subject": "GTK Boxer armored transport vehicle, modular mission module, military vehicle",
+        "ordinal": 0,
+        "family": "vehicle",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_vehicles",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "vehicle_Fennek_Recon",
       "category": "bundeswehr_vehicles",
-      "prompt": "Fennek reconnaissance vehicle, light armored car, photorealistic, isolated, white background, military vehicle"
+      "prompt": "Subject: Fennek reconnaissance vehicle, light armored car, military vehicle.\nGeometry: Preserve the stated chassis and body type. Straight axles, aligned wheels, correctly centered wheel hubs and a continuous body shell. Doors and service panels are closed unless the subject explicitly requires them open. Interior fittings appear through genuine windows or openings, without cutaways or missing body panels.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Fennek reconnaissance vehicle, light armored car, photorealistic, isolated, white background, military vehicle"
+        },
+        "source_sha256": {
+          "prompt": "ed07513fd584a7b62d06b2240547b2d00f3a12fa9f368147dbadc83912a762d2"
+        },
+        "subject": "Fennek reconnaissance vehicle, light armored car, military vehicle",
+        "ordinal": 0,
+        "family": "vehicle",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_vehicles",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "vehicle_Dingo_2",
       "category": "bundeswehr_vehicles",
-      "prompt": "ATF Dingo 2 protected patrol vehicle, photorealistic, isolated, white background, military vehicle"
+      "prompt": "Subject: ATF Dingo 2 protected patrol vehicle, military vehicle.\nGeometry: Preserve the stated chassis and body type. Straight axles, aligned wheels, correctly centered wheel hubs and a continuous body shell. Doors and service panels are closed unless the subject explicitly requires them open. Interior fittings appear through genuine windows or openings, without cutaways or missing body panels.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "ATF Dingo 2 protected patrol vehicle, photorealistic, isolated, white background, military vehicle"
+        },
+        "source_sha256": {
+          "prompt": "73bc70409bb3a935882f787002693bf36d87cdc2fea86761678c9902deb3ef72"
+        },
+        "subject": "ATF Dingo 2 protected patrol vehicle, military vehicle",
+        "ordinal": 0,
+        "family": "vehicle",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_vehicles",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "vehicle_PzH_2000",
       "category": "bundeswehr_vehicles",
-      "prompt": "Panzerhaubitze 2000 self-propelled howitzer, photorealistic, isolated, white background, military vehicle"
+      "prompt": "Subject: Panzerhaubitze 2000 self-propelled howitzer, military vehicle.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Panzerhaubitze 2000 self-propelled howitzer, photorealistic, isolated, white background, military vehicle"
+        },
+        "source_sha256": {
+          "prompt": "6fff43aa42a86c3f527182cb6279fef84f6cc58226fc0d2c439c6600835dd3b8"
+        },
+        "subject": "Panzerhaubitze 2000 self-propelled howitzer, military vehicle",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_vehicles",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "airdef_Gepard_1A2",
       "category": "bundeswehr_airdefense",
-      "prompt": "Flakpanzer Gepard anti-aircraft gun tank, dual autocannons, military engineering, detailed, isolated, white background"
+      "prompt": "Subject: Flakpanzer Gepard anti-aircraft gun tank, dual autocannons, military engineering, detailed.\nGeometry: Preserve the specified wing, tail and fuselage arrangement. Paired wings and landing-gear mounts are aligned consistently with the airframe. Propellers, when specified, are stationary with distinct rigid blades. Use the described aerospace materials, without ground-vehicle attachments.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Flakpanzer Gepard anti-aircraft gun tank, dual autocannons, military engineering, detailed, isolated, white background"
+        },
+        "source_sha256": {
+          "prompt": "9b210401dde73812ff0d2df7c4521ac9b860580ec248fb366193cdf7a0eeaa83"
+        },
+        "subject": "Flakpanzer Gepard anti-aircraft gun tank, dual autocannons, military engineering, detailed",
+        "ordinal": 0,
+        "family": "aircraft",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_airdefense",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "airdef_IRIS_T_SLM_Launcher",
       "category": "bundeswehr_airdefense",
-      "prompt": "IRIS-T SLM launcher vehicle, german air defense system, military engineering, detailed, isolated, white background"
+      "prompt": "Subject: IRIS-T SLM launcher vehicle, german air defense system, military engineering, detailed.\nGeometry: Preserve the stated chassis and body type. Straight axles, aligned wheels, correctly centered wheel hubs and a continuous body shell. Doors and service panels are closed unless the subject explicitly requires them open. Interior fittings appear through genuine windows or openings, without cutaways or missing body panels.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "IRIS-T SLM launcher vehicle, german air defense system, military engineering, detailed, isolated, white background"
+        },
+        "source_sha256": {
+          "prompt": "ea168011e731369a722471933ce0b305d6e6430699dd5654ec0d66cb34d4a97c"
+        },
+        "subject": "IRIS-T SLM launcher vehicle, german air defense system, military engineering, detailed",
+        "ordinal": 0,
+        "family": "vehicle",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_airdefense",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "airdef_Patriot_Launcher_Truck",
       "category": "bundeswehr_airdefense",
-      "prompt": "M901 Launching Station on MAN truck chassis, Luftwaffe markings, military engineering, detailed, isolated, white background"
+      "prompt": "Subject: M901 Launching Station on MAN truck chassis, Luftwaffe markings, military engineering, detailed.\nGeometry: Preserve the stated chassis and body type. Straight axles, aligned wheels, correctly centered wheel hubs and a continuous body shell. Doors and service panels are closed unless the subject explicitly requires them open. Interior fittings appear through genuine windows or openings, without cutaways or missing body panels.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "M901 Launching Station on MAN truck chassis, Luftwaffe markings, military engineering, detailed, isolated, white background"
+        },
+        "source_sha256": {
+          "prompt": "b8fac4084692fc0d92d6e8891bb4a1ec95a1cbd3a98f4c5826038e4102d1b1cb"
+        },
+        "subject": "M901 Launching Station on MAN truck chassis, Luftwaffe markings, military engineering, detailed",
+        "ordinal": 0,
+        "family": "vehicle",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_airdefense",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "airdef_MANTIS_Turret",
       "category": "bundeswehr_airdefense",
-      "prompt": "MANTIS air defence system turret, stationary C-RAM, military engineering, detailed, isolated, white background"
+      "prompt": "Subject: MANTIS air defence system turret, stationary C-RAM, military engineering, detailed.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "MANTIS air defence system turret, stationary C-RAM, military engineering, detailed, isolated, white background"
+        },
+        "source_sha256": {
+          "prompt": "333b83a0d535675e98952f326d8f2d9aa94d613c474e18af682e225213885be4"
+        },
+        "subject": "MANTIS air defence system turret, stationary C-RAM, military engineering, detailed",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_airdefense",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "airdef_Ozelot_Wiesel_2",
       "category": "bundeswehr_airdefense",
-      "prompt": "LeFlaSys Ozelot on Wiesel 2 chassis, stinger launcher, military engineering, detailed, isolated, white background"
+      "prompt": "Subject: LeFlaSys Ozelot on Wiesel 2 chassis, stinger launcher, military engineering, detailed.\nGeometry: Preserve the stated chassis and body type. Straight axles, aligned wheels, correctly centered wheel hubs and a continuous body shell. Doors and service panels are closed unless the subject explicitly requires them open. Interior fittings appear through genuine windows or openings, without cutaways or missing body panels.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "LeFlaSys Ozelot on Wiesel 2 chassis, stinger launcher, military engineering, detailed, isolated, white background"
+        },
+        "source_sha256": {
+          "prompt": "c1f493fbee88b0a4d877eaf434ff32ebcc149c16168859eb8415ecdec7c852b7"
+        },
+        "subject": "LeFlaSys Ozelot on Wiesel 2 chassis, stinger launcher, military engineering, detailed",
+        "ordinal": 0,
+        "family": "vehicle",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_airdefense",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "airdef_Radar_TRML_4D",
       "category": "bundeswehr_airdefense",
-      "prompt": "TRML-4D radar system truck, active electronically scanned array, military engineering, detailed, isolated, white background"
+      "prompt": "Subject: TRML-4D radar system truck, active electronically scanned array, military engineering, detailed.\nGeometry: Preserve the stated chassis and body type. Straight axles, aligned wheels, correctly centered wheel hubs and a continuous body shell. Doors and service panels are closed unless the subject explicitly requires them open. Interior fittings appear through genuine windows or openings, without cutaways or missing body panels.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "TRML-4D radar system truck, active electronically scanned array, military engineering, detailed, isolated, white background"
+        },
+        "source_sha256": {
+          "prompt": "7d04067c739d7963b5610600dac0431f7dc407731810fe61af014acb4078c921"
+        },
+        "subject": "TRML-4D radar system truck, active electronically scanned array, military engineering, detailed",
+        "ordinal": 0,
+        "family": "vehicle",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_airdefense",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "aircraft_Eurofighter_Typhoon",
       "category": "bundeswehr_aircraft",
-      "prompt": "Eurofighter Typhoon, Luftwaffe grey livery, air superiority fighter, aircraft in flight configuration or landed, isolated, white background"
+      "prompt": "Subject: Eurofighter Typhoon, Luftwaffe grey livery, air superiority fighter, aircraft in flight configuration or landed.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Eurofighter Typhoon, Luftwaffe grey livery, air superiority fighter, aircraft in flight configuration or landed, isolated, white background"
+        },
+        "source_sha256": {
+          "prompt": "c04d3b0d12879d8d90b46dca62d77e036a4dd5a05fcc8bb6d27c1927eef4c898"
+        },
+        "subject": "Eurofighter Typhoon, Luftwaffe grey livery, air superiority fighter, aircraft in flight configuration or landed",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_aircraft",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "aircraft_Panavia_Tornado_IDS",
       "category": "bundeswehr_aircraft",
-      "prompt": "Panavia Tornado IDS, German Air Force, recon configuration, aircraft in flight configuration or landed, isolated, white background"
+      "prompt": "Subject: Panavia Tornado IDS, German Air Force, recon configuration, aircraft in flight configuration or landed.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Panavia Tornado IDS, German Air Force, recon configuration, aircraft in flight configuration or landed, isolated, white background"
+        },
+        "source_sha256": {
+          "prompt": "aa4b8c07e427e4c8166dc113cc65d717ef3ed0c83e4effccfdcf7c37df5d5d9a"
+        },
+        "subject": "Panavia Tornado IDS, German Air Force, recon configuration, aircraft in flight configuration or landed",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_aircraft",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "aircraft_Tiger_UHT_Helicopter",
       "category": "bundeswehr_aircraft",
-      "prompt": "Eurocopter Tiger UHT attack helicopter, anti-tank missiles, aircraft in flight configuration or landed, isolated, white background"
+      "prompt": "Subject: Eurocopter Tiger UHT attack helicopter, anti-tank missiles, aircraft in flight configuration or landed.\nGeometry: A coherent fuselage with correctly connected landing gear and rotor mounts. Preserve the authored single-main, tandem or coaxial arrangement. Every hub aligns with its own shaft; where a tail rotor is specified, retain the main and tail rotors' different intended axes. All blades are stationary, rigid and sharply defined. Use the described aerospace materials, without ground-vehicle attachments.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Eurocopter Tiger UHT attack helicopter, anti-tank missiles, aircraft in flight configuration or landed, isolated, white background"
+        },
+        "source_sha256": {
+          "prompt": "e7fd05c3f7d3baa9017b39552f95ddf0ad676a520a03f19d13b003079c60bf9c"
+        },
+        "subject": "Eurocopter Tiger UHT attack helicopter, anti-tank missiles, aircraft in flight configuration or landed",
+        "ordinal": 0,
+        "family": "helicopter",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_aircraft",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "aircraft_NH90_TTH",
       "category": "bundeswehr_aircraft",
-      "prompt": "NH90 tactical transport helicopter, olive drab army aviation, aircraft in flight configuration or landed, isolated, white background"
+      "prompt": "Subject: NH90 tactical transport helicopter, olive drab army aviation, aircraft in flight configuration or landed.\nGeometry: A coherent fuselage with correctly connected landing gear and rotor mounts. Preserve the authored single-main, tandem or coaxial arrangement. Every hub aligns with its own shaft; where a tail rotor is specified, retain the main and tail rotors' different intended axes. All blades are stationary, rigid and sharply defined. Use the described aerospace materials, without ground-vehicle attachments.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "NH90 tactical transport helicopter, olive drab army aviation, aircraft in flight configuration or landed, isolated, white background"
+        },
+        "source_sha256": {
+          "prompt": "95c6b3346b1544aa11c457885d6cf00878eb98623cf8d16bcf02db2ccb8ec5ed"
+        },
+        "subject": "NH90 tactical transport helicopter, olive drab army aviation, aircraft in flight configuration or landed",
+        "ordinal": 0,
+        "family": "helicopter",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_aircraft",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "aircraft_CH53_G_Stallion",
       "category": "bundeswehr_aircraft",
-      "prompt": "Sikorsky CH-53G heavy transport helicopter, Heer markings, aircraft in flight configuration or landed, isolated, white background"
+      "prompt": "Subject: Sikorsky CH-53G heavy transport helicopter, Heer markings, aircraft in flight configuration or landed.\nGeometry: A coherent fuselage with correctly connected landing gear and rotor mounts. Preserve the authored single-main, tandem or coaxial arrangement. Every hub aligns with its own shaft; where a tail rotor is specified, retain the main and tail rotors' different intended axes. All blades are stationary, rigid and sharply defined. Use the described aerospace materials, without ground-vehicle attachments.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Sikorsky CH-53G heavy transport helicopter, Heer markings, aircraft in flight configuration or landed, isolated, white background"
+        },
+        "source_sha256": {
+          "prompt": "9e05d6e7f973f0f9f049c78247416dca9ec1a404d3c841cb36ba1ef7737aa5c5"
+        },
+        "subject": "Sikorsky CH-53G heavy transport helicopter, Heer markings, aircraft in flight configuration or landed",
+        "ordinal": 0,
+        "family": "helicopter",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_aircraft",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "aircraft_A400M_Atlas",
       "category": "bundeswehr_aircraft",
-      "prompt": "Airbus A400M Atlas military transport aircraft, aircraft in flight configuration or landed, isolated, white background"
+      "prompt": "Subject: Airbus A400M Atlas military transport aircraft, aircraft in flight configuration or landed.\nGeometry: Preserve the specified wing, tail and fuselage arrangement. Paired wings and landing-gear mounts are aligned consistently with the airframe. Propellers, when specified, are stationary with distinct rigid blades. Use the described aerospace materials, without ground-vehicle attachments.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Airbus A400M Atlas military transport aircraft, aircraft in flight configuration or landed, isolated, white background"
+        },
+        "source_sha256": {
+          "prompt": "45addea8e9bb1e49fb89ec2f18ee08bc8b133a9241752e6ec2c72fafc00d92cd"
+        },
+        "subject": "Airbus A400M Atlas military transport aircraft, aircraft in flight configuration or landed",
+        "ordinal": 0,
+        "family": "aircraft",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_aircraft",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "gear_G36_Rifle",
       "category": "bundeswehr_gear",
-      "prompt": "Heckler & Koch G36 assault rifle, standard issue, optic handle, military equipment, studio lighting, white background"
+      "prompt": "Subject: Heckler & Koch G36 assault rifle, standard issue, optic handle, military equipment.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Heckler & Koch G36 assault rifle, standard issue, optic handle, military equipment, studio lighting, white background"
+        },
+        "source_sha256": {
+          "prompt": "c234b0e80d9f661372148ee3be21ea8831a34c47bf5f6b36d5929d880ab6e6df"
+        },
+        "subject": "Heckler & Koch G36 assault rifle, standard issue, optic handle, military equipment",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_gear",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "gear_Gefechtshelm_M92",
       "category": "bundeswehr_gear",
-      "prompt": "Bundeswehr combat helmet M92, flecktarn cover, military equipment, studio lighting, white background"
+      "prompt": "Subject: Bundeswehr combat helmet M92, flecktarn cover, military equipment.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Bundeswehr combat helmet M92, flecktarn cover, military equipment, studio lighting, white background"
+        },
+        "source_sha256": {
+          "prompt": "cd52542393f9f7bd1818d342c295e9a8ef567414ffd71726330418703a696d34"
+        },
+        "subject": "Bundeswehr combat helmet M92, flecktarn cover, military equipment",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_gear",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "gear_Flecktarn_Backpack",
       "category": "bundeswehr_gear",
-      "prompt": "Military backpack in 5-color Flecktarn camouflage, military equipment, studio lighting, white background"
+      "prompt": "Subject: Military backpack in 5-color Flecktarn camouflage, military equipment.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Military backpack in 5-color Flecktarn camouflage, military equipment, studio lighting, white background"
+        },
+        "source_sha256": {
+          "prompt": "4e557cb82e90a298a435ad3d1c75132d57493a4703e28a7c993a690afccfef78"
+        },
+        "subject": "Military backpack in 5-color Flecktarn camouflage, military equipment",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_gear",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "gear_Panzerfaust_3",
       "category": "bundeswehr_gear",
-      "prompt": "Panzerfaust 3 anti-tank weapon, loaded, military equipment, studio lighting, white background"
+      "prompt": "Subject: Panzerfaust 3 anti-tank weapon, loaded, military equipment.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Panzerfaust 3 anti-tank weapon, loaded, military equipment, studio lighting, white background"
+        },
+        "source_sha256": {
+          "prompt": "10fe0f7e3bdf4b894eed96eeb01b231547379c63ce9e9a436aa94f4b1e4a1eb6"
+        },
+        "subject": "Panzerfaust 3 anti-tank weapon, loaded, military equipment",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_gear",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "gear_MG5_MachineGun",
       "category": "bundeswehr_gear",
-      "prompt": "Heckler & Koch MG5 general purpose machine gun, military equipment, studio lighting, white background"
+      "prompt": "Subject: Heckler & Koch MG5 general purpose machine gun, military equipment.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Heckler & Koch MG5 general purpose machine gun, military equipment, studio lighting, white background"
+        },
+        "source_sha256": {
+          "prompt": "96a7ede0f20ebf5d80731f81f49982ced1f90ff2a9f56d8b9c6b004d6b593866"
+        },
+        "subject": "Heckler & Koch MG5 general purpose machine gun, military equipment",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_gear",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "gear_SEM_70_Radio",
       "category": "bundeswehr_gear",
-      "prompt": "SEM 70 manpack military radio, vintage bundeswehr, military equipment, studio lighting, white background"
+      "prompt": "Subject: SEM 70 manpack military radio, vintage bundeswehr, military equipment.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "SEM 70 manpack military radio, vintage bundeswehr, military equipment, studio lighting, white background"
+        },
+        "source_sha256": {
+          "prompt": "c1a7bf1d31b8acbf6005e2a379f92b887a01700ec90738515447c3fc1fc3bfa9"
+        },
+        "subject": "SEM 70 manpack military radio, vintage bundeswehr, military equipment",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_gear",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "gear_Combat_Boots_Gen2",
       "category": "bundeswehr_gear",
-      "prompt": "Bundeswehr combat boots model 2000, black leather, military equipment, studio lighting, white background"
+      "prompt": "Subject: Bundeswehr combat boots model 2000, black leather, military equipment.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Bundeswehr combat boots model 2000, black leather, military equipment, studio lighting, white background"
+        },
+        "source_sha256": {
+          "prompt": "57a5bb1757f22cd945d5e3f7679ad82e272526fe19c4b4fac395013456a12f97"
+        },
+        "subject": "Bundeswehr combat boots model 2000, black leather, military equipment",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_gear",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "gear_Plate_Carrier_System",
       "category": "bundeswehr_gear",
-      "prompt": "Modern IdZ infantry vest, flecktarn camo, military equipment, studio lighting, white background"
+      "prompt": "Subject: Modern IdZ infantry vest, flecktarn camo, military equipment.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Modern IdZ infantry vest, flecktarn camo, military equipment, studio lighting, white background"
+        },
+        "source_sha256": {
+          "prompt": "c83f7eeabbd7347f4a8dc5375bf630961450cf803639bf22242735d9c0f1a173"
+        },
+        "subject": "Modern IdZ infantry vest, flecktarn camo, military equipment",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_gear",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "logistics_Unimog_U1300L",
       "category": "bundeswehr_logistics",
-      "prompt": "Unimog U1300L military truck, canvas top, olive green, logistics equipment, used condition, white background"
+      "prompt": "Subject: Unimog U1300L military truck, canvas top, olive green, logistics equipment, used condition.\nGeometry: Preserve the stated chassis and body type. Straight axles, aligned wheels, correctly centered wheel hubs and a continuous body shell. Doors and service panels are closed unless the subject explicitly requires them open. Interior fittings appear through genuine windows or openings, without cutaways or missing body panels.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Unimog U1300L military truck, canvas top, olive green, logistics equipment, used condition, white background"
+        },
+        "source_sha256": {
+          "prompt": "ff13f28437cb9e48e5e1d8a05bf5cb4379254849eb3ce4b025ab1e863afa2447"
+        },
+        "subject": "Unimog U1300L military truck, canvas top, olive green, logistics equipment, used condition",
+        "ordinal": 0,
+        "family": "vehicle",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_logistics",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "logistics_MAN_KAT1_8x8",
       "category": "bundeswehr_logistics",
-      "prompt": "MAN KAT1 8x8 heavy tactical truck, logistics equipment, used condition, white background"
+      "prompt": "Subject: MAN KAT1 8x8 heavy tactical truck, logistics equipment, used condition.\nGeometry: Preserve the stated chassis and body type. Straight axles, aligned wheels, correctly centered wheel hubs and a continuous body shell. Doors and service panels are closed unless the subject explicitly requires them open. Interior fittings appear through genuine windows or openings, without cutaways or missing body panels.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "MAN KAT1 8x8 heavy tactical truck, logistics equipment, used condition, white background"
+        },
+        "source_sha256": {
+          "prompt": "2b444f588102ab47edd7e88e409e3d8cc623f289938cdff6815d68fc404880ab"
+        },
+        "subject": "MAN KAT1 8x8 heavy tactical truck, logistics equipment, used condition",
+        "ordinal": 0,
+        "family": "vehicle",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_logistics",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "logistics_Field_Kitchen_TFK250",
       "category": "bundeswehr_logistics",
-      "prompt": "Taktische Feldkueche TFK 250, mobile field kitchen trailer, logistics equipment, used condition, white background"
+      "prompt": "Subject: Taktische Feldkueche TFK 250, mobile field kitchen trailer, logistics equipment, used condition.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Taktische Feldkueche TFK 250, mobile field kitchen trailer, logistics equipment, used condition, white background"
+        },
+        "source_sha256": {
+          "prompt": "7c92d30cc458142399b0dbdb6a180c42e7d11b460af9ca46e9027a95b04784ea"
+        },
+        "subject": "Taktische Feldkueche TFK 250, mobile field kitchen trailer, logistics equipment, used condition",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_logistics",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "logistics_Faltstrasse_Mat",
       "category": "bundeswehr_logistics",
-      "prompt": "Military temporary road mat roll, engineering equipment, logistics equipment, used condition, white background"
+      "prompt": "Subject: Military temporary road mat roll, engineering equipment, logistics equipment, used condition.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Military temporary road mat roll, engineering equipment, logistics equipment, used condition, white background"
+        },
+        "source_sha256": {
+          "prompt": "4ad4a8c7be7b236acef9f16924176b3e05d1511907d181dde030a5ffeb0a18d2"
+        },
+        "subject": "Military temporary road mat roll, engineering equipment, logistics equipment, used condition",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_logistics",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "logistics_Jerrycan_20L",
       "category": "bundeswehr_logistics",
-      "prompt": "Classic 20L steel jerrycan, olive drab, bundeswehr markings, logistics equipment, used condition, white background"
+      "prompt": "Subject: Classic 20L steel jerrycan, olive drab, bundeswehr markings, logistics equipment, used condition.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Classic 20L steel jerrycan, olive drab, bundeswehr markings, logistics equipment, used condition, white background"
+        },
+        "source_sha256": {
+          "prompt": "2a18eeb9ce8769ba44fdcaf73450ca4f1fd339f9baf1c39c6f3bac50898c7a0c"
+        },
+        "subject": "Classic 20L steel jerrycan, olive drab, bundeswehr markings, logistics equipment, used condition",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_logistics",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "naval_Frigate_Baden_Wuerttemberg",
       "category": "bundeswehr_naval",
-      "prompt": "F125 class frigate Baden-Wuerttemberg, german navy, warship, waterline model, white background"
+      "prompt": "Subject: F125 class frigate Baden-Wuerttemberg, german navy, warship, waterline model.\nGeometry: One coherent hull with continuous hull surfaces and physically attached propulsion and deck fittings. Keep the specified vessel type and proportions; show the complete hull outside water.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "F125 class frigate Baden-Wuerttemberg, german navy, warship, waterline model, white background"
+        },
+        "source_sha256": {
+          "prompt": "b9cd2402125139e1a938b05476fd56b00d86ee443cfc85f09a7cbdc5060e0587"
+        },
+        "subject": "F125 class frigate Baden-Wuerttemberg, german navy, warship, waterline model",
+        "ordinal": 0,
+        "family": "boat",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_naval",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "naval_Submarine_Type_212A",
       "category": "bundeswehr_naval",
-      "prompt": "Type 212A submarine, deutsche marine, fuel cell propulsion, warship, waterline model, white background"
+      "prompt": "Subject: Type 212A submarine, deutsche marine, fuel cell propulsion, warship, waterline model.\nGeometry: One coherent hull with continuous hull surfaces and physically attached propulsion and deck fittings. Keep the specified vessel type and proportions; show the complete hull outside water.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Type 212A submarine, deutsche marine, fuel cell propulsion, warship, waterline model, white background"
+        },
+        "source_sha256": {
+          "prompt": "78dff979a6fc7920e042d07886d253fcf383aa0169383d772078fabf615c07f2"
+        },
+        "subject": "Type 212A submarine, deutsche marine, fuel cell propulsion, warship, waterline model",
+        "ordinal": 0,
+        "family": "boat",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_naval",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "naval_Corvette_Braunschweig",
       "category": "bundeswehr_naval",
-      "prompt": "K130 Braunschweig class corvette, warship, waterline model, white background"
+      "prompt": "Subject: K130 Braunschweig class corvette, warship, waterline model.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "K130 Braunschweig class corvette, warship, waterline model, white background"
+        },
+        "source_sha256": {
+          "prompt": "edee76e5160d9ee5a723c3f0432557572f3fd9a2f2c1be9486d745a78b6d70ca"
+        },
+        "subject": "K130 Braunschweig class corvette, warship, waterline model",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_bundeswehr_naval",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     }
-  ]
+  ],
+  "generation_prompt_version": 2
 }

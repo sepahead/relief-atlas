@@ -3,177 +3,1123 @@
     {
       "id": "tank_leopard_2a7",
       "category": "military_vehicle",
-      "prompt": "German Leopard 2A7 main battle tank, desert camouflage, high detailed turret"
+      "prompt": "Subject: German Leopard 2A7 main battle tank, desert camouflage, high detailed turret.\nGeometry: Preserve the stated chassis and body type. Straight axles, aligned wheels, correctly centered wheel hubs and a continuous body shell. Doors and service panels are closed unless the subject explicitly requires them open. Interior fittings appear through genuine windows or openings, without cutaways or missing body panels.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "German Leopard 2A7 main battle tank, desert camouflage, high detailed turret"
+        },
+        "source_sha256": {
+          "prompt": "381eabe2311c262d9a4503b2d11fbbb8397c240ced73c300ace03f88ab03dd91"
+        },
+        "subject": "German Leopard 2A7 main battle tank, desert camouflage, high detailed turret",
+        "ordinal": 0,
+        "family": "vehicle",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_military_vehicle",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "tank_puma_ifv",
       "category": "military_vehicle",
-      "prompt": "German Puma infantry fighting vehicle, forest camo, tracked"
+      "prompt": "Subject: German Puma infantry fighting vehicle, forest camo, tracked.\nGeometry: Preserve the stated chassis and body type. Straight axles, aligned wheels, correctly centered wheel hubs and a continuous body shell. Doors and service panels are closed unless the subject explicitly requires them open. Interior fittings appear through genuine windows or openings, without cutaways or missing body panels.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "German Puma infantry fighting vehicle, forest camo, tracked"
+        },
+        "source_sha256": {
+          "prompt": "d3c340652a3680d9d52f1e8e9ac4908f27e95ea63746d5a66f248e6b8e66c132"
+        },
+        "subject": "German Puma infantry fighting vehicle, forest camo, tracked",
+        "ordinal": 0,
+        "family": "vehicle",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_military_vehicle",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "vehicle_boxer_apc",
       "category": "military_vehicle",
-      "prompt": "Boxer armored personnel carrier, 8x8 wheeled, german military green"
+      "prompt": "Subject: Boxer armored personnel carrier, 8x8 wheeled, german military green.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Boxer armored personnel carrier, 8x8 wheeled, german military green"
+        },
+        "source_sha256": {
+          "prompt": "b7c3a0ad42b12ab6c9ee844abb5953a845de50d035ae310fe2010611dd0ad52b"
+        },
+        "subject": "Boxer armored personnel carrier, 8x8 wheeled, german military green",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_military_vehicle",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "vehicle_fennek_recon",
       "category": "military_vehicle",
-      "prompt": "Fennek reconnaissance vehicle, 4x4, sensor mast extended"
+      "prompt": "Subject: Fennek reconnaissance vehicle, 4x4, sensor mast extended.\nGeometry: Preserve the stated chassis and body type. Straight axles, aligned wheels, correctly centered wheel hubs and a continuous body shell. Doors and service panels are closed unless the subject explicitly requires them open. Interior fittings appear through genuine windows or openings, without cutaways or missing body panels.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Fennek reconnaissance vehicle, 4x4, sensor mast extended"
+        },
+        "source_sha256": {
+          "prompt": "ef051162e7c7854c423e2cfcfaacefdec97dd176da8423d1a4d4ee14c859ab29"
+        },
+        "subject": "Fennek reconnaissance vehicle, 4x4, sensor mast extended",
+        "ordinal": 0,
+        "family": "vehicle",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_military_vehicle",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "artillery_pzh2000",
       "category": "military_vehicle",
-      "prompt": "Panzerhaubitze 2000 self-propelled artillery, tracked, long barrel"
+      "prompt": "Subject: Panzerhaubitze 2000 self-propelled artillery, tracked, long barrel.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Panzerhaubitze 2000 self-propelled artillery, tracked, long barrel"
+        },
+        "source_sha256": {
+          "prompt": "4d159b2d1ffcf0610fbfda6433c1658971b28f34dd97dd49fdc2eb2054e71798"
+        },
+        "subject": "Panzerhaubitze 2000 self-propelled artillery, tracked, long barrel",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_military_vehicle",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "drone_vector_vtol",
       "category": "military_drone",
-      "prompt": "Quantum Systems Vector VTOL drone, fixed wing with rotors, military grey"
+      "prompt": "Subject: Quantum Systems Vector VTOL drone, fixed wing with rotors, military grey.\nGeometry: Preserve the specified wing, tail and fuselage arrangement. Paired wings and landing-gear mounts are aligned consistently with the airframe. Propellers, when specified, are stationary with distinct rigid blades. Use the described aerospace materials, without ground-vehicle attachments.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Quantum Systems Vector VTOL drone, fixed wing with rotors, military grey"
+        },
+        "source_sha256": {
+          "prompt": "bf441534eccd8553e1ee49af488467ab468634fd9e93e74ee17aa3680d7eef30"
+        },
+        "subject": "Quantum Systems Vector VTOL drone, fixed wing with rotors, military grey",
+        "ordinal": 0,
+        "family": "aircraft",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_military_drone",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "drone_luna_ng",
       "category": "military_drone",
-      "prompt": "Luna NG reconnaissance drone, catapult launch rail, sleek aerodynamic"
+      "prompt": "Subject: Luna NG reconnaissance drone, catapult launch rail, sleek aerodynamic.\nGeometry: A rigid, fully deployed airframe with a clear central body and distinct arm-to-motor connections. Every propeller hub is concentric with its own motor shaft. Preserve the specified rotor arrangement. Keep the authored arm and rotor layout. Each hub is concentric with its own motor shaft and each motor housing connects to its actual arm mount. Matching components have consistent scale. A rotor count alone does not specify the arm count or layout. All propellers are stationary with distinct rigid blades. Any described payload remains secured to its intended mount, clear of all rotors. Use the described aerospace materials, without ground-vehicle attachments.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 55 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Luna NG reconnaissance drone, catapult launch rail, sleek aerodynamic"
+        },
+        "source_sha256": {
+          "prompt": "83f50a441e361fcb8c21d3db8892380c9d088cb62d0e2a4be443d0bd0a82f94a"
+        },
+        "subject": "Luna NG reconnaissance drone, catapult launch rail, sleek aerodynamic",
+        "ordinal": 0,
+        "family": "multirotor",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_military_drone",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "drone_heron_tp",
       "category": "military_drone",
-      "prompt": "Large MALE UAV Heron TP, german luftwaffe markings, runway landing gear"
+      "prompt": "Subject: Large MALE UAV Heron TP, german luftwaffe markings, runway landing gear.\nGeometry: A rigid, fully deployed airframe with a clear central body and distinct arm-to-motor connections. Every propeller hub is concentric with its own motor shaft. Preserve the specified rotor arrangement. Keep the authored arm and rotor layout. Each hub is concentric with its own motor shaft and each motor housing connects to its actual arm mount. Matching components have consistent scale. A rotor count alone does not specify the arm count or layout. All propellers are stationary with distinct rigid blades. Any described payload remains secured to its intended mount, clear of all rotors. Use the described aerospace materials, without ground-vehicle attachments.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 55 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Large MALE UAV Heron TP, german luftwaffe markings, runway landing gear"
+        },
+        "source_sha256": {
+          "prompt": "a3665c25f9c9f18005160c905bc1cae6e8c07bba8f4fce28b8b0418075451400"
+        },
+        "subject": "Large MALE UAV Heron TP, german luftwaffe markings, runway landing gear",
+        "ordinal": 0,
+        "family": "multirotor",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_military_drone",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "drone_mikado_quad",
       "category": "military_drone",
-      "prompt": "Mikado micro reconnaissance quadcopter, ruggedized, black plastic"
+      "prompt": "Subject: A quadcopter with exactly four separate motor/rotor units. Mikado micro reconnaissance quadcopter, ruggedized, black plastic.\nGeometry: Exactly 4 motor/rotor units; every unit has a real motor housing and propeller hub. Keep the authored arm and rotor layout. Each hub is concentric with its own motor shaft and each motor housing connects to its actual arm mount. Matching components have consistent scale. A rotor count alone does not specify the arm count or layout. All propellers are stationary with distinct rigid blades. Any described payload remains secured to its intended mount, clear of all rotors. Use the described aerospace materials, without ground-vehicle attachments.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: A high three-quarter front-left view, 25 degrees around from the front and looking down at about 55 degrees, clearly showing all 4 separate motor housings around the body. The complete rotor pattern is readable, with no motor hidden behind the central body.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Mikado micro reconnaissance quadcopter, ruggedized, black plastic"
+        },
+        "source_sha256": {
+          "prompt": "6a96c9df95e8a971ede26e0b54e4f97a5054312d882ad2a6756846fa28d0e833"
+        },
+        "subject": "Mikado micro reconnaissance quadcopter, ruggedized, black plastic",
+        "ordinal": 0,
+        "family": "multirotor",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_military_drone",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "drone_aladin_hand",
       "category": "military_drone",
-      "prompt": "Aladin hand-launched mini UAV, two-tone grey"
+      "prompt": "Subject: Aladin hand-launched mini UAV, two-tone grey.\nGeometry: A rigid, fully deployed airframe with a clear central body and distinct arm-to-motor connections. Every propeller hub is concentric with its own motor shaft. Preserve the specified rotor arrangement. Keep the authored arm and rotor layout. Each hub is concentric with its own motor shaft and each motor housing connects to its actual arm mount. Matching components have consistent scale. A rotor count alone does not specify the arm count or layout. All propellers are stationary with distinct rigid blades. Any described payload remains secured to its intended mount, clear of all rotors. Use the described aerospace materials, without ground-vehicle attachments.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 55 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Aladin hand-launched mini UAV, two-tone grey"
+        },
+        "source_sha256": {
+          "prompt": "cec57f349de5d7c5cd6f85d160cde25910f75efe237be9bc59d7820d312014c1"
+        },
+        "subject": "Aladin hand-launched mini UAV, two-tone grey",
+        "ordinal": 0,
+        "family": "multirotor",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_military_drone",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "weapon_g36_rifle",
       "category": "weapon_modern",
-      "prompt": "Heckler & Koch G36 assault rifle, carry handle optic, black polymer"
+      "prompt": "Subject: Heckler & Koch G36 assault rifle, carry handle optic, black polymer.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Heckler & Koch G36 assault rifle, carry handle optic, black polymer"
+        },
+        "source_sha256": {
+          "prompt": "b636c23974e278ef8b554f99d53665210499831a265b5527c8aff852ab0c86fe"
+        },
+        "subject": "Heckler & Koch G36 assault rifle, carry handle optic, black polymer",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_weapon_modern",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "weapon_hk416_rifle",
       "category": "weapon_modern",
-      "prompt": "HK416 assault rifle, quad rail handguard, tan color"
+      "prompt": "Subject: HK416 assault rifle, quad rail handguard, tan color.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "HK416 assault rifle, quad rail handguard, tan color"
+        },
+        "source_sha256": {
+          "prompt": "4c81456ecba805829ad93cf59bb7ecb4cbee2d140fb37c0539770c6bca1a4859"
+        },
+        "subject": "HK416 assault rifle, quad rail handguard, tan color",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_weapon_modern",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "weapon_mp7_pdw",
       "category": "weapon_modern",
-      "prompt": "MP7 personal defense weapon, compact, foregrip folded"
+      "prompt": "Subject: MP7 personal defense weapon, compact, foregrip folded.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "MP7 personal defense weapon, compact, foregrip folded"
+        },
+        "source_sha256": {
+          "prompt": "d5211f4ded2c9bb891eb8dbe67c826cb99b6a2cda7c5103318b22080754337f7"
+        },
+        "subject": "MP7 personal defense weapon, compact, foregrip folded",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_weapon_modern",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "weapon_mg5_machinegun",
       "category": "weapon_modern",
-      "prompt": "MG5 general purpose machine gun, belt fed, bipod deployed"
+      "prompt": "Subject: MG5 general purpose machine gun, belt fed, bipod deployed.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "MG5 general purpose machine gun, belt fed, bipod deployed"
+        },
+        "source_sha256": {
+          "prompt": "9bec8a80b90072dfd159a07b5664db0964b34bed26a379585b534049bc303d4b"
+        },
+        "subject": "MG5 general purpose machine gun, belt fed, bipod deployed",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_weapon_modern",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "weapon_panzerfaust3",
       "category": "weapon_modern",
-      "prompt": "Panzerfaust 3 anti-tank weapon, fired position, olive drab"
+      "prompt": "Subject: Panzerfaust 3 anti-tank weapon, fired position, olive drab.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Panzerfaust 3 anti-tank weapon, fired position, olive drab"
+        },
+        "source_sha256": {
+          "prompt": "737c50df6766d6ce8164d0b68a305dd7f90a13f8d09eaa9f5b5cf01b661f63d2"
+        },
+        "subject": "Panzerfaust 3 anti-tank weapon, fired position, olive drab",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_weapon_modern",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "weapon_pistol_p8",
       "category": "weapon_modern",
-      "prompt": "P8 combat pistol, black, polymer frame"
+      "prompt": "Subject: P8 combat pistol, black, polymer frame.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "P8 combat pistol, black, polymer frame"
+        },
+        "source_sha256": {
+          "prompt": "f5a81108284c464d4a80f106501473bf245c24ced8cd454a2762771d2003990c"
+        },
+        "subject": "P8 combat pistol, black, polymer frame",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_weapon_modern",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "weapon_cold_km2000",
       "category": "weapon_cold",
-      "prompt": "KM2000 combat knife, tanto point, serrated edge, black handle"
+      "prompt": "Subject: KM2000 combat knife, tanto point, serrated edge, black handle.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "KM2000 combat knife, tanto point, serrated edge, black handle"
+        },
+        "source_sha256": {
+          "prompt": "b29ad101e1470f80f5c2c9b14983e145ddad7c8dda1e724355508fd951ecf4f1"
+        },
+        "subject": "KM2000 combat knife, tanto point, serrated edge, black handle",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_weapon_cold",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "weapon_cold_trench_shovel",
       "category": "weapon_cold",
-      "prompt": "German folding trench shovel, serrated edge, wooden handle"
+      "prompt": "Subject: German folding trench shovel, serrated edge, wooden handle.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "German folding trench shovel, serrated edge, wooden handle"
+        },
+        "source_sha256": {
+          "prompt": "f96376c22e6ab5856b09ee3784d497f60a1a79f941f1c5ab25423c5217362de6"
+        },
+        "subject": "German folding trench shovel, serrated edge, wooden handle",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_weapon_cold",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "weapon_cold_bayonet",
       "category": "weapon_cold",
-      "prompt": "Modern bayonet for assault rifle, wire cutter sheath mechanism"
+      "prompt": "Subject: Modern bayonet for assault rifle, wire cutter sheath mechanism.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Modern bayonet for assault rifle, wire cutter sheath mechanism"
+        },
+        "source_sha256": {
+          "prompt": "b4a9f0d3d6290864ceb9d0590c2af03511b53d452daf918bc0f5b5fccaab4b81"
+        },
+        "subject": "Modern bayonet for assault rifle, wire cutter sheath mechanism",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_weapon_cold",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "weapon_cold_tactical_tomahawk",
       "category": "weapon_cold",
-      "prompt": "Tactical tomahawk axe, matte black finish, spike poll"
+      "prompt": "Subject: Tactical tomahawk axe, matte black finish, spike poll.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Tactical tomahawk axe, matte black finish, spike poll"
+        },
+        "source_sha256": {
+          "prompt": "37c189a05c9970da74b2ca8d1db26b9ae3e580030a236f14faa425f2a002c812"
+        },
+        "subject": "Tactical tomahawk axe, matte black finish, spike poll",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_weapon_cold",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "fruit_apple_red",
       "category": "fruit",
-      "prompt": "Fresh red delicious apple, shiny skin, stem attached"
+      "prompt": "Subject: Fresh red delicious apple, shiny skin, stem attached.\nGeometry: Preserve the specific food form, edible surface and stated cut or whole condition. Keep natural irregularity and the specified rind, skin, crust or crumb.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Fresh red delicious apple, shiny skin, stem attached"
+        },
+        "source_sha256": {
+          "prompt": "43890181a7571fa29cf12b81fd42d1a94f5456e376794da8ddcd5b8969b36ef4"
+        },
+        "subject": "Fresh red delicious apple, shiny skin, stem attached",
+        "ordinal": 0,
+        "family": "food",
+        "specifications": {
+          "prompt": {
+            "profile": "food_object",
+            "geometry": "Preserve the specific food form, edible surface and stated cut or whole condition. Keep natural irregularity and the specified rind, skin, crust or crumb.",
+            "sources": [],
+            "scope": "authored_description",
+            "checks": [
+              "food identity",
+              "specified whole/cut condition"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "fruit_banana_bunch",
       "category": "fruit",
-      "prompt": "Bunch of yellow bananas, slightly spotted, ripe"
+      "prompt": "Subject: Bunch of yellow bananas, slightly spotted, ripe.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Bunch of yellow bananas, slightly spotted, ripe"
+        },
+        "source_sha256": {
+          "prompt": "5b9eba567a881d337244161a800b1a334cd35c43695a35aa8aefbccaf6c2fd8c"
+        },
+        "subject": "Bunch of yellow bananas, slightly spotted, ripe",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_fruit",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "fruit_pineapple_whole",
       "category": "fruit",
-      "prompt": "Whole pineapple, rough skin, green crown leaves"
+      "prompt": "Subject: Whole pineapple, rough skin, green crown leaves.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Whole pineapple, rough skin, green crown leaves"
+        },
+        "source_sha256": {
+          "prompt": "216c36afbb97378d99f4c0b4e00002ad2b570a6ab64c51ff763879d7b6275fbc"
+        },
+        "subject": "Whole pineapple, rough skin, green crown leaves",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_fruit",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "fruit_grapes_green",
       "category": "fruit",
-      "prompt": "Bunch of green grapes, on vine, fresh with dew"
+      "prompt": "Subject: Bunch of green grapes, on vine, fresh with dew.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Bunch of green grapes, on vine, fresh with dew"
+        },
+        "source_sha256": {
+          "prompt": "6c8cd7ba95de1878aeaa081b48ddfc19a159b209c95d5e1ca0dcb73ec585d87c"
+        },
+        "subject": "Bunch of green grapes, on vine, fresh with dew",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_fruit",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "fruit_orange_whole",
       "category": "fruit",
-      "prompt": "Whole naval orange, textured skin, vibrant color"
+      "prompt": "Subject: Whole naval orange, textured skin, vibrant color.\nGeometry: Preserve the specific food form, edible surface and stated cut or whole condition. Keep natural irregularity and the specified rind, skin, crust or crumb.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Whole naval orange, textured skin, vibrant color"
+        },
+        "source_sha256": {
+          "prompt": "15845d19269cb402d795a3065b03c660c982b1b80a394fe7542bdc1306ce8faa"
+        },
+        "subject": "Whole naval orange, textured skin, vibrant color",
+        "ordinal": 0,
+        "family": "food",
+        "specifications": {
+          "prompt": {
+            "profile": "food_object",
+            "geometry": "Preserve the specific food form, edible surface and stated cut or whole condition. Keep natural irregularity and the specified rind, skin, crust or crumb.",
+            "sources": [],
+            "scope": "authored_description",
+            "checks": [
+              "food identity",
+              "specified whole/cut condition"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "fruit_pear_green",
       "category": "fruit",
-      "prompt": "Green anjou pear, smooth skin, classic shape"
+      "prompt": "Subject: Green anjou pear, smooth skin, classic shape.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Green anjou pear, smooth skin, classic shape"
+        },
+        "source_sha256": {
+          "prompt": "c79f8bc53647fd8739be6adb39d416e781ba50f7b870113cfd1cf518be3c688a"
+        },
+        "subject": "Green anjou pear, smooth skin, classic shape",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_fruit",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "fruit_watermelon_slice",
       "category": "fruit",
-      "prompt": "Slice of watermelon, red flesh, black seeds, green rind"
+      "prompt": "Subject: Slice of watermelon, red flesh, black seeds, green rind.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Slice of watermelon, red flesh, black seeds, green rind"
+        },
+        "source_sha256": {
+          "prompt": "763d0f3167925f2005182cc23c455315a462cdb2590dfb55c8b36032acd3cec5"
+        },
+        "subject": "Slice of watermelon, red flesh, black seeds, green rind",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_fruit",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "fruit_strawberry_large",
       "category": "fruit",
-      "prompt": "Large garden strawberry, red and bumpy, green calyx"
+      "prompt": "Subject: Large garden strawberry, red and bumpy, green calyx.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Large garden strawberry, red and bumpy, green calyx"
+        },
+        "source_sha256": {
+          "prompt": "245657959a25f276aa507f3d12aa597113150de486f1f582dc85a2cd2db47674"
+        },
+        "subject": "Large garden strawberry, red and bumpy, green calyx",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_fruit",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "fruit_lemon_yellow",
       "category": "fruit",
-      "prompt": "Bright yellow lemon, textured rind, oval shape"
+      "prompt": "Subject: Bright yellow lemon, textured rind, oval shape.\nGeometry: Preserve the specific food form, edible surface and stated cut or whole condition. Keep natural irregularity and the specified rind, skin, crust or crumb.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Bright yellow lemon, textured rind, oval shape"
+        },
+        "source_sha256": {
+          "prompt": "3e9bdbd47d66323e87c6bdc058bd8440f99c15544bcb4dc12caee159253c0c87"
+        },
+        "subject": "Bright yellow lemon, textured rind, oval shape",
+        "ordinal": 0,
+        "family": "food",
+        "specifications": {
+          "prompt": {
+            "profile": "food_object",
+            "geometry": "Preserve the specific food form, edible surface and stated cut or whole condition. Keep natural irregularity and the specified rind, skin, crust or crumb.",
+            "sources": [],
+            "scope": "authored_description",
+            "checks": [
+              "food identity",
+              "specified whole/cut condition"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "fruit_cherry_pair",
       "category": "fruit",
-      "prompt": "Pair of red cherries, joined by stems"
+      "prompt": "Subject: Pair of red cherries, joined by stems.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Pair of red cherries, joined by stems"
+        },
+        "source_sha256": {
+          "prompt": "81ec8c716131f19d02514d3e947802d6fa07e6002ddb6dbc0d8135c88d73835e"
+        },
+        "subject": "Pair of red cherries, joined by stems",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_fruit",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "equipment_helmet_combat",
       "category": "military_gear",
-      "prompt": "German combat helmet (Gefechtshelm M92), flecktarn cover"
+      "prompt": "Subject: German combat helmet (Gefechtshelm M92), flecktarn cover.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "German combat helmet (Gefechtshelm M92), flecktarn cover"
+        },
+        "source_sha256": {
+          "prompt": "02c55b2249a7a09501eb6984797b374fc6dc64ae1eebd9872e718b0fbf14400a"
+        },
+        "subject": "German combat helmet (Gefechtshelm M92), flecktarn cover",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_military_gear",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "equipment_backpack_flecktarn",
       "category": "military_gear",
-      "prompt": "Large military rucksack, flecktarn camouflage pattern, stuffed full"
+      "prompt": "Subject: Large military rucksack, flecktarn camouflage pattern, stuffed full.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Large military rucksack, flecktarn camouflage pattern, stuffed full"
+        },
+        "source_sha256": {
+          "prompt": "fa73f803dc53ee785296fbfa7b1ca26e22d58fd278b3dde44472d4a1d7abe308"
+        },
+        "subject": "Large military rucksack, flecktarn camouflage pattern, stuffed full",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_military_gear",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "equipment_radio_sem52",
       "category": "military_gear",
-      "prompt": "SEM 52 handheld military radio, olive green, antenna"
+      "prompt": "Subject: SEM 52 handheld military radio, olive green, antenna.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "SEM 52 handheld military radio, olive green, antenna"
+        },
+        "source_sha256": {
+          "prompt": "9a7b879208d2880b015af75f3508b8583bea1be1704a542853ae4558f6918bc3"
+        },
+        "subject": "SEM 52 handheld military radio, olive green, antenna",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_military_gear",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "equipment_binoculars_vector",
       "category": "military_gear",
-      "prompt": "High-end military laser rangefinder binoculars, rubberized armor"
+      "prompt": "Subject: High-end military laser rangefinder binoculars, rubberized armor.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "High-end military laser rangefinder binoculars, rubberized armor"
+        },
+        "source_sha256": {
+          "prompt": "678181d20188cc7ae944aa76840499a9f47c0c35b282350cde4f72617286a4f0"
+        },
+        "subject": "High-end military laser rangefinder binoculars, rubberized armor",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_military_gear",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "equipment_boots_combat",
       "category": "military_gear",
-      "prompt": "Pair of black leather combat boots, laced up, heavy tread"
+      "prompt": "Subject: Pair of black leather combat boots, laced up, heavy tread.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Pair of black leather combat boots, laced up, heavy tread"
+        },
+        "source_sha256": {
+          "prompt": "8cfe7a4b1afe5cf4d8a4a2d6cdc06b92742c4b49053fa67b2ca9899e714ac8c2"
+        },
+        "subject": "Pair of black leather combat boots, laced up, heavy tread",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_military_gear",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     }
-  ]
+  ],
+  "generation_prompt_version": 2
 }

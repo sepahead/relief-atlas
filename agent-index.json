@@ -1,7 +1,7 @@
 {
   "schema": "sepahead.agent-index.v1",
   "repository": "sepahead/relief-atlas",
-  "summary": "relief-atlas: the manifest of 10,079 disaster-relief, humanitarian-aid and civil-protection mesh items with pre-generated prompts, the cloud and on-device generation pipelines, their self-tests, and the metadata of 125 earlier meshes. AGENTS.md is the operating contract; this index restates its facts for tools.",
+  "summary": "relief-atlas: manifest-driven humanitarian and civil-protection assets using local Qwen-Image-2.1 and TRELLIS.2 or separate paid cloud backends, offline recovery controls, artifact-bound QA and release accounting, researched prompt recipes, and preserved earlier collections. The four active manifests define 10,079 items; Git retains 125 earlier mesh metadata records. AGENTS.md is the operating contract.",
   "entry_documents": [
     {
       "path": "AGENTS.md",
@@ -14,11 +14,23 @@
     {
       "path": "CITATION.cff",
       "role": "citation"
+    },
+    {
+      "path": "CLAUDE.md",
+      "role": "Claude orientation; shared agent contract remains authoritative"
+    },
+    {
+      "path": "docs/offline-run.md",
+      "role": "offline start, pause, resume and recovery workflow"
+    },
+    {
+      "path": "docs/prompt-design.md",
+      "role": "reference recipes, research provenance and visual review"
     }
   ],
   "delivery": {
     "default_branch": "main",
-    "merge": "Commit documentation changes and push to main after the gates pass; change the pipeline only on the owner's request.",
+    "merge": "Commit authorized changes and push to main after the gates pass; pipeline and retained-manifest changes require an owner request.",
     "signing": "follows the committer's configuration; not required",
     "attribution": "no AI attribution, co-author trailers or generated-by lines",
     "owner_only": [
@@ -34,11 +46,12 @@
       "id": "pipeline-tests",
       "when": "scripts/, meshmaker/, tests/ or a manifest changes",
       "command": "python3 -m unittest discover -s tests",
-      "cost": "fast"
+      "cost": "fast",
+      "environment": "requirements-local.txt"
     },
     {
       "id": "agent-index",
-      "when": "agent-index.json or a path it names changes",
+      "when": "before each push; keep entry documents, paths and gates consistent",
       "command": "python3 scripts/check_agent_index.py",
       "cost": "fast"
     },
@@ -47,6 +60,20 @@
       "when": "any change",
       "command": "git diff --check",
       "cost": "fast"
+    },
+    {
+      "id": "image-runtime-tests",
+      "when": "runtime-sensitive changes on a prepared Mac",
+      "command": "meshmaker/local/imgenv/bin/python -m unittest discover -s tests",
+      "environment": "requirements-image.txt",
+      "cost": "medium"
+    },
+    {
+      "id": "mesh-runtime-tests",
+      "when": "runtime-sensitive changes on a prepared Mac",
+      "command": "meshmaker/local/trellis-mac/.venv/bin/python -m unittest discover -s tests",
+      "environment": "requirements-mesh.txt",
+      "cost": "medium"
     }
   ],
   "generated": [],
@@ -77,5 +104,20 @@
       "repository": "sepahead/cobot-atlas",
       "relation": "sibling mesh dataset for robot simulation"
     }
-  ]
+  ],
+  "offline_workflow": {
+    "entrypoint": "atlas",
+    "controls": [
+      "Start.command",
+      "Pause.command",
+      "Resume.command",
+      "Status.command"
+    ],
+    "defaults": "config/offline_run.json",
+    "guide": "docs/offline-run.md",
+    "network": "macOS worker and descendants deny network access; cached local generation does not run setup or the paid backend",
+    "selection": "saved manifest snapshots; default policy eligibility; explicit selection never broadens on resume",
+    "completion": "positive release membership with current artifact-bound image, mesh and Gaussian QA",
+    "interruption": "reuse verified commits; restart an uncommitted sampling stage"
+  }
 }

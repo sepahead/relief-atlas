@@ -3,102 +3,647 @@
     {
       "id": "painter_easel_large",
       "category": "painter_studio",
-      "prompt": "large wooden artist easel, empty canvas, standing upright"
+      "prompt": "Subject: large wooden artist easel, empty canvas, standing upright.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "large wooden artist easel, empty canvas, standing upright"
+        },
+        "source_sha256": {
+          "prompt": "3baa5052dbdc9ffc6d3aead06a019e1f767ed11323adaf917415ae0d8be9cc05"
+        },
+        "subject": "large wooden artist easel, empty canvas, standing upright",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_painter_studio",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "painter_canvas_stretched",
       "category": "painter_studio",
-      "prompt": "blank white stretched canvas, rectangular, wooden frame back"
+      "prompt": "Subject: blank white stretched canvas, rectangular, wooden frame back.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "blank white stretched canvas, rectangular, wooden frame back"
+        },
+        "source_sha256": {
+          "prompt": "e12b42ad77c56c8b6b9760289303111cf49bc90d49411f6c8c1ddeaa1c599a98"
+        },
+        "subject": "blank white stretched canvas, rectangular, wooden frame back",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_painter_studio",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "painter_palette_wood",
       "category": "painter_studio",
-      "prompt": "traditional wooden painter's palette, kidney shape, thumb hole"
+      "prompt": "Subject: traditional wooden painter's palette, kidney shape, thumb hole.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "traditional wooden painter's palette, kidney shape, thumb hole"
+        },
+        "source_sha256": {
+          "prompt": "adc4bf3317ec4c78b68a94bee101c15e506d788c0cf5edcff4fbb3561c7b1c94"
+        },
+        "subject": "traditional wooden painter's palette, kidney shape, thumb hole",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_painter_studio",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "painter_brush_set_jar",
       "category": "painter_studio",
-      "prompt": "ceramic jar filled with various paintbrushes, different sizes"
+      "prompt": "Subject: ceramic jar filled with various paintbrushes, different sizes.\nGeometry: A household vessel with a continuous wall, defined rim and real interior cavity. Keep the stated handle, lid, material and opening; preserve an explicitly inverted, tilted or sideways pose.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: A three-quarter view making the rim, cavity and any handle visible, while preserving the authored pose. Show one view from the left, about 25 degrees around and 20 degrees above level, while retaining any explicitly requested pose or view.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "ceramic jar filled with various paintbrushes, different sizes"
+        },
+        "source_sha256": {
+          "prompt": "c68940d360833928cb127dc5adb1e09f10d869e8891e9172de40f51d80e65f36"
+        },
+        "subject": "ceramic jar filled with various paintbrushes, different sizes",
+        "ordinal": 0,
+        "family": "vessel",
+        "specifications": {
+          "prompt": {
+            "profile": "hollow_household_vessel",
+            "geometry": "A household vessel with a continuous wall, defined rim and real interior cavity. Keep the stated handle, lid, material and opening; preserve an explicitly inverted, tilted or sideways pose.",
+            "sources": [],
+            "scope": "authored_description",
+            "checks": [
+              "open cavity where specified",
+              "requested handle and pose"
+            ],
+            "view": "A three-quarter view making the rim, cavity and any handle visible, while preserving the authored pose.",
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "painter_tube_paint_red",
       "category": "painter_studio",
-      "prompt": "squeezed tube of red oil paint, metal tube, cap on"
+      "prompt": "Subject: squeezed tube of red oil paint, metal tube, cap on.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "squeezed tube of red oil paint, metal tube, cap on"
+        },
+        "source_sha256": {
+          "prompt": "2818b73cdd867a7e34f87f14d1250719a11dfa8fdb1b7422173280b58a8de0a2"
+        },
+        "subject": "squeezed tube of red oil paint, metal tube, cap on",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_painter_studio",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "painter_tube_paint_blue",
       "category": "painter_studio",
-      "prompt": "squeezed tube of blue oil paint, metal tube, cap on"
+      "prompt": "Subject: squeezed tube of blue oil paint, metal tube, cap on.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "squeezed tube of blue oil paint, metal tube, cap on"
+        },
+        "source_sha256": {
+          "prompt": "3eb0302a6f7c3c1f904bf7f7f956debe322d5646b4f3a0ca6bcbb33f840691d3"
+        },
+        "subject": "squeezed tube of blue oil paint, metal tube, cap on",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_painter_studio",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "painter_tube_paint_yellow",
       "category": "painter_studio",
-      "prompt": "squeezed tube of yellow oil paint, metal tube, cap on"
+      "prompt": "Subject: squeezed tube of yellow oil paint, metal tube, cap on.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "squeezed tube of yellow oil paint, metal tube, cap on"
+        },
+        "source_sha256": {
+          "prompt": "a50bb5052aef6248581ff0df468f80c3551849536f7396c094274c48f68dde4c"
+        },
+        "subject": "squeezed tube of yellow oil paint, metal tube, cap on",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_painter_studio",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "painter_palette_knife",
       "category": "painter_studio",
-      "prompt": "metal palette knife, wooden handle, used for mixing paint"
+      "prompt": "Subject: metal palette knife, wooden handle, used for mixing paint.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "metal palette knife, wooden handle, used for mixing paint"
+        },
+        "source_sha256": {
+          "prompt": "11345e8047da49a8ae8ebe51ff87d13730757f1aabe258bcb50465086b3d5198"
+        },
+        "subject": "metal palette knife, wooden handle, used for mixing paint",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_painter_studio",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "painter_rag_messy",
       "category": "painter_studio",
-      "prompt": "crumpled paint rag, stained with various colors"
+      "prompt": "Subject: crumpled paint rag, stained with various colors.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "crumpled paint rag, stained with various colors"
+        },
+        "source_sha256": {
+          "prompt": "44c3d000811a410bc6ba6e298f180fe3dd3d41a4ca9043804224f58b65e7fccc"
+        },
+        "subject": "crumpled paint rag, stained with various colors",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_painter_studio",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "painter_turpentine_jar",
       "category": "painter_studio",
-      "prompt": "glass jar with turpentine solvent, slightly cloudy"
+      "prompt": "Subject: glass jar with turpentine solvent, slightly cloudy.\nGeometry: A household vessel with a continuous wall, defined rim and real interior cavity. Keep the stated handle, lid, material and opening; preserve an explicitly inverted, tilted or sideways pose.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: A three-quarter view making the rim, cavity and any handle visible, while preserving the authored pose. Show one view from the left, about 25 degrees around and 20 degrees above level, while retaining any explicitly requested pose or view.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "glass jar with turpentine solvent, slightly cloudy"
+        },
+        "source_sha256": {
+          "prompt": "c06d1672b911bcf47e87fec823202d5f96aa31cc91d6afeb27908ce664d4e8c4"
+        },
+        "subject": "glass jar with turpentine solvent, slightly cloudy",
+        "ordinal": 0,
+        "family": "vessel",
+        "specifications": {
+          "prompt": {
+            "profile": "hollow_household_vessel",
+            "geometry": "A household vessel with a continuous wall, defined rim and real interior cavity. Keep the stated handle, lid, material and opening; preserve an explicitly inverted, tilted or sideways pose.",
+            "sources": [],
+            "scope": "authored_description",
+            "checks": [
+              "open cavity where specified",
+              "requested handle and pose"
+            ],
+            "view": "A three-quarter view making the rim, cavity and any handle visible, while preserving the authored pose.",
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "mechanic_wrench_adjustable",
       "category": "mechanic_shop",
-      "prompt": "adjustable crescent wrench, metal, heavy duty"
+      "prompt": "Subject: adjustable crescent wrench, metal, heavy duty.\nGeometry: Preserve the specific hand tool, connected handle and working end, with coherent shaft or jaw alignment. Retain the stated drive profile, material, wear and operating pose.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: Show the complete handle and working end with minimal foreshortening. Show one view from the left, about 25 degrees around and 20 degrees above level, while retaining any explicitly requested pose or view.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "adjustable crescent wrench, metal, heavy duty"
+        },
+        "source_sha256": {
+          "prompt": "0b50fb000c5a54d3ed43f187ded6a1a3d6b19022d846b13ea495e8843d48f7cc"
+        },
+        "subject": "adjustable crescent wrench, metal, heavy duty",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "hammer_wrench",
+            "geometry": "Preserve the specific hand tool, connected handle and working end, with coherent shaft or jaw alignment. Retain the stated drive profile, material, wear and operating pose.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": "Show the complete handle and working end with minimal foreshortening.",
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "mechanic_screwdriver_phillips",
       "category": "mechanic_shop",
-      "prompt": "phillips head screwdriver, ergonomic rubber handle, black and yellow"
+      "prompt": "Subject: phillips head screwdriver, ergonomic rubber handle, black and yellow.\nGeometry: Preserve the specific hand tool, connected handle and working end, with coherent shaft or jaw alignment. Retain the stated drive profile, material, wear and operating pose.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: Show the complete handle and working end with minimal foreshortening. Show one view from the left, about 25 degrees around and 20 degrees above level, while retaining any explicitly requested pose or view.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "phillips head screwdriver, ergonomic rubber handle, black and yellow"
+        },
+        "source_sha256": {
+          "prompt": "876c64d87f8f967bcac05bc4a7921a792ed3a9de84f6e60efe885aa775156a6b"
+        },
+        "subject": "phillips head screwdriver, ergonomic rubber handle, black and yellow",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "hammer_wrench",
+            "geometry": "Preserve the specific hand tool, connected handle and working end, with coherent shaft or jaw alignment. Retain the stated drive profile, material, wear and operating pose.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": "Show the complete handle and working end with minimal foreshortening.",
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "mechanic_screwdriver_flat",
       "category": "mechanic_shop",
-      "prompt": "flathead screwdriver, ergonomic rubber handle, black and red"
+      "prompt": "Subject: flathead screwdriver, ergonomic rubber handle, black and red.\nGeometry: Preserve the specific hand tool, connected handle and working end, with coherent shaft or jaw alignment. Retain the stated drive profile, material, wear and operating pose.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: Show the complete handle and working end with minimal foreshortening. Show one view from the left, about 25 degrees around and 20 degrees above level, while retaining any explicitly requested pose or view.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "flathead screwdriver, ergonomic rubber handle, black and red"
+        },
+        "source_sha256": {
+          "prompt": "ce48c8f026f398f726dbad89483ff810c11e4043daec00ee4ae66b5766f2d9df"
+        },
+        "subject": "flathead screwdriver, ergonomic rubber handle, black and red",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "hammer_wrench",
+            "geometry": "Preserve the specific hand tool, connected handle and working end, with coherent shaft or jaw alignment. Retain the stated drive profile, material, wear and operating pose.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": "Show the complete handle and working end with minimal foreshortening.",
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "mechanic_oil_can_vintage",
       "category": "mechanic_shop",
-      "prompt": "vintage metal oil can, pump handle, long spout"
+      "prompt": "Subject: vintage metal oil can, pump handle, long spout.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "vintage metal oil can, pump handle, long spout"
+        },
+        "source_sha256": {
+          "prompt": "aaf9bea53459f4cc897dfe07e2605a90b1984c14105a27108f2143470b1cb809"
+        },
+        "subject": "vintage metal oil can, pump handle, long spout",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_mechanic_shop",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "mechanic_car_jack",
       "category": "mechanic_shop",
-      "prompt": "hydraulic floor jack, red painted metal, heavy"
+      "prompt": "Subject: hydraulic floor jack, red painted metal, heavy.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "hydraulic floor jack, red painted metal, heavy"
+        },
+        "source_sha256": {
+          "prompt": "f0ac653e4f25ccfccff4e9a9c19544d65485c23d360398200e01230f930a8e1c"
+        },
+        "subject": "hydraulic floor jack, red painted metal, heavy",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_mechanic_shop",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "mechanic_toolbox_metal",
       "category": "mechanic_shop",
-      "prompt": "red metal toolbox, latched closed, handle on top"
+      "prompt": "Subject: red metal toolbox, latched closed, handle on top.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "red metal toolbox, latched closed, handle on top"
+        },
+        "source_sha256": {
+          "prompt": "628c60064ffde24cf84a7f7639f2793e559d916078e15af066e4dc53da25bf8f"
+        },
+        "subject": "red metal toolbox, latched closed, handle on top",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_mechanic_shop",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "mechanic_tire_pressure_gauge",
       "category": "mechanic_shop",
-      "prompt": "tire pressure gauge, metal stick type"
+      "prompt": "Subject: tire pressure gauge, metal stick type.\nGeometry: A coherent gauge housing with one readable dial, attached pointer and the stated fluid connection. Glass covers the dial; keep the pointer and scale inside the housing.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: Face the dial toward the camera while showing its body depth and connection. Show one view from the left, about 25 degrees around and 20 degrees above level, while retaining any explicitly requested pose or view.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "tire pressure gauge, metal stick type"
+        },
+        "source_sha256": {
+          "prompt": "8b05d711ec09b5bf93a01e540d75a6446a566cec9c51d5794597d03b33d7ca8b"
+        },
+        "subject": "tire pressure gauge, metal stick type",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "pressure_gauge",
+            "geometry": "A coherent gauge housing with one readable dial, attached pointer and the stated fluid connection. Glass covers the dial; keep the pointer and scale inside the housing.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": "Face the dial toward the camera while showing its body depth and connection.",
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "mechanic_spark_plug",
       "category": "mechanic_shop",
-      "prompt": "clean new spark plug, ceramic insulator, metal threads"
+      "prompt": "Subject: clean new spark plug, ceramic insulator, metal threads.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "clean new spark plug, ceramic insulator, metal threads"
+        },
+        "source_sha256": {
+          "prompt": "19570e6a3f5103e90ca65b861508b4fe16e834be8d8e1b800b0d96e4281e5e4f"
+        },
+        "subject": "clean new spark plug, ceramic insulator, metal threads",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_mechanic_shop",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "mechanic_filter_oil",
       "category": "mechanic_shop",
-      "prompt": "cylindrical oil filter, orange metal casing"
+      "prompt": "Subject: cylindrical oil filter, orange metal casing.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "cylindrical oil filter, orange metal casing"
+        },
+        "source_sha256": {
+          "prompt": "c172a249c67bd3e88b56ca313dc73ab27bd0f11fbd56ae548bc6313e6e5c9333"
+        },
+        "subject": "cylindrical oil filter, orange metal casing",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_mechanic_shop",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "mechanic_battery_car",
       "category": "mechanic_shop",
-      "prompt": "12v car battery, black casing, positive and negative terminals"
+      "prompt": "Subject: 12v car battery, black casing, positive and negative terminals.\nGeometry: Preserve the stated chassis and body type. Straight axles, aligned wheels, correctly centered wheel hubs and a continuous body shell. Doors and service panels are closed unless the subject explicitly requires them open. Interior fittings appear through genuine windows or openings, without cutaways or missing body panels.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "12v car battery, black casing, positive and negative terminals"
+        },
+        "source_sha256": {
+          "prompt": "35895c291ce88acee0f3dfeb03f0acf4fe358526086cba7b6a47b566ad806069"
+        },
+        "subject": "12v car battery, black casing, positive and negative terminals",
+        "ordinal": 0,
+        "family": "vehicle",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_mechanic_shop",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     }
-  ]
+  ],
+  "generation_prompt_version": 2
 }

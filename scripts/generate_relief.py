@@ -45,9 +45,20 @@ LOCK_FILE = STATE_DIR / "queue.lock"
 SPENDING_FILE = STATE_DIR / "spending.json"
 SPENDING_LOCK = STATE_DIR / "spending.lock"
 FAILED_FILE = STATE_DIR / "failed.json"
+OVERRIDE_LOCK = STATE_DIR / "content_policy_overrides.lock"
 
 for d in [OUTPUT_DIR, STATE_DIR]:
     d.mkdir(parents=True, exist_ok=True)
+
+# The dual-use content policy lives beside the local pipeline, but it is not
+# specific to it: it screens manifest TEXT, so it applies to any generator
+# reading the same manifests. This path had no gate at all, which meant the
+# README's primary Usage section would push all 30 blocked weapon items and 540
+# restricted items through a paid image API, while the docs claimed the policy
+# flags were "accepted by every phase".
+sys.path.insert(0, str(SCRIPT_DIR / "local"))
+import content_policy  # noqa: E402
+from generation_prompts import normalize_generation_prompt  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # API Key Configuration
@@ -264,8 +275,25 @@ def requeue_item(item: dict):
             fcntl.flock(lock_file.fileno(), fcntl.LOCK_UN)
 
 
-def build_queue(geography: str | None = None, retry_failed: bool = False) -> int:
-    """Build queue from manifests minus completed items."""
+def record_override(item: dict):
+    """Append an override-GENERATED item to the ledger, process-safely.
+
+    content_policy.record_overrides() read-modify-writes the whole file, which
+    is fine for the single-process local phases but not for 15 workers per key.
+    The fcntl lock mirrors record_failure().
+    """
+    with open(OVERRIDE_LOCK, "w") as lock_file:
+        fcntl.flock(lock_file.fileno(), fcntl.LOCK_EX)
+        try:
+            content_policy.record_overrides([item], phase="cloud_gen")
+        finally:
+            fcntl.flock(lock_file.fileno(), fcntl.LOCK_UN)
+
+
+def build_queue(geography: str | None = None, retry_failed: bool = False,
+                allow_restricted: bool = False, allow_blocked: bool = False,
+                only_policy: str | None = None) -> int:
+    """Build queue from manifests minus completed items, minus policy refusals."""
     all_items = []
 
     if retry_failed:
@@ -279,7 +307,10 @@ def build_queue(geography: str | None = None, retry_failed: bool = False) -> int
             for item in data["meshes"]:
                 if item["id"] in failed_ids:
                     all_items.append(item)
-        print(f"Re-queued {len(all_items)} failed items")
+        # NB: the screen below applies to this branch too — retrying a failure
+        # must not be a way around the gate — so the count is reported after it,
+        # not here, where it would claim items the screen goes on to refuse.
+        print(f"Found {len(all_items)} failed items to screen")
     else:
         # Load all manifest items
         for manifest_file in sorted(MANIFEST_DIR.glob("relief_manifest_*.json")):
@@ -289,6 +320,20 @@ def build_queue(geography: str | None = None, retry_failed: bool = False) -> int
                 if geography and item.get("geography") != geography:
                     continue
                 all_items.append(item)
+
+    # Content policy BEFORE anything is queued, so a weapon prompt never
+    # reaches a paid API and no refused item can consume budget. Refusals are
+    # logged to state/content_policy_skipped.json, and each surviving item
+    # carries its verdict into the queue so the worker can stamp it onto the
+    # asset's metadata.json.
+    all_items = content_policy.select_tier(all_items, only_policy)
+    permitted, rejected = content_policy.screen_items(
+        all_items, allow_restricted, allow_blocked)
+    if rejected:
+        content_policy.record_skipped(rejected, phase="cloud_gen")
+    overrides = [it for it in permitted if it["policy"]["override"]]
+    print(content_policy.describe_screen(permitted, rejected, overrides))
+    all_items = permitted
 
     # Find completed items (GLB exists and >1KB)
     completed = set()
@@ -314,20 +359,11 @@ def build_queue(geography: str | None = None, retry_failed: bool = False) -> int
 FAL_IMAGE_COST = 0.133   # GPT-Image-1.5 HQ 1024x1024
 FAL_MESH_COST = 0.30      # Trellis 2 or Hunyuan3D
 
-ENHANCE_SUFFIX = (
-    ". The object stands alone on a clean pure white seamless backdrop, centered in frame, "
-    "under even softbox studio lighting with gentle contact shadows. "
-    "Product reference photograph for 3D model generation. "
-    "Medium-format camera, 85mm lens, moderate depth of field. "
-    "No watermark, no logos, no extra objects, no text overlays."
-)
 
 
 def enhance_prompt(base: str) -> str:
-    """Add quality enhancement suffix if not already present."""
-    if "pure white seamless backdrop" in base:
-        return base
-    return base + ENHANCE_SUFFIX
+    """Use the shared reference recipe without contradictory style suffixes."""
+    return normalize_generation_prompt(base)
 
 
 class ProviderBase(ABC):
@@ -674,6 +710,17 @@ def worker_process(worker_id: int, key_config: dict, stats_queue: mp.Queue, shut
                 "prompt": prompt,
                 "provider": provider_type,
                 "image_model": provider.IMAGE_MODEL if hasattr(provider, "IMAGE_MODEL") else "unknown",
+                # The policy verdict travels with the asset, as in the local
+                # pipeline: policy.override is the only durable trace on the
+                # asset itself that a flag was needed to produce it, so a
+                # release can filter on it without consulting run logs.
+                #
+                # Indexed, not .get(): every queued item passed through
+                # screen_items, so an unstamped item here means the screen was
+                # bypassed. A KeyError is the right outcome for that — defaulting
+                # to {} would write an asset whose provenance silently reads as
+                # "no override".
+                "policy": item["policy"],
                 "timestamp": datetime.now().isoformat(),
             }
             with open(output_path / "metadata.json", "w") as f:
@@ -681,6 +728,17 @@ def worker_process(worker_id: int, key_config: dict, stats_queue: mp.Queue, shut
 
             count += 1
             stats_queue.put(("ok", worker_id, key_name, item_id))
+
+            # Logged only now that the artifacts are on disk and the item is
+            # already counted as a success: being permitted is not the same as
+            # being generated, and a ledger write must not be able to turn a
+            # completed asset into a failure that gets requeued.
+            if item["policy"].get("override"):
+                try:
+                    record_override(item)
+                except Exception as e:
+                    print(f"[W{worker_id}] WARNING: override ledger write "
+                          f"failed for {item_id}: {e}", flush=True)
 
         except RuntimeError as e:
             err = str(e).lower()
@@ -760,6 +818,7 @@ def main():
                         help="Build queue and show stats, don't generate")
     parser.add_argument("--retry-failed", action="store_true",
                         help="Retry previously failed items")
+    content_policy.add_policy_args(parser)
     args = parser.parse_args()
 
     # Parse keys
@@ -787,7 +846,10 @@ def main():
 
     # Build queue
     geo = None if args.geography == "all" else args.geography
-    queue_size = build_queue(geography=geo, retry_failed=args.retry_failed)
+    queue_size = build_queue(geography=geo, retry_failed=args.retry_failed,
+                             allow_restricted=args.allow_restricted,
+                             allow_blocked=args.allow_blocked,
+                             only_policy=args.only_policy)
 
     # Count completed items for display
     completed_count = 0

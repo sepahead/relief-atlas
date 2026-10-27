@@ -5,142 +5,923 @@
     {
       "id": "mug_upside_down_blue",
       "category": "pose_variation",
-      "prompt": "Blue ceramic mug positioned upside down, resting on its rim, handle visible, photorealistic, white background"
+      "prompt": "Subject: Blue ceramic mug positioned upside down, resting on its rim, handle visible.\nGeometry: A household vessel with a continuous wall, defined rim and real interior cavity. Keep the stated handle, lid, material and opening; preserve an explicitly inverted, tilted or sideways pose.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: A three-quarter view making the rim, cavity and any handle visible, while preserving the authored pose. Show one view from the left, about 25 degrees around and 20 degrees above level, while retaining any explicitly requested pose or view.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Blue ceramic mug positioned upside down, resting on its rim, handle visible, photorealistic, white background"
+        },
+        "source_sha256": {
+          "prompt": "e6f1c28b231ef4c23c34c579a2ac81b2e51d450a508f9aa300e9205568d4a426"
+        },
+        "subject": "Blue ceramic mug positioned upside down, resting on its rim, handle visible",
+        "ordinal": 0,
+        "family": "vessel",
+        "specifications": {
+          "prompt": {
+            "profile": "hollow_household_vessel",
+            "geometry": "A household vessel with a continuous wall, defined rim and real interior cavity. Keep the stated handle, lid, material and opening; preserve an explicitly inverted, tilted or sideways pose.",
+            "sources": [],
+            "scope": "authored_description",
+            "checks": [
+              "open cavity where specified",
+              "requested handle and pose"
+            ],
+            "view": "A three-quarter view making the rim, cavity and any handle visible, while preserving the authored pose.",
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "mug_tilted_red",
       "category": "pose_variation",
-      "prompt": "Red ceramic mug tilted on its side at a 45 degree angle, handle facing up, photorealistic, white background"
+      "prompt": "Subject: Red ceramic mug tilted on its side at a 45 degree angle, handle facing up.\nGeometry: A household vessel with a continuous wall, defined rim and real interior cavity. Keep the stated handle, lid, material and opening; preserve an explicitly inverted, tilted or sideways pose.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: A three-quarter view making the rim, cavity and any handle visible, while preserving the authored pose. Show one view from the left, about 25 degrees around and 20 degrees above level, while retaining any explicitly requested pose or view.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Red ceramic mug tilted on its side at a 45 degree angle, handle facing up, photorealistic, white background"
+        },
+        "source_sha256": {
+          "prompt": "25787ca0cf351f5b06d5f0111f2afaec4c4806a06817281fef238aa9054dc8f7"
+        },
+        "subject": "Red ceramic mug tilted on its side at a 45 degree angle, handle facing up",
+        "ordinal": 0,
+        "family": "vessel",
+        "specifications": {
+          "prompt": {
+            "profile": "hollow_household_vessel",
+            "geometry": "A household vessel with a continuous wall, defined rim and real interior cavity. Keep the stated handle, lid, material and opening; preserve an explicitly inverted, tilted or sideways pose.",
+            "sources": [],
+            "scope": "authored_description",
+            "checks": [
+              "open cavity where specified",
+              "requested handle and pose"
+            ],
+            "view": "A three-quarter view making the rim, cavity and any handle visible, while preserving the authored pose.",
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "bowl_inverted_metal",
       "category": "pose_variation",
-      "prompt": "Stainless steel mixing bowl inverted, upside down position, photorealistic, white background"
+      "prompt": "Subject: Stainless steel mixing bowl inverted, upside down position.\nGeometry: A household vessel with a continuous wall, defined rim and real interior cavity. Keep the stated handle, lid, material and opening; preserve an explicitly inverted, tilted or sideways pose.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: A three-quarter view making the rim, cavity and any handle visible, while preserving the authored pose. Show one view from the left, about 25 degrees around and 20 degrees above level, while retaining any explicitly requested pose or view.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Stainless steel mixing bowl inverted, upside down position, photorealistic, white background"
+        },
+        "source_sha256": {
+          "prompt": "080dc25eeaa72fee7a4bc1f3931c8bb95647a1196f589701c78bffa45a795360"
+        },
+        "subject": "Stainless steel mixing bowl inverted, upside down position",
+        "ordinal": 0,
+        "family": "vessel",
+        "specifications": {
+          "prompt": {
+            "profile": "hollow_household_vessel",
+            "geometry": "A household vessel with a continuous wall, defined rim and real interior cavity. Keep the stated handle, lid, material and opening; preserve an explicitly inverted, tilted or sideways pose.",
+            "sources": [],
+            "scope": "authored_description",
+            "checks": [
+              "open cavity where specified",
+              "requested handle and pose"
+            ],
+            "view": "A three-quarter view making the rim, cavity and any handle visible, while preserving the authored pose.",
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "bottle_lying_flat_water",
       "category": "pose_variation",
-      "prompt": "Plastic water bottle lying flat on its side, clear plastic with blue cap, photorealistic, white background"
+      "prompt": "Subject: Plastic water bottle lying flat on its side, clear plastic with blue cap.\nGeometry: Keep the stated vessel profile, neck, base and cap or stopper. An open vessel has a real mouth; a closed one retains its closure. Preserve explicit glass or plastic transparency and contents.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: Show the neck, closure state and complete base in one view. Show one view from the left, about 25 degrees around and 20 degrees above level, while retaining any explicitly requested pose or view.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Plastic water bottle lying flat on its side, clear plastic with blue cap, photorealistic, white background"
+        },
+        "source_sha256": {
+          "prompt": "3f4727880022fe80df0bd2ef7ea3f73cae61349bc95524f7535fe240650adfc9"
+        },
+        "subject": "Plastic water bottle lying flat on its side, clear plastic with blue cap",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "bottle",
+            "geometry": "Keep the stated vessel profile, neck, base and cap or stopper. An open vessel has a real mouth; a closed one retains its closure. Preserve explicit glass or plastic transparency and contents.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": "Show the neck, closure state and complete base in one view.",
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "table_lab_white",
       "category": "environment",
-      "prompt": "White laboratory table, clean surface, sturdy metal legs, simple rectangular design, photorealistic, white background"
+      "prompt": "Subject: White laboratory table, clean surface, sturdy metal legs, simple rectangular design.\nGeometry: A continuous tabletop with the authored thickness and support structure. Legs or pedestals meet the underside at coherent joints; retain the described footprint, shelves and material.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: Show the top and supporting structure with the entire footprint visible. Show one view from the left, about 25 degrees around and 20 degrees above level, while retaining any explicitly requested pose or view.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "White laboratory table, clean surface, sturdy metal legs, simple rectangular design, photorealistic, white background"
+        },
+        "source_sha256": {
+          "prompt": "39cb9aa1a3adb4fb2be3c01ca6f6fe21125e24b86aada03f2c54fe0ed0ce1fb2"
+        },
+        "subject": "White laboratory table, clean surface, sturdy metal legs, simple rectangular design",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "table",
+            "geometry": "A continuous tabletop with the authored thickness and support structure. Legs or pedestals meet the underside at coherent joints; retain the described footprint, shelves and material.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": "Show the top and supporting structure with the entire footprint visible.",
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "table_wood_workshop",
       "category": "environment",
-      "prompt": "Wooden workshop table, sturdy construction, natural wood grain, industrial look, photorealistic, white background"
+      "prompt": "Subject: Wooden workshop table, sturdy construction, natural wood grain, industrial look.\nGeometry: A continuous tabletop with the authored thickness and support structure. Legs or pedestals meet the underside at coherent joints; retain the described footprint, shelves and material.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: Show the top and supporting structure with the entire footprint visible. Show one view from the left, about 25 degrees around and 20 degrees above level, while retaining any explicitly requested pose or view.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Wooden workshop table, sturdy construction, natural wood grain, industrial look, photorealistic, white background"
+        },
+        "source_sha256": {
+          "prompt": "d338716142149fd96419e2ecd8d98da1a1709a633174dc661db187e41fbace9f"
+        },
+        "subject": "Wooden workshop table, sturdy construction, natural wood grain, industrial look",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "table",
+            "geometry": "A continuous tabletop with the authored thickness and support structure. Legs or pedestals meet the underside at coherent joints; retain the described footprint, shelves and material.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": "Show the top and supporting structure with the entire footprint visible.",
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "workbench_industrial",
       "category": "environment",
-      "prompt": "Industrial metal workbench, grey steel construction, heavy duty, photorealistic, white background"
+      "prompt": "Subject: Industrial metal workbench, grey steel construction, heavy duty.\nGeometry: A continuous tabletop with the authored thickness and support structure. Legs or pedestals meet the underside at coherent joints; retain the described footprint, shelves and material.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: Show the top and supporting structure with the entire footprint visible. Show one view from the left, about 25 degrees around and 20 degrees above level, while retaining any explicitly requested pose or view.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Industrial metal workbench, grey steel construction, heavy duty, photorealistic, white background"
+        },
+        "source_sha256": {
+          "prompt": "eb27dea456f8a118e3cefeeb07dfd087ffb5f985d5e9321f06f4c226f1dd6d22"
+        },
+        "subject": "Industrial metal workbench, grey steel construction, heavy duty",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "table",
+            "geometry": "A continuous tabletop with the authored thickness and support structure. Legs or pedestals meet the underside at coherent joints; retain the described footprint, shelves and material.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": "Show the top and supporting structure with the entire footprint visible.",
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "table_round_cafe",
       "category": "environment",
-      "prompt": "Round cafe table, white top with single central metal pedestal leg, photorealistic, white background"
+      "prompt": "Subject: Round cafe table, white top with single central metal pedestal leg.\nGeometry: A continuous tabletop with the authored thickness and support structure. Legs or pedestals meet the underside at coherent joints; retain the described footprint, shelves and material.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: Show the top and supporting structure with the entire footprint visible. Show one view from the left, about 25 degrees around and 20 degrees above level, while retaining any explicitly requested pose or view.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Round cafe table, white top with single central metal pedestal leg, photorealistic, white background"
+        },
+        "source_sha256": {
+          "prompt": "87ebecf6fa50f3bdbe614a872a44e36ed7c98777d45927c8f74b5b410c4d0f0d"
+        },
+        "subject": "Round cafe table, white top with single central metal pedestal leg",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "table",
+            "geometry": "A continuous tabletop with the authored thickness and support structure. Legs or pedestals meet the underside at coherent joints; retain the described footprint, shelves and material.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": "Show the top and supporting structure with the entire footprint visible.",
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "rope_coiled_blue",
       "category": "deformable",
-      "prompt": "Blue climbing rope coiled neatly on the floor, circular pattern, texture of braided nylon, photorealistic, white background"
+      "prompt": "Subject: Blue climbing rope coiled neatly on the floor, circular pattern, texture of braided nylon.\nGeometry: Preserve the described foam, sponge, rubber or fabric material and the explicitly requested resting or deformed shape. Keep the surface continuous and the deformation local to the stated form.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Blue climbing rope coiled neatly on the floor, circular pattern, texture of braided nylon, photorealistic, white background"
+        },
+        "source_sha256": {
+          "prompt": "b8619fae9c75b3a6b7ff440d67da12a9aaeca38a63dde9429bf7d14e216caf48"
+        },
+        "subject": "Blue climbing rope coiled neatly on the floor, circular pattern, texture of braided nylon",
+        "ordinal": 0,
+        "family": "fabric",
+        "specifications": {
+          "prompt": {
+            "profile": "deformable",
+            "geometry": "Preserve the described foam, sponge, rubber or fabric material and the explicitly requested resting or deformed shape. Keep the surface continuous and the deformation local to the stated form.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "rope_pile_red",
       "category": "deformable",
-      "prompt": "Red rope in a messy pile, tangled arrangement, braided texture, photorealistic, white background"
+      "prompt": "Subject: Red rope in a messy pile, tangled arrangement, braided texture.\nGeometry: Preserve the described foam, sponge, rubber or fabric material and the explicitly requested resting or deformed shape. Keep the surface continuous and the deformation local to the stated form.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Red rope in a messy pile, tangled arrangement, braided texture, photorealistic, white background"
+        },
+        "source_sha256": {
+          "prompt": "8389f91cf2a60dbafd08b086a39721e545ee3e51449f1568ba67caef5da5d190"
+        },
+        "subject": "Red rope in a messy pile, tangled arrangement, braided texture",
+        "ordinal": 0,
+        "family": "fabric",
+        "specifications": {
+          "prompt": {
+            "profile": "deformable",
+            "geometry": "Preserve the described foam, sponge, rubber or fabric material and the explicitly requested resting or deformed shape. Keep the surface continuous and the deformation local to the stated form.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "cloth_folded_blue",
       "category": "deformable",
-      "prompt": "Blue cotton towel folded neatly into a square stack, soft fabric texture, photorealistic, white background"
+      "prompt": "Subject: Blue cotton towel folded neatly into a square stack, soft fabric texture.\nGeometry: Preserve the described foam, sponge, rubber or fabric material and the explicitly requested resting or deformed shape. Keep the surface continuous and the deformation local to the stated form.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Blue cotton towel folded neatly into a square stack, soft fabric texture, photorealistic, white background"
+        },
+        "source_sha256": {
+          "prompt": "0f3fa3c1a05a4b62d65254f950322baf0c05fc31248ef3e87ab188eaa3d2b79c"
+        },
+        "subject": "Blue cotton towel folded neatly into a square stack, soft fabric texture",
+        "ordinal": 0,
+        "family": "fabric",
+        "specifications": {
+          "prompt": {
+            "profile": "deformable",
+            "geometry": "Preserve the described foam, sponge, rubber or fabric material and the explicitly requested resting or deformed shape. Keep the surface continuous and the deformation local to the stated form.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "cloth_crumpled_white",
       "category": "deformable",
-      "prompt": "White fabric cloth crumpled into a ball, wrinkled texture, messy arrangement, photorealistic, white background"
+      "prompt": "Subject: White fabric cloth crumpled into a ball, wrinkled texture, messy arrangement.\nGeometry: Preserve the described foam, sponge, rubber or fabric material and the explicitly requested resting or deformed shape. Keep the surface continuous and the deformation local to the stated form.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "White fabric cloth crumpled into a ball, wrinkled texture, messy arrangement, photorealistic, white background"
+        },
+        "source_sha256": {
+          "prompt": "b9e931c0670739b9c0cfd1e8f438ec290190fa43352536c483f3fef243825795"
+        },
+        "subject": "White fabric cloth crumpled into a ball, wrinkled texture, messy arrangement",
+        "ordinal": 0,
+        "family": "fabric",
+        "specifications": {
+          "prompt": {
+            "profile": "deformable",
+            "geometry": "Preserve the described foam, sponge, rubber or fabric material and the explicitly requested resting or deformed shape. Keep the surface continuous and the deformation local to the stated form.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "sponge_compressed_yellow",
       "category": "deformable",
-      "prompt": "Yellow kitchen sponge squeezed in the middle, compressed shape, porous texture, photorealistic, white background"
+      "prompt": "Subject: Yellow kitchen sponge squeezed in the middle, compressed shape, porous texture.\nGeometry: Preserve the described foam, sponge, rubber or fabric material and the explicitly requested resting or deformed shape. Keep the surface continuous and the deformation local to the stated form.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Yellow kitchen sponge squeezed in the middle, compressed shape, porous texture, photorealistic, white background"
+        },
+        "source_sha256": {
+          "prompt": "0063ed9886e9862d3b426bd129814ebe93a2a63d9f602e59b58fa195353c0211"
+        },
+        "subject": "Yellow kitchen sponge squeezed in the middle, compressed shape, porous texture",
+        "ordinal": 0,
+        "family": "fabric",
+        "specifications": {
+          "prompt": {
+            "profile": "deformable",
+            "geometry": "Preserve the described foam, sponge, rubber or fabric material and the explicitly requested resting or deformed shape. Keep the surface continuous and the deformation local to the stated form.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "drawer_unit_closed_wood",
       "category": "articulated",
-      "prompt": "Small wooden drawer unit with 3 drawers, all drawers fully closed, simple furniture, photorealistic, white background"
+      "prompt": "Subject: Small wooden drawer unit with 3 drawers, all drawers fully closed, simple furniture.\nGeometry: Preserve the authored mechanism and requested joint angles. Links meet at actual pivots or hinges, connected halves remain distinct, and an open gap stays open.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Small wooden drawer unit with 3 drawers, all drawers fully closed, simple furniture, photorealistic, white background"
+        },
+        "source_sha256": {
+          "prompt": "4960b049f0550ed139de3ee8341a4c7c70f4f13d8731774d662cf5b3ff2e764b"
+        },
+        "subject": "Small wooden drawer unit with 3 drawers, all drawers fully closed, simple furniture",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "articulated",
+            "geometry": "Preserve the authored mechanism and requested joint angles. Links meet at actual pivots or hinges, connected halves remain distinct, and an open gap stays open.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "drawer_unit_open_top",
       "category": "articulated",
-      "prompt": "Small wooden drawer unit, top drawer pulled open halfway, other drawers closed, photorealistic, white background"
+      "prompt": "Subject: Small wooden drawer unit, top drawer pulled open halfway, other drawers closed.\nGeometry: Preserve the authored mechanism and requested joint angles. Links meet at actual pivots or hinges, connected halves remain distinct, and an open gap stays open.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Small wooden drawer unit, top drawer pulled open halfway, other drawers closed, photorealistic, white background"
+        },
+        "source_sha256": {
+          "prompt": "e6be619b83ab1e1f3b31afd0d1231c940799aede530419f260db9d3c48363721"
+        },
+        "subject": "Small wooden drawer unit, top drawer pulled open halfway, other drawers closed",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "articulated",
+            "geometry": "Preserve the authored mechanism and requested joint angles. Links meet at actual pivots or hinges, connected halves remain distinct, and an open gap stays open.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "cabinet_2door_closed_white",
       "category": "articulated",
-      "prompt": "White storage cabinet with 2 doors, doors closed, simple handles, photorealistic, white background"
+      "prompt": "Subject: White storage cabinet with 2 doors, doors closed, simple handles.\nGeometry: Preserve the authored mechanism and requested joint angles. Links meet at actual pivots or hinges, connected halves remain distinct, and an open gap stays open.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "White storage cabinet with 2 doors, doors closed, simple handles, photorealistic, white background"
+        },
+        "source_sha256": {
+          "prompt": "718eaa56182d41eb2c291230ee3cdb7d5b2c081989dd92bc05202ba976814e60"
+        },
+        "subject": "White storage cabinet with 2 doors, doors closed, simple handles",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "articulated",
+            "geometry": "Preserve the authored mechanism and requested joint angles. Links meet at actual pivots or hinges, connected halves remain distinct, and an open gap stays open.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "cabinet_2door_open_left",
       "category": "articulated",
-      "prompt": "White storage cabinet, left door swung open 90 degrees, right door closed, interior shelves visible, photorealistic, white background"
+      "prompt": "Subject: White storage cabinet, left door swung open 90 degrees, right door closed, interior shelves visible.\nGeometry: Preserve the authored mechanism and requested joint angles. Links meet at actual pivots or hinges, connected halves remain distinct, and an open gap stays open.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "White storage cabinet, left door swung open 90 degrees, right door closed, interior shelves visible, photorealistic, white background"
+        },
+        "source_sha256": {
+          "prompt": "9cef82051c6450cf31ca13c7cfabe4365dd2240886cfeaf3bbc4cd02dc8b9e73"
+        },
+        "subject": "White storage cabinet, left door swung open 90 degrees, right door closed, interior shelves visible",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "articulated",
+            "geometry": "Preserve the authored mechanism and requested joint angles. Links meet at actual pivots or hinges, connected halves remain distinct, and an open gap stays open.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "laptop_closed_silver",
       "category": "articulated",
-      "prompt": "Silver laptop computer closed shut, sleek aluminum design, photorealistic, white background"
+      "prompt": "Subject: Silver laptop computer closed shut, sleek aluminum design.\nGeometry: Preserve the authored mechanism and requested joint angles. Links meet at actual pivots or hinges, connected halves remain distinct, and an open gap stays open.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Silver laptop computer closed shut, sleek aluminum design, photorealistic, white background"
+        },
+        "source_sha256": {
+          "prompt": "b78d42ad7705678217177c65f6b6dc5b48a053ccea28498d21e4a7389bb030ba"
+        },
+        "subject": "Silver laptop computer closed shut, sleek aluminum design",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "articulated",
+            "geometry": "Preserve the authored mechanism and requested joint angles. Links meet at actual pivots or hinges, connected halves remain distinct, and an open gap stays open.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "laptop_open_90deg",
       "category": "articulated",
-      "prompt": "Silver laptop computer open at 90 degree angle, screen and keyboard visible, photorealistic, white background"
+      "prompt": "Subject: Silver laptop computer open at 90 degree angle, screen and keyboard visible.\nGeometry: Preserve the authored mechanism and requested joint angles. Links meet at actual pivots or hinges, connected halves remain distinct, and an open gap stays open.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Silver laptop computer open at 90 degree angle, screen and keyboard visible, photorealistic, white background"
+        },
+        "source_sha256": {
+          "prompt": "a469e30d15cf3c21b253711dc361f6e65c2a949a2c62e7666a8a72fb3fb079f6"
+        },
+        "subject": "Silver laptop computer open at 90 degree angle, screen and keyboard visible",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "articulated",
+            "geometry": "Preserve the authored mechanism and requested joint angles. Links meet at actual pivots or hinges, connected halves remain distinct, and an open gap stays open.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "hammer_striking_pose",
       "category": "tool_use",
-      "prompt": "Claw hammer positioned vertically as if about to strike, head at top, wooden handle, photorealistic, white background"
+      "prompt": "Subject: Claw hammer positioned vertically as if about to strike, head at top, wooden handle.\nGeometry: Preserve the specific hand tool, connected handle and working end, with coherent shaft or jaw alignment. Retain the stated drive profile, material, wear and operating pose.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: Show the complete handle and working end with minimal foreshortening. Show one view from the left, about 25 degrees around and 20 degrees above level, while retaining any explicitly requested pose or view.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Claw hammer positioned vertically as if about to strike, head at top, wooden handle, photorealistic, white background"
+        },
+        "source_sha256": {
+          "prompt": "aef1ec2861c7138ec2a92f5a39f2305fc3974e721fa94b88927d7315811ae5e2"
+        },
+        "subject": "Claw hammer positioned vertically as if about to strike, head at top, wooden handle",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "hammer_wrench",
+            "geometry": "Preserve the specific hand tool, connected handle and working end, with coherent shaft or jaw alignment. Retain the stated drive profile, material, wear and operating pose.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": "Show the complete handle and working end with minimal foreshortening.",
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "screwdriver_vertical_phillips",
       "category": "tool_use",
-      "prompt": "Phillips head screwdriver standing vertically, tip pointing down, orange and black handle, photorealistic, white background"
+      "prompt": "Subject: Phillips head screwdriver standing vertically, tip pointing down, orange and black handle.\nGeometry: Preserve the specific hand tool, connected handle and working end, with coherent shaft or jaw alignment. Retain the stated drive profile, material, wear and operating pose.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: Show the complete handle and working end with minimal foreshortening. Show one view from the left, about 25 degrees around and 20 degrees above level, while retaining any explicitly requested pose or view.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Phillips head screwdriver standing vertically, tip pointing down, orange and black handle, photorealistic, white background"
+        },
+        "source_sha256": {
+          "prompt": "549d67549c6f92241478d9a7a9c12bcbfe24141f11768d20c54a53b4d0bc8c5a"
+        },
+        "subject": "Phillips head screwdriver standing vertically, tip pointing down, orange and black handle",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "hammer_wrench",
+            "geometry": "Preserve the specific hand tool, connected handle and working end, with coherent shaft or jaw alignment. Retain the stated drive profile, material, wear and operating pose.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": "Show the complete handle and working end with minimal foreshortening.",
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "wrench_horizontal_adjustable",
       "category": "tool_use",
-      "prompt": "Adjustable wrench lying flat horizontally, chrome finish, jaw slightly open, photorealistic, white background"
+      "prompt": "Subject: Adjustable wrench lying flat horizontally, chrome finish, jaw slightly open.\nGeometry: Preserve the specific hand tool, connected handle and working end, with coherent shaft or jaw alignment. Retain the stated drive profile, material, wear and operating pose.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: Show the complete handle and working end with minimal foreshortening. Show one view from the left, about 25 degrees around and 20 degrees above level, while retaining any explicitly requested pose or view.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Adjustable wrench lying flat horizontally, chrome finish, jaw slightly open, photorealistic, white background"
+        },
+        "source_sha256": {
+          "prompt": "f9762fcfe9d5250fe6f24fa3e5569273739428988e81654cbe76f36524fba4d5"
+        },
+        "subject": "Adjustable wrench lying flat horizontally, chrome finish, jaw slightly open",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "hammer_wrench",
+            "geometry": "Preserve the specific hand tool, connected handle and working end, with coherent shaft or jaw alignment. Retain the stated drive profile, material, wear and operating pose.",
+            "sources": [],
+            "scope": "authored_type_geometry",
+            "checks": [
+              "authored identity and dimensions",
+              "specified material and pose",
+              "type-specific geometry"
+            ],
+            "view": "Show the complete handle and working end with minimal foreshortening.",
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "knife_chef_vertical",
       "category": "tool_use",
-      "prompt": "Chef's knife positioned vertically blade down, stainless steel blade, black handle, photorealistic, white background"
+      "prompt": "Subject: Chef's knife positioned vertically blade down, stainless steel blade, black handle.\nGeometry: Preserve the specified shape, proportions, material and pose. Parts meet at their real joints; repeated components have consistent size and alignment.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Chef's knife positioned vertically blade down, stainless steel blade, black handle, photorealistic, white background"
+        },
+        "source_sha256": {
+          "prompt": "4e223df91d8a84537d6502c36df87e862f9627938d1fccf8f83a3e9472bb34eb"
+        },
+        "subject": "Chef's knife positioned vertically blade down, stainless steel blade, black handle",
+        "ordinal": 0,
+        "family": "generic",
+        "specifications": {
+          "prompt": {
+            "profile": "authored_tool_use",
+            "geometry": null,
+            "sources": [],
+            "scope": "authored_description_requires_type_reference",
+            "checks": [
+              "authored identity",
+              "authored proportions, material and pose"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "plate_with_apple_red",
       "category": "multi_object",
-      "prompt": "White ceramic dinner plate with a fresh red apple sitting in the center, photorealistic, white background"
+      "prompt": "Subject: White ceramic dinner plate with a fresh red apple sitting in the center.\nGeometry: The explicitly requested objects remain separate complete objects in their stated arrangement, with readable boundaries and correct contact relationships. Do not fuse the set into one machine or substitute one object for the entire collection.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "White ceramic dinner plate with a fresh red apple sitting in the center, photorealistic, white background"
+        },
+        "source_sha256": {
+          "prompt": "862a9a9f11928e8a7fbf9bad0f59eb48bc341da521fd27f00606c99e3637c094"
+        },
+        "subject": "White ceramic dinner plate with a fresh red apple sitting in the center",
+        "ordinal": 0,
+        "family": "object_set",
+        "specifications": {
+          "prompt": {
+            "profile": "explicit_object_set",
+            "geometry": "The explicitly requested objects remain separate complete objects in their stated arrangement, with readable boundaries and correct contact relationships. Do not fuse the set into one machine or substitute one object for the entire collection.",
+            "sources": [],
+            "scope": "authored_description",
+            "checks": [
+              "requested object count",
+              "each object complete",
+              "correct arrangement and contacts"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "bowl_with_spoon_cereal",
       "category": "multi_object",
-      "prompt": "White cereal bowl with a metal spoon resting inside, handle sticking out, photorealistic, white background"
+      "prompt": "Subject: White cereal bowl with a metal spoon resting inside, handle sticking out.\nGeometry: The explicitly requested objects remain separate complete objects in their stated arrangement, with readable boundaries and correct contact relationships. Do not fuse the set into one machine or substitute one object for the entire collection.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "White cereal bowl with a metal spoon resting inside, handle sticking out, photorealistic, white background"
+        },
+        "source_sha256": {
+          "prompt": "96179085ef8657c67e731158a70b0a3e27369e098e731b582ea5c25f26304fc4"
+        },
+        "subject": "White cereal bowl with a metal spoon resting inside, handle sticking out",
+        "ordinal": 0,
+        "family": "object_set",
+        "specifications": {
+          "prompt": {
+            "profile": "explicit_object_set",
+            "geometry": "The explicitly requested objects remain separate complete objects in their stated arrangement, with readable boundaries and correct contact relationships. Do not fuse the set into one machine or substitute one object for the entire collection.",
+            "sources": [],
+            "scope": "authored_description",
+            "checks": [
+              "requested object count",
+              "each object complete",
+              "correct arrangement and contacts"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "cup_on_saucer_coffee",
       "category": "multi_object",
-      "prompt": "White coffee cup sitting on a matching white saucer, classic design, photorealistic, white background"
+      "prompt": "Subject: White coffee cup sitting on a matching white saucer, classic design.\nGeometry: The explicitly requested objects remain separate complete objects in their stated arrangement, with readable boundaries and correct contact relationships. Do not fuse the set into one machine or substitute one object for the entire collection.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "White coffee cup sitting on a matching white saucer, classic design, photorealistic, white background"
+        },
+        "source_sha256": {
+          "prompt": "b99d6e273adde69dd6cf1b7dcd90ad82d38b1e2637c479b366fda654a6542626"
+        },
+        "subject": "White coffee cup sitting on a matching white saucer, classic design",
+        "ordinal": 0,
+        "family": "object_set",
+        "specifications": {
+          "prompt": {
+            "profile": "explicit_object_set",
+            "geometry": "The explicitly requested objects remain separate complete objects in their stated arrangement, with readable boundaries and correct contact relationships. Do not fuse the set into one machine or substitute one object for the entire collection.",
+            "sources": [],
+            "scope": "authored_description",
+            "checks": [
+              "requested object count",
+              "each object complete",
+              "correct arrangement and contacts"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "cutting_board_with_lemon",
       "category": "multi_object",
-      "prompt": "Wooden cutting board with a whole yellow lemon sitting on it, photorealistic, white background"
+      "prompt": "Subject: Wooden cutting board with a whole yellow lemon sitting on it.\nGeometry: The explicitly requested objects remain separate complete objects in their stated arrangement, with readable boundaries and correct contact relationships. Do not fuse the set into one machine or substitute one object for the entire collection.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Wooden cutting board with a whole yellow lemon sitting on it, photorealistic, white background"
+        },
+        "source_sha256": {
+          "prompt": "990db20405b669d536eadee99a8b96553905fedbb8749ed1ef3edc4ddebb580d"
+        },
+        "subject": "Wooden cutting board with a whole yellow lemon sitting on it",
+        "ordinal": 0,
+        "family": "object_set",
+        "specifications": {
+          "prompt": {
+            "profile": "explicit_object_set",
+            "geometry": "The explicitly requested objects remain separate complete objects in their stated arrangement, with readable boundaries and correct contact relationships. Do not fuse the set into one machine or substitute one object for the entire collection.",
+            "sources": [],
+            "scope": "authored_description",
+            "checks": [
+              "requested object count",
+              "each object complete",
+              "correct arrangement and contacts"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     },
     {
       "id": "tray_with_glasses",
       "category": "multi_object",
-      "prompt": "Rectangular serving tray with two clear glass tumblers on it, photorealistic, white background"
+      "prompt": "Subject: Rectangular serving tray with two clear glass tumblers on it.\nGeometry: The explicitly requested objects remain separate complete objects in their stated arrangement, with readable boundaries and correct contact relationships. Do not fuse the set into one machine or substitute one object for the entire collection.\nSurface: The surface retains the specified materials, colours, finish and wear; avoid invented damage or decorations.\nView: one elevated three-quarter front-left view, about 25 degrees around from the front and 20 degrees above level. Show depth and the mounting relationships between parts; avoid overlapping silhouettes where possible.\nCapture: the complete subject or explicitly described set fits inside the central 70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh specular highlights. Preserve requested emblems and inscriptions clearly; omit unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.\nBackground: flat uniform light neutral gray, with no studio floor, horizon, pedestal or cast backdrop shadow.",
+      "generation_prompt": {
+        "version": 2,
+        "sources": {
+          "prompt": "Rectangular serving tray with two clear glass tumblers on it, photorealistic, white background"
+        },
+        "source_sha256": {
+          "prompt": "a4e4f037bf427e8f35b8bf85acaec7af0fb08415fe7dca13ea88f7c316d37a30"
+        },
+        "subject": "Rectangular serving tray with two clear glass tumblers on it",
+        "ordinal": 0,
+        "family": "object_set",
+        "specifications": {
+          "prompt": {
+            "profile": "explicit_object_set",
+            "geometry": "The explicitly requested objects remain separate complete objects in their stated arrangement, with readable boundaries and correct contact relationships. Do not fuse the set into one machine or substitute one object for the entire collection.",
+            "sources": [],
+            "scope": "authored_description",
+            "checks": [
+              "requested object count",
+              "each object complete",
+              "correct arrangement and contacts"
+            ],
+            "view": null,
+            "description": null,
+            "reference_evidence": {}
+          }
+        }
+      }
     }
-  ]
+  ],
+  "generation_prompt_version": 2
 }

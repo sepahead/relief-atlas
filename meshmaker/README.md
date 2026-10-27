@@ -1,47 +1,41 @@
-# meshmaker — untracked working directory
+# meshmaker workspace
 
-This directory is **not** part of the committed relief-atlas source. `.gitignore`
-keeps everything under it out of version control except this note. It holds two
-unrelated things that both happen to be large, local-only, or sensitive:
+This directory holds local generation tooling and runtime data. Use the
+[top-level README](../README.md) for the maintained workflow and
+[AGENTS.md](../AGENTS.md) for contributor instructions. Ignore rules apply to
+specific paths; this note and some source files are tracked, so do not assume
+everything under `meshmaker/` is excluded from git.
 
-## 1. The local model workspace (`meshmaker/local/`)
+## Local runtime
 
-The on-device pipeline in `scripts/local/` reads its weights and virtualenvs
-from here:
-
+```text
+meshmaker/local/models/       Qwen, TRELLIS, decoder, DINOv3, matting and safety weights
+meshmaker/local/imgenv/       Image-generation Python environment
+meshmaker/local/trellis-mac/  Pinned upstream source and mesh environment
+meshmaker/local/*.log         Local run logs
 ```
-meshmaker/local/models/       ~38GB of weights (FLUX.2, TRELLIS.2, BiRefNet, NSFW detector)
-meshmaker/local/imgenv/       image-generation virtualenv (diffusers on MPS)
-meshmaker/local/trellis-mac/  upstream trellis-mac clone + its venv
-meshmaker/local/*.log         run logs
-```
 
-None of this is committed, and none of it needs to be: `scripts/local/setup_local.sh`
-rebuilds the entire workspace from public model repositories, with no
-HuggingFace login required. If you are setting up a fresh clone, run that script
-rather than trying to recover anything from git history.
+Required model weights total approximately 52.6 GB, including the 33.1 GB Qwen
+bundle. Environments, caches, optional weights and outputs add space. These
+runtime paths are ignored. Fresh setup uses `scripts/local/setup_local.sh` and
+requires approved Hugging Face access for DINOv3; prepared inference uses local
+files. Model and source pins live in `config/local_models.json` and
+`config/local_runtime.json`.
 
-## 2. Legacy cloud generation tooling (`meshmaker/*.py`)
+The current checkpoint transfer policy is one file, one connection and a
+256 KiB/s cap on the resumable aria2 path. See the main README for the distinction
+between checkpoint transfer, package installation and workspace-only recovery.
 
-The batch/swarm launchers and manifests at the top level of this directory are
-the earlier **paid-API** generation pipeline (fal.ai / Runware), kept on disk for
-reference. They are untracked because they are:
+## Earlier generation tooling and collections
 
-- **cost-bearing** — the swarm launchers can fan out many parallel paid cloud
-  jobs, and a stray invocation spends real money;
-- **a credential risk** — they read an `api_keys.txt` from the working tree;
-- **superseded** — the maintained pipeline is the fully local one under
-  `scripts/local/`, which needs no API keys at all.
+The earlier fal.ai and Runware scripts may launch many paid jobs and read local
+credentials. Inspect their behavior before execution. The maintained cloud
+entry point is `scripts/generate_relief.py`; local generation is under
+`scripts/local/`.
 
-`legacy_original_scripts/` contains the committed, reference-only subset of this
-same lineage.
-
-## Release checklist
-
-- [ ] `meshmaker/` is absent from any released source tree or archive.
-- [ ] No API keys (`api_keys.txt`, `config/api_keys.txt`) are inside the repo tree.
-- [ ] No generated assets or run logs from `meshmaker/` ship in a release.
-- [ ] Any asset stamped `policy.override = true` in its `metadata.json` is
-      deliberately included or deliberately removed — see the content policy
-      section of the top-level [README](../README.md) and
-      `state/content_policy_overrides.json`.
+The Bundeswehr and other earlier assets are useful source collections intended
+for integration, with original provenance preserved. `legacy_original/`,
+`legacy_original_scripts/` and the associated manifests record that history.
+Keep credentials, weights, generated binaries and transient logs out of source
+releases. Use an explicitly defined collection and release manifest for asset
+distribution; the current default release excludes policy overrides.

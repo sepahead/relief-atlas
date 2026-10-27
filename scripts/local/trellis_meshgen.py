@@ -1,7 +1,7 @@
 """Phase 2: TRELLIS.2-4B image-to-3D on Apple Silicon (mesh + 3DGS).
 
-Reads the RGBA reference images produced by flux_imagegen.py and exports, per
-item: a PBR-textured GLB mesh and a 3D Gaussian Splatting PLY synthesized from
+Reads the RGBA reference images produced by qwen_imagegen.py and exports, per
+item: a PBR-textured GLB mesh and compact 3D Gaussian splats synthesized from
 TRELLIS.2's decoded voxel grid. Runs fully offline against local weights.
 
 Run with: meshmaker/local/trellis-mac/.venv/bin/python scripts/local/trellis_meshgen.py
@@ -63,17 +63,19 @@ class _NoRembg:
 _rembg_mod.BiRefNet = _NoRembg
 
 from gs_export import (  # noqa: E402
-    export_gaussians_from_mesh_with_voxel, tmp_sibling,
+    export_gaussians_from_mesh_with_voxel, gltf_vertices, tmp_sibling,
 )
 import content_policy  # noqa: E402
+from generation_prompts import is_optimized_prompt  # noqa: E402
 from prompt_utils import (  # noqa: E402
-    MANIFESTS, OUTPUT_DIR_NAME, clean_name, clean_prompt, item_seed,
-    load_manifest, mesh_complete,
+    MANIFESTS, OUTPUT_DIR, STATE_DIR, clean_name, clean_prompt, item_seed,
+    mesh_complete, select_manifest_items,
 )
-
-OUTPUT_DIR = PROJECT_DIR / OUTPUT_DIR_NAME
-STATE_DIR = PROJECT_DIR / "state"
-IMAGE_MODEL_ID = "local/flux.2-klein-4b"
+from pipeline_utils import (  # noqa: E402
+    GS_EXTENSIONS, GS_COLOR_ENCODINGS, file_sha256, generation_provenance, image_model_matches, source_image_matches,
+    durable_replace, source_image_metadata, verdict_matches, write_json,
+    is_infrastructure_error, gpu_lock,
+)
 MESH_MODEL_ID = "local/trellis.2-4b"
 
 
@@ -88,22 +90,29 @@ def parse_args():
                     choices=["512", "1024", "1024_cascade"])
     ap.add_argument("--texture-size", type=int, default=1024,
                     choices=[512, 1024, 2048])
+    ap.add_argument("--mesh-steps", type=int, default=None,
+                    help="override sampling steps for structure, shape and texture")
+    ap.add_argument("--target-faces", type=int, default=200000,
+                    help="triangle target before texture baking")
     ap.add_argument("--seed", type=int, default=None,
                     help="override the per-item deterministic seed")
+    ap.add_argument("--gs-format", choices=["spz", "splat", "both"], default="spz",
+                    help="Gaussian containers to retain; SPZ falls back to SPLAT if unavailable")
     content_policy.add_policy_args(ap)
     ap.add_argument("--ignore-image-qa", action="store_true",
                     help="mesh images that failed or lack an image QA verdict; "
                          "the resulting meshes are then uncertified")
-    return ap.parse_args()
+    args = ap.parse_args()
+    if args.target_faces < 1 or (args.mesh_steps is not None and args.mesh_steps < 1):
+        ap.error("mesh steps and target faces must be positive")
+    return args
 
 
 def save_json_atomic(path, data):
-    tmp = tmp_sibling(path)
-    tmp.write_text(json.dumps(data, indent=2))
-    tmp.replace(path)
+    write_json(path, data)
 
 
-def export_glb(mesh_out, glb_path, texture_size):
+def export_glb(mesh_out, glb_path, texture_size, target_faces=200000):
     """Bake PBR textures and export GLB. Mirrors trellis-mac/generate.py."""
     import torch
 
@@ -140,21 +149,15 @@ def export_glb(mesh_out, glb_path, texture_size):
 
     if use_metal:
         try:
-            import fast_simplification
             import o_voxel
 
-            target_faces = min(200000, len(faces))
-            if len(faces) > target_faces:
-                ratio = 1.0 - (target_faces / len(faces))
-                sv, sf = fast_simplification.simplify(verts, faces, ratio)
-                simp_v = torch.from_numpy(sv).float()
-                simp_f = torch.from_numpy(sf.astype("int32"))
-            else:
-                simp_v = mesh_out.vertices.cpu().float()
-                simp_f = mesh_out.faces.cpu()
-
+            target_faces = min(target_faces, len(faces))
+            # to_glb builds a BVH of this mesh before its own simplification,
+            # then projects baked texels back to that original surface. An
+            # external pre-decimation discarded that reference and sampled
+            # attributes at positions displaced from the decoded surface.
             glb = o_voxel.postprocess.to_glb(
-                vertices=simp_v, faces=simp_f,
+                vertices=mesh_out.vertices.cpu().float(), faces=mesh_out.faces.cpu(),
                 attr_volume=mesh_out.attrs.cpu(),
                 coords=mesh_out.coords.cpu(),
                 attr_layout=mesh_out.layout,
@@ -168,12 +171,14 @@ def export_glb(mesh_out, glb_path, texture_size):
             glb.export(str(glb_path), file_type="glb")
             return "metal"
         except RuntimeError as e:
+            if is_infrastructure_error(e):
+                raise
             print(f"    metal bake failed ({e}); falling back to KDTree baker")
 
     # KDTree fallback baker from trellis-mac/backends
     from backends.texture_baker import bake_texture, export_glb_with_texture, uv_unwrap
 
-    target_faces = min(200000, len(faces))
+    target_faces = min(target_faces, len(faces))
     bake_v, bake_f = verts, faces
     if len(faces) > target_faces:
         import fast_simplification
@@ -187,33 +192,16 @@ def export_glb(mesh_out, glb_path, texture_size):
         mesh_out.origin.cpu().float().numpy(), mesh_out.voxel_size,
         texture_size=texture_size,
     )
-    export_glb_with_texture(new_verts, new_faces, uvs, base_color_img, mr_img, str(glb_path))
+    export_glb_with_texture(gltf_vertices(new_verts), new_faces, uvs,
+                            base_color_img, mr_img, str(glb_path))
     return "kdtree"
 
 
 def main():
     args = parse_args()
-
-    items = []
-    if args.ids:
-        by_id = {it["id"]: it for geo in MANIFESTS for it in load_manifest(geo)}
-        missing = [i for i in args.ids if i not in by_id]
-        if missing:
-            print(f"unknown ids: {missing}")
-            return
-        items = [dict(by_id[i]) for i in args.ids]
-        for it in items:
-            it["prompt_clean"] = clean_prompt(it["prompt"], it["id"])
-    else:
-        for geo in args.geographies:
-            for it in load_manifest(geo):
-                it = dict(it)
-                it["prompt_clean"] = clean_prompt(it["prompt"], it["id"])
-                items.append(it)
-        # Tier selection precedes --limit; see flux_imagegen.py for why.
-        items = content_policy.select_tier(items, args.only_policy)
-        if args.limit:
-            items = items[: args.limit]
+    items = select_manifest_items(args.geographies, args.ids, args.limit, args.only_policy)
+    for it in items:
+        it["prompt_clean"] = clean_prompt(it["prompt"], it["id"], transparent=True)
 
     retries = {}
     retries_path = STATE_DIR / "qa_retries.json"
@@ -245,12 +233,13 @@ def main():
         if it["id"] in quarantine:
             n_quarantined += 1
             continue
-        if not args.ignore_image_qa and not image_qa.get(it["id"], {}).get("pass"):
+        if not args.ignore_image_qa and (not image_model_matches(out_dir, it["id"])
+                or not verdict_matches(image_qa.get(it["id"]), out_dir, it["id"], "images")):
             # No verdict is treated exactly like a failed verdict: an
             # unscreened image must not become a shipped asset.
             n_unverified += 1
             continue
-        if not mesh_complete(out_dir, it["id"]):
+        if not (mesh_complete(out_dir, it["id"]) and source_image_matches(out_dir, it["id"])):
             todo.append(it)
     print(f"{len(items)} items, {len(todo)} need meshes"
           + (f", {n_unverified} blocked by image QA" if n_unverified else "")
@@ -270,13 +259,17 @@ def main():
     pipeline = Trellis2ImageTo3DPipeline.from_pretrained(str(MODEL_DIR))
     pipeline.to(torch.device("mps"))
     print(f"Loaded in {time.time() - t0:.0f}s, device=mps")
+    provenance = generation_provenance("trellis", "decoder", "dino")
+    sampling = {name: {**getattr(pipeline, f"{name}_sampler_params"),
+                       **({"steps": args.mesh_steps} if args.mesh_steps is not None else {})}
+                for name in ("sparse_structure", "shape_slat", "tex_slat")}
 
     STATE_DIR.mkdir(parents=True, exist_ok=True)
     failures_path = STATE_DIR / "local_mesh_failures.json"
     failures = json.loads(failures_path.read_text()) if failures_path.exists() else {}
 
     done = 0
-    # Meshes actually written under a policy override; see flux_imagegen.py.
+    # Meshes actually written under a policy override; see qwen_imagegen.py.
     generated_overrides = []
     for it in todo:
         item_id = it["id"]
@@ -288,8 +281,10 @@ def main():
         seed = args.seed if args.seed is not None else (
             item_seed(item_id) + 7919 * retries.get(item_id, 0))
         try:
-            img = PILImage.open(png_path)
-            outputs = pipeline.run(img, seed=seed, pipeline_type=args.pipeline_type)
+            image_meta = source_image_metadata(out_dir, item_id)
+            with PILImage.open(png_path) as img, torch.inference_mode():
+                outputs = pipeline.run(img, seed=seed, pipeline_type=args.pipeline_type,
+                    **{f"{name}_sampler_params": params for name, params in sampling.items()})
             mesh_out = outputs[0] if isinstance(outputs, list) else outputs
 
             verts = mesh_out.vertices.cpu().numpy()
@@ -302,19 +297,24 @@ def main():
             # accepts. tmp_sibling keeps the real suffix, which the exporters
             # need in order to pick the right container.
             glb_tmp = tmp_sibling(glb_path)
-            bake_backend = export_glb(mesh_out, glb_tmp, args.texture_size)
-            # Condensed 3DGS: emits BOTH containers when the spz package is
-            # installed -- .spz (~10x smaller than PLY, preferred) plus .splat
-            # (32 B/splat, universal web fallback). Without spz, .splat only.
-            # The raw float32 PLY is never kept.
+            bake_backend = export_glb(mesh_out, glb_tmp, args.texture_size, args.target_faces)
+            # Retain only the requested containers. Compact SPZ is the default;
+            # without the Niantic binding the exporter falls back to SPLAT.
             gs_paths, n_gaussians = export_gaussians_from_mesh_with_voxel(
-                mesh_out, str(out_dir / item_id))
+                mesh_out, str(out_dir / item_id), gs_format=args.gs_format)
             if not n_gaussians:
                 raise RuntimeError("3DGS export produced no gaussians")
             # Promote only once the GLB and every 3DGS container are on disk.
-            glb_tmp.replace(glb_path)
+            # Metadata is the commit marker: a crash during promotion must
+            # leave this item incomplete, even when replacing an older decode.
+            (out_dir / "metadata.json").unlink(missing_ok=True)
+            durable_replace(glb_tmp, glb_path)
             for gs_final in gs_paths:
-                tmp_sibling(gs_final).replace(gs_final)
+                durable_replace(tmp_sibling(gs_final), gs_final)
+            kept = {p.suffix.lstrip(".") for p in gs_paths}
+            for ext in GS_EXTENSIONS:
+                if ext not in kept:
+                    (out_dir / f"{item_id}.{ext}").unlink(missing_ok=True)
             t_total = time.time() - t0
 
             metadata = {
@@ -322,28 +322,39 @@ def main():
                 "category": it["category"],
                 "geography": it["geography"],
                 "name": clean_name(it.get("name", "")),
-                "prompt": it["prompt_clean"],
+                "prompt": image_meta.get("prompt"),
+                "manifest_prompt": it["prompt_clean"],
+                "reference_prompt_recipe_version": image_meta.get("prompt_recipe_version"),
+                "manifest_prompt_recipe_version": it.get("generation_prompt", {}).get("version") if is_optimized_prompt(it["prompt"]) else None,
+                "reference_provenance": "recorded" if image_meta else "unknown",
                 "policy": it["policy"],
                 "image_qa": {k: image_qa.get(item_id, {}).get(k)
-                             for k in ("pass", "nsfw", "sharpness")},
-                "image_model": IMAGE_MODEL_ID,
+                             for k in ("pass", "qa_version", "nsfw", "nsfw_screened", "sharpness")},
+                "source_image_sha256": file_sha256(png_path),
+                "image_model": image_meta.get("image_model"),
                 "mesh_model": MESH_MODEL_ID,
+                "provenance": provenance,
                 "seed": seed,
                 "pipeline_type": args.pipeline_type,
                 "texture_size": args.texture_size,
+                "target_faces": args.target_faces,
+                "sampling": sampling,
                 "bake_backend": bake_backend,
+                "mesh_coordinate_system": "right-handed-y-up",
+                "gs_coordinate_system": "right-handed-z-up",
                 "vertices": int(len(verts)),
                 "triangles": int(len(mesh_out.faces)),
                 "gaussians": int(n_gaussians),
                 "gs_format": "+".join(
                     p.suffix.lstrip(".") for p in gs_paths),
+                "gs_color_encodings": {p.suffix.lstrip("."): GS_COLOR_ENCODINGS[p.suffix.lstrip(".")]
+                                       for p in gs_paths},
                 "generation_seconds": round(t_gen, 1),
                 "total_seconds": round(t_total, 1),
                 "timestamp": datetime.now(timezone.utc).isoformat(),
             }
-            image_meta_path = out_dir / "image_meta.json"
-            if image_meta_path.exists():
-                metadata["image_meta"] = json.loads(image_meta_path.read_text())
+            if image_meta:
+                metadata["image_meta"] = image_meta
             save_json_atomic(out_dir / "metadata.json", metadata)
             failures.pop(item_id, None)
             done += 1
@@ -357,6 +368,10 @@ def main():
             # Drop half-written transients so a 10K run cannot accumulate them.
             for stale in out_dir.glob(f".{item_id}.tmp.*"):
                 stale.unlink(missing_ok=True)
+            if is_infrastructure_error(e):
+                if generated_overrides:
+                    content_policy.record_overrides(generated_overrides, phase="mesh_gen")
+                raise RuntimeError(f"Mesh generation infrastructure failed for {item_id}; assets retained") from e
         finally:
             save_json_atomic(failures_path, failures)
 
@@ -370,4 +385,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    with gpu_lock():
+        main()

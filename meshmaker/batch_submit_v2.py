@@ -19,6 +19,9 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from queue import Queue
 from datetime import datetime
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts/local"))
+from generation_prompts import normalize_generation_prompt  # noqa: E402
+
 try:
     import fal_client
 except ImportError:
@@ -57,8 +60,8 @@ def load_keys():
     return keys
 
 def enhance_prompt(prompt, category=""):
-    extras = "single isolated object, centered, pure white background, professional studio lighting, ultra high resolution 8K, extremely sharp focus, photorealistic, detailed texture, clean edges"
-    return f"{prompt}, {extras}"
+    """Use the shared reference recipe without contradictory style suffixes."""
+    return normalize_generation_prompt(prompt, category=category)
 
 def generate_mesh(mesh_def, api_key, results_queue):
     mesh_id = mesh_def["id"]

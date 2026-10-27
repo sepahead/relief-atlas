@@ -35,6 +35,9 @@ from queue import Queue, PriorityQueue
 import traceback
 import random
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts/local"))
+from generation_prompts import normalize_generation_prompt  # noqa: E402
+
 try:
     import fal_client
 except ImportError:
@@ -60,18 +63,6 @@ INTER_REQUEST_DELAY = 0.3
 DOWNLOAD_TIMEOUT = 300
 
 # Quality enhancement keywords for prompts
-PROMPT_ENHANCEMENTS = [
-    "single isolated object",
-    "centered in frame",
-    "pure white background",
-    "professional product photography",
-    "studio lighting",
-    "high resolution 4K",
-    "sharp focus",
-    "no shadows on background",
-    "clean edges",
-    "photorealistic render"
-]
 
 
 # ============================================================================
@@ -79,29 +70,8 @@ PROMPT_ENHANCEMENTS = [
 # ============================================================================
 
 def enhance_prompt(base_prompt: str, category: str = "") -> str:
-    """Enhance prompt for better 3D mesh generation quality."""
-    # Category-specific enhancements
-    category_hints = {
-        "robot": "industrial design, mechanical precision, ",
-        "gripper": "robotic end effector, mechanical precision, ",
-        "fabric": "soft material texture, natural folds, ",
-        "hanoi": "wooden toy, smooth finish, ",
-        "ycb": "YCB benchmark style, realistic object, ",
-        "tool": "professional tool, industrial quality, ",
-        "kitchen": "kitchenware, clean design, ",
-    }
-
-    category_hint = ""
-    for key, hint in category_hints.items():
-        if key in category.lower():
-            category_hint = hint
-            break
-
-    # Build enhanced prompt
-    enhancements = ", ".join(PROMPT_ENHANCEMENTS)
-    enhanced = f"{category_hint}{base_prompt}, {enhancements}"
-
-    return enhanced
+    """Use the shared reference recipe without contradictory style suffixes."""
+    return normalize_generation_prompt(base_prompt, category=category)
 
 
 # ============================================================================

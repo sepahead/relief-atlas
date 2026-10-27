@@ -1,4 +1,4 @@
-"""Backdrop matting: convert FLUX.2 studio shots to RGBA for TRELLIS.2.
+"""Backdrop matting and native-alpha preservation for TRELLIS.2 references.
 
 TRELLIS.2 skips its (gated) RMBG-2.0 background remover when the input image
 already carries a real alpha channel, so we derive alpha ourselves.
@@ -61,11 +61,14 @@ def _border_seed(certain_bg: np.ndarray) -> np.ndarray:
 
 
 def _border_touch_mask(mask: np.ndarray) -> np.ndarray:
-    touch = np.zeros_like(mask)
+    # This is an index mask, even when the input is an integer label image.
+    # An integer array here invokes fancy row indexing rather than selecting
+    # border pixels, and silently misclassifies enclosed holes.
+    touch = np.zeros_like(mask, dtype=bool)
     touch[0] = mask[0]
     touch[-1] = mask[-1]
-    touch[:, 0] |= mask[:, 0]
-    touch[:, -1] |= mask[:, -1]
+    touch[:, 0] |= mask[:, 0] != 0
+    touch[:, -1] |= mask[:, -1] != 0
     return touch
 
 
@@ -93,7 +96,7 @@ def birefnet_alpha(img: Image.Image) -> np.ndarray:
     x = np.asarray(im, dtype=np.float32) / 255.0
     x = (x - np.array([0.485, 0.456, 0.406])) / np.array([0.229, 0.224, 0.225])
     t = torch.from_numpy(x).permute(2, 0, 1).unsqueeze(0).float().to(_BIREFNET_DEVICE)
-    with torch.no_grad():
+    with torch.inference_mode():
         preds = _BIREFNET(t)
         p = preds[-1] if isinstance(preds, list) else preds
         small = torch.sigmoid(p)[0, 0].cpu().numpy()
@@ -188,6 +191,16 @@ def _finish_rgba(rgb: np.ndarray, fg_soft: np.ndarray,
         "holes_filled": int(holes_filled),
     }
     return Image.fromarray(rgba, "RGBA"), stats
+
+
+def reference_rgba(img: Image.Image) -> tuple[Image.Image, dict]:
+    """Keep a generated alpha channel; matte opaque references as a fallback."""
+    if img.mode == "RGBA" and img.getchannel("A").getextrema()[0] < 255:
+        alpha = np.asarray(img.getchannel("A"))
+        return img.copy(), {"method": "native_rgba",
+                            "fg_fraction": round(float((alpha > 127).mean()), 4),
+                            "soft_alpha_fraction": round(float(((alpha > 0) & (alpha < 255)).mean()), 4)}
+    return matte_image(img)
 
 
 def matte_image(img: Image.Image, method: str = "auto") -> tuple[Image.Image, dict]:

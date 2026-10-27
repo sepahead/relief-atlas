@@ -13,12 +13,14 @@ Usage:
 """
 
 import json
-import os
 import sys
 from datetime import datetime
 from pathlib import Path
 
 OUTPUT_DIR = Path(__file__).resolve().parent.parent / "manifests"
+sys.path.insert(0, str(Path(__file__).resolve().parent / "local"))
+from generation_prompts import PROMPT_VERSION, is_optimized_prompt, rewrite_item  # noqa: E402
+from pipeline_utils import write_json  # noqa: E402
 
 
 # ---------------------------------------------------------------------------
@@ -53,8 +55,10 @@ SCENE_VARIANTS = [
     "It is in depot storage: protective covers partially removed, some dust on upper surfaces, batteries disconnected, long-term storage markings visible on the hull.",
 ]
 
-# GPT-Image optimized: structured natural language, camera terms, explicit constraints.
-# Optimized for Trellis 2 / Tripo input: clean white BG, centered, even lighting, no harsh shadows.
+# Historical template text is retained as source provenance and for stable ID
+# expansion. rewrite_item emits the actual versioned image-reference recipe;
+# this old backdrop, depth-of-field and attachment boilerplate is not sent to
+# generation models.
 PROMPT_SUFFIX = (
     "The object stands alone on a clean pure white seamless backdrop, centered in frame, "
     "under even softbox studio lighting with gentle contact shadows. "
@@ -144,6 +148,7 @@ def build_items(prefix: str, category: str, geography: str, organization: str,
         all_config_variants.extend(extra_variants)
 
     seen_prompts = set()
+    subject_ordinals = {}
 
     # Generate all unique combinations in nested loops
     for pass_num in range(100):  # safety limit
@@ -172,7 +177,7 @@ def build_items(prefix: str, category: str, geography: str, organization: str,
                         continue
                     seen_prompts.add(full_prompt)
 
-                    items.append({
+                    row = {
                         "id": make_id(prefix, idx),
                         "category": category,
                         "geography": geography,
@@ -180,7 +185,10 @@ def build_items(prefix: str, category: str, geography: str, organization: str,
                         "name": f"{name} ({variant_str})",
                         "prompt": full_prompt,
                         "tags": tags,
-                    })
+                    }
+                    ordinal = subject_ordinals.get(name, 0)
+                    items.append(rewrite_item(row, base_subject=base_prompt, ordinal=ordinal))
+                    subject_ordinals[name] = ordinal + 1
                     idx += 1
 
                 if len(items) >= target:
@@ -693,17 +701,24 @@ def generate_general() -> list[dict]:
 # ---------------------------------------------------------------------------
 
 def write_manifest(filepath: Path, items: list[dict], description: str, geography: str):
+    # Source collections already integrated into the active Germany manifest
+    # must survive regenerating its template-derived rows.
+    if filepath.exists():
+        previous = json.loads(filepath.read_text())
+        present = {item["id"] for item in items}
+        items = [*items, *[rewrite_item(item) for item in previous.get("meshes", [])
+                          if item.get("id", "").startswith("legacy_") and item["id"] not in present]]
+    items = [item if is_optimized_prompt(item.get("prompt", "")) else rewrite_item(item) for item in items]
     manifest = {
         "version": "2.0",
         "description": description,
         "geography": geography,
         "total_items": len(items),
         "generated_at": datetime.now().isoformat(),
+        "generation_prompt_version": PROMPT_VERSION,
         "meshes": items,
     }
-    filepath.parent.mkdir(parents=True, exist_ok=True)
-    with open(filepath, "w") as f:
-        json.dump(manifest, f, indent=2, ensure_ascii=False)
+    write_json(filepath, manifest)
     print(f"  {filepath.name}: {len(items)} items")
 
 

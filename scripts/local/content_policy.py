@@ -67,8 +67,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
-PROJECT_DIR = Path(__file__).resolve().parents[2]
-STATE_DIR = PROJECT_DIR / "state"
+from pipeline_utils import STATE_DIR, write_json as atomic_write_json
 
 # Bump when the families below change so stored verdicts stay interpretable.
 POLICY_VERSION = 1
@@ -286,9 +285,8 @@ def classify_text(text: str) -> Verdict:
     return Verdict(ALLOWED, "unclassified", "")
 
 
-def classify_item(item: dict) -> Verdict:
-    """Classify a manifest row from its name, prompt, category and id."""
-    verdict = classify_text(f"{item.get('name', '')} {item.get('prompt', '')}")
+def _classify_item_prompt(item: dict, prompt: str) -> Verdict:
+    verdict = classify_text(f"{item.get('name', '')} {prompt}")
     # An explicit humanitarian match wins over the provenance heuristic: a
     # demining rig from the legacy set is still a demining rig.
     if verdict.classification == ALLOWED and verdict.category != "humanitarian":
@@ -297,6 +295,21 @@ def classify_item(item: dict) -> Verdict:
         if legacy:
             return Verdict(RESTRICTED, "legacy_military_set", legacy.group(0))
     return verdict
+
+
+def classify_item(item: dict) -> Verdict:
+    """Screen current wording and retained source text; rewrites cannot lower eligibility requirements."""
+    recipe = item.get("generation_prompt", {})
+    sources = recipe.get("sources", {}) if isinstance(recipe, dict) else {}
+    if not isinstance(sources, dict):
+        sources = {}
+    originals = [value for key, value in sources.items()
+                 if key in ("prompt", "text_prompt", "image_prompt") and isinstance(value, str)]
+    current = [item[key] for key in ("prompt", "text_prompt", "image_prompt")
+               if isinstance(item.get(key), str)]
+    verdicts = [_classify_item_prompt(item, prompt) for prompt in [*originals, *current] or [""]]
+    severity = {ALLOWED: 0, RESTRICTED: 1, BLOCKED: 2}
+    return max(verdicts, key=lambda verdict: severity[verdict.classification])
 
 
 def screen_items(items: list[dict], allow_restricted: bool,
@@ -422,10 +435,7 @@ def describe_screen(permitted, rejected, overrides) -> str:
 
 def write_json(path: Path, data):
     """Atomic write, mirroring the convention used across the pipeline."""
-    path.parent.mkdir(parents=True, exist_ok=True)
-    tmp = path.with_name(f".{path.name}.tmp")
-    tmp.write_text(json.dumps(data, indent=2))
-    tmp.replace(path)
+    atomic_write_json(path, data)
 
 
 def record_skipped(rejected: list[dict], phase: str):
