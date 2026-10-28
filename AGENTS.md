@@ -55,6 +55,7 @@ retained metadata are not evidence of a certified release.
 | Concern | Source of truth |
 | --- | --- |
 | Local orchestration and selection propagation | `scripts/local/run_all.py` |
+| README SVG diagrams and responsive variants | `scripts/render_readme_diagrams.py`, `assets/diagrams/`, `docs/readme-diagrams.md` |
 | Offline start/pause/resume and login recovery | `atlas`, `*.command`, `scripts/local/offline_run.py`, `config/offline_run.json` |
 | Paths, output identity, hashes, locks, atomic state, QA version | `scripts/local/pipeline_utils.py` |
 | Manifest loading, deterministic seeds, deliverable completeness | `scripts/local/prompt_utils.py` |

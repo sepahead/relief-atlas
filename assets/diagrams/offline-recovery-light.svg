@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="992" viewBox="0 0 1120 992" role="img" aria-labelledby="title description">
+<title id="title">Recovery follows saved evidence</title>
+<desc id="description">The latest saved Start, Resume or Pause command controls the managed worker. Pause saves paused intent before stopping owned children; Status only reads saved state. Resume verifies the saved plan, artifact hashes and current QA. Missing references are generated; a committed image with incomplete geometry keeps its image and rebuilds the complete 3D stage; complete geometry with missing QA is inspected; current passes still need positive release membership for every saved target. Resource waits recheck automatically. A crashed worker can restart within the logged-in session if intent is running. After reboot, user login is also required. Unresolved prerequisites, changed snapshots, exhausted failures and quarantine need attention. An interrupted sampling stage restarts; completed hash-verified commits are reused.</desc>
+<!-- Source: scripts/render_readme_diagrams.py. -->
+<defs>
+<marker id="arrow-route" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#526176"/></marker>
+<marker id="arrow-rose" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#9f1239"/></marker>
+<marker id="arrow-blue" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#1d4ed8"/></marker>
+<marker id="arrow-teal" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#0f766e"/></marker>
+<marker id="arrow-amber" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#92400e"/></marker>
+<pattern id="alpha" width="12" height="12" patternUnits="userSpaceOnUse">
+<rect width="12" height="12" fill="#ffffff"/>
+<path d="M0 0H6V6H0ZM6 6H12V12H6Z" fill="#e1e7ef"/>
+</pattern></defs>
+<rect x="0" y="0" width="1120" height="992" rx="20" fill="#f6f8fc" stroke="none" stroke-width="1.5"/>
+<rect x="0.75" y="0.75" width="1118.5" height="990.5" rx="20" fill="none" stroke="#ccd5e2" stroke-width="1.5"/>
+<path d="M994 18C940 62 1080 62 1042 119" fill="none" stroke="#9f1239" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity="0.14"/>
+<path d="M983 18C929 62 1069 62 1031 119" fill="none" stroke="#9f1239" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity="0.14"/>
+<path d="M972 18C918 62 1058 62 1020 119" fill="none" stroke="#9f1239" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity="0.14"/>
+<path d="M961 18C907 62 1047 62 1009 119" fill="none" stroke="#9f1239" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity="0.14"/>
+<path d="M950 18C896 62 1036 62 998 119" fill="none" stroke="#9f1239" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity="0.14"/>
+<text x="36" y="39" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#9f1239" text-anchor="start">RELIEF ATLAS  /  02  /  OFFLINE RECOVERY</text>
+<text x="36" y="82" font-family="Arial, Helvetica, sans-serif" font-size="32" font-weight="700" fill="#182235" text-anchor="start">Recovery follows saved evidence</text>
+<text x="36" y="118" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#526176" text-anchor="start">Resume checks saved files and runs the first missing stage.</text>
+<rect x="36" y="152" width="336" height="100" rx="14" fill="#fff1f2" stroke="#9f1239" stroke-width="1.5"/>
+<path d="M56 152v5" fill="none" stroke="#9f1239" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M65 152v5" fill="none" stroke="#9f1239" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M74 152v5" fill="none" stroke="#9f1239" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<text x="60" y="190" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#182235" text-anchor="start">Start / Resume</text>
+<text x="60" y="222" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#526176" text-anchor="start">Save running intent</text>
+<rect x="392" y="152" width="336" height="100" rx="14" fill="#fffbeb" stroke="#92400e" stroke-width="1.5"/>
+<path d="M412 152v5" fill="none" stroke="#92400e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M421 152v5" fill="none" stroke="#92400e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M430 152v5" fill="none" stroke="#92400e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<text x="416" y="190" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#182235" text-anchor="start">Pause</text>
+<text x="416" y="222" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#526176" text-anchor="start">Save paused intent, then stop</text>
+<rect x="748" y="152" width="336" height="100" rx="14" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5"/>
+<path d="M768 152v5" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M777 152v5" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M786 152v5" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<text x="772" y="190" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#182235" text-anchor="start">Status</text>
+<text x="772" y="222" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#526176" text-anchor="start">Read saved state only</text>
+<path d="M204 252L204 332" fill="none" stroke="#9f1239" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="1" marker-end="url(#arrow-rose)"/>
+<rect x="392" y="272" width="336" height="36" rx="18.0" fill="#fffbeb" stroke="#92400e" stroke-width="1.5"/>
+<text x="560.0" y="296.12" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="600" fill="#92400e" text-anchor="middle">Manual pause survives login</text>
+<path d="M560 252L560 272" fill="none" stroke="#92400e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="1" marker-end="url(#arrow-amber)"/>
+<text x="748" y="294" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#526176" text-anchor="start">Read-only; no worker is started.</text>
+<rect x="36" y="332" width="1048" height="76" rx="14" fill="#fff1f2" stroke="#9f1239" stroke-width="1.5"/>
+<path d="M56 332v5" fill="none" stroke="#9f1239" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M65 332v5" fill="none" stroke="#9f1239" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M74 332v5" fill="none" stroke="#9f1239" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<g transform="translate(58 346) scale(0.9166666666666666)" aria-hidden="true">
+<path d="M10 3H29L39 13V45H10ZM29 3V14H39" fill="#fff1f2" stroke="#9f1239" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M16 21H32M16 28H32M16 35H27" fill="none" stroke="#9f1239" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+</g>
+<text x="124" y="365" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#182235" text-anchor="start">Check saved plan, hashes and current QA</text>
+<text x="124" y="392" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#526176" text-anchor="start">Keep the same saved selection and settings.</text>
+<path d="M560 408L560 438" fill="none" stroke="#9f1239" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="1" marker-end="url(#arrow-rose)"/>
+<text x="72" y="464" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="600" fill="#526176" text-anchor="start">Saved evidence</text>
+<text x="590" y="464" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="600" fill="#526176" text-anchor="start">Next required work</text>
+<rect x="36" y="480" width="1048" height="72" rx="14" fill="#ffffff" stroke="#ccd5e2" stroke-width="1.5"/>
+<path d="M56 480v5" fill="none" stroke="#ccd5e2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M65 480v5" fill="none" stroke="#ccd5e2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M74 480v5" fill="none" stroke="#ccd5e2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<circle cx="72" cy="515" r="14" fill="#fff1f2" stroke="#9f1239" stroke-width="1.5"/>
+<text x="72" y="521" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#9f1239" text-anchor="middle">1</text>
+<text x="108" y="510" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#182235" text-anchor="start">No committed reference</text>
+<text x="108" y="536" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#526176" text-anchor="start">No trusted image commit yet</text>
+<path d="M530 516L566 516" fill="none" stroke="#0f766e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="1" marker-end="url(#arrow-teal)"/>
+<text x="590" y="522" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="600" fill="#0f766e" text-anchor="start">Generate reference + image QA</text>
+<rect x="36" y="560" width="1048" height="72" rx="14" fill="#ffffff" stroke="#ccd5e2" stroke-width="1.5"/>
+<path d="M56 560v5" fill="none" stroke="#ccd5e2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M65 560v5" fill="none" stroke="#ccd5e2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M74 560v5" fill="none" stroke="#ccd5e2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<circle cx="72" cy="595" r="14" fill="#fff1f2" stroke="#9f1239" stroke-width="1.5"/>
+<text x="72" y="601" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#9f1239" text-anchor="middle">2</text>
+<text x="108" y="590" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#182235" text-anchor="start">Image committed</text>
+<text x="108" y="616" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#526176" text-anchor="start">3D bundle incomplete</text>
+<path d="M530 596L566 596" fill="none" stroke="#0f766e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="1" marker-end="url(#arrow-teal)"/>
+<text x="590" y="602" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="600" fill="#0f766e" text-anchor="start">Check image QA; rebuild 3D</text>
+<rect x="36" y="640" width="1048" height="72" rx="14" fill="#ffffff" stroke="#ccd5e2" stroke-width="1.5"/>
+<path d="M56 640v5" fill="none" stroke="#ccd5e2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M65 640v5" fill="none" stroke="#ccd5e2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M74 640v5" fill="none" stroke="#ccd5e2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<circle cx="72" cy="675" r="14" fill="#fff1f2" stroke="#9f1239" stroke-width="1.5"/>
+<text x="72" y="681" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#9f1239" text-anchor="middle">3</text>
+<text x="108" y="670" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#182235" text-anchor="start">Geometry complete</text>
+<text x="108" y="696" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#526176" text-anchor="start">Required QA missing or stale</text>
+<path d="M530 676L566 676" fill="none" stroke="#0f766e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="1" marker-end="url(#arrow-teal)"/>
+<text x="590" y="682" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="600" fill="#0f766e" text-anchor="start">Inspect the existing exports</text>
+<rect x="36" y="720" width="1048" height="72" rx="14" fill="#ffffff" stroke="#ccd5e2" stroke-width="1.5"/>
+<path d="M56 720v5" fill="none" stroke="#ccd5e2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M65 720v5" fill="none" stroke="#ccd5e2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M74 720v5" fill="none" stroke="#ccd5e2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<circle cx="72" cy="755" r="14" fill="#fff1f2" stroke="#9f1239" stroke-width="1.5"/>
+<text x="72" y="761" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#9f1239" text-anchor="middle">4</text>
+<text x="108" y="750" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#182235" text-anchor="start">Current QA passes</text>
+<text x="108" y="776" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#526176" text-anchor="start">Final release still needs accounting</text>
+<path d="M530 756L566 756" fill="none" stroke="#0f766e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="1" marker-end="url(#arrow-teal)"/>
+<text x="590" y="762" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="600" fill="#0f766e" text-anchor="start">Audit every saved target</text>
+<rect x="36" y="824" width="336" height="104" rx="14" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5"/>
+<path d="M56 824v5" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M65 824v5" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M74 824v5" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<text x="56" y="857" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#182235" text-anchor="start">Resource waits</text>
+<text x="56" y="885" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#526176" text-anchor="start">Power / disk / GPU / pipeline</text>
+<text x="56" y="909" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#526176" text-anchor="start">Automatically recheck resources</text>
+<rect x="392" y="824" width="336" height="104" rx="14" fill="#fff1f2" stroke="#9f1239" stroke-width="1.5"/>
+<path d="M412 824v5" fill="none" stroke="#9f1239" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M421 824v5" fill="none" stroke="#9f1239" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M430 824v5" fill="none" stroke="#9f1239" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<text x="412" y="857" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#182235" text-anchor="start">Crash / reboot</text>
+<text x="412" y="885" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#526176" text-anchor="start">Restart if intent is running</text>
+<text x="412" y="909" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#526176" text-anchor="start">After reboot: log in first</text>
+<rect x="748" y="824" width="336" height="104" rx="14" fill="#fffbeb" stroke="#92400e" stroke-width="1.5"/>
+<path d="M768 824v5" fill="none" stroke="#92400e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M777 824v5" fill="none" stroke="#92400e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M786 824v5" fill="none" stroke="#92400e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<text x="768" y="857" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#182235" text-anchor="start">Needs attention</text>
+<text x="768" y="885" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#526176" text-anchor="start">Prerequisites / snapshots</text>
+<text x="768" y="909" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#526176" text-anchor="start">Exhausted failures / quarantine</text>
+<text x="36" y="965" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#526176" text-anchor="start">Interrupted sampling restarts. Verified files are reused; quarantine is preserved.</text>
+</svg>

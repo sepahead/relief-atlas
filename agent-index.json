@@ -26,6 +26,10 @@
     {
       "path": "docs/prompt-design.md",
       "role": "reference recipes, research provenance and visual review"
+    },
+    {
+      "path": "docs/readme-diagrams.md",
+      "role": "SVG diagram contracts, regeneration and visual validation"
     }
   ],
   "delivery": {
@@ -74,9 +78,20 @@
       "command": "meshmaker/local/trellis-mac/.venv/bin/python -m unittest discover -s tests",
       "environment": "requirements-mesh.txt",
       "cost": "medium"
+    },
+    {
+      "id": "readme-diagrams",
+      "when": "SVG diagram source, variants or README diagram references change",
+      "command": "python3 scripts/render_readme_diagrams.py --check",
+      "cost": "fast"
     }
   ],
-  "generated": [],
+  "generated": [
+    {
+      "path": "assets/diagrams/*.svg",
+      "regenerate": "python3 scripts/render_readme_diagrams.py"
+    }
+  ],
   "frozen": [
     {
       "path": "manifests/",

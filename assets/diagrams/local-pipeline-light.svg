@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="836" viewBox="0 0 1120 836" role="img" aria-labelledby="title description">
+<title id="title">One item, one traceable pipeline</title>
+<desc id="description">The atlas-managed offline pipeline freezes policy-screened manifest rows and settings. Qwen-Image-2.1 produces an RGBA reference: native alpha is preserved, while opaque output uses BiRefNet or chroma matting. Image QA and the required safety screen gate TRELLIS.2-4B, which uses DINOv3 conditioning and a trained structure decoder. Its shared decoded mesh and voxel attributes feed both a textured Y-up GLB and native Z-up Gaussians, usually SPZ with SPLAT fallback. Mesh and Gaussian QA are separate required gates. A separate audit determines release membership. The arrows describe data flow, not parallel execution.</desc>
+<!-- Source: scripts/render_readme_diagrams.py. -->
+<defs>
+<marker id="arrow-route" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#526176"/></marker>
+<marker id="arrow-rose" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#9f1239"/></marker>
+<marker id="arrow-blue" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#1d4ed8"/></marker>
+<marker id="arrow-teal" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#0f766e"/></marker>
+<marker id="arrow-amber" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#92400e"/></marker>
+<pattern id="alpha" width="12" height="12" patternUnits="userSpaceOnUse">
+<rect width="12" height="12" fill="#ffffff"/>
+<path d="M0 0H6V6H0ZM6 6H12V12H6Z" fill="#e1e7ef"/>
+</pattern></defs>
+<rect x="0" y="0" width="1120" height="836" rx="20" fill="#f6f8fc" stroke="none" stroke-width="1.5"/>
+<rect x="0.75" y="0.75" width="1118.5" height="834.5" rx="20" fill="none" stroke="#ccd5e2" stroke-width="1.5"/>
+<path d="M994 18C940 62 1080 62 1042 119" fill="none" stroke="#9f1239" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity="0.14"/>
+<path d="M983 18C929 62 1069 62 1031 119" fill="none" stroke="#9f1239" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity="0.14"/>
+<path d="M972 18C918 62 1058 62 1020 119" fill="none" stroke="#9f1239" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity="0.14"/>
+<path d="M961 18C907 62 1047 62 1009 119" fill="none" stroke="#9f1239" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity="0.14"/>
+<path d="M950 18C896 62 1036 62 998 119" fill="none" stroke="#9f1239" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity="0.14"/>
+<text x="36" y="39" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#9f1239" text-anchor="start">RELIEF ATLAS  /  01  /  LOCAL PIPELINE</text>
+<text x="36" y="82" font-family="Arial, Helvetica, sans-serif" font-size="32" font-weight="700" fill="#182235" text-anchor="start">One item, one traceable pipeline</text>
+<text x="36" y="118" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#526176" text-anchor="start">Reference image → shared 3D decode → two deliverables.</text>
+<rect x="36" y="150" width="1048" height="102" rx="14" fill="#fff1f2" stroke="#9f1239" stroke-width="1.5"/>
+<path d="M56 150v5" fill="none" stroke="#9f1239" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M65 150v5" fill="none" stroke="#9f1239" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M74 150v5" fill="none" stroke="#9f1239" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<g transform="translate(60 174) scale(1.0833333333333333)" aria-hidden="true">
+<path d="M10 3H29L39 13V45H10ZM29 3V14H39" fill="#fff1f2" stroke="#9f1239" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M16 21H32M16 28H32M16 35H27" fill="none" stroke="#9f1239" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+</g>
+<text x="136" y="187" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#182235" text-anchor="start">Freeze the permitted selection</text>
+<text x="136" y="219" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="400" fill="#526176" text-anchor="start">Item IDs, original prompts, provenance, settings</text>
+<rect x="782" y="174" width="272" height="48" rx="24.0" fill="#fff1f2" stroke="#9f1239" stroke-width="1.5"/>
+<text x="918.0" y="204.12" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="600" fill="#9f1239" text-anchor="middle">Same scope at every phase</text>
+<path d="M198 252L198 288" fill="none" stroke="#9f1239" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="1" marker-end="url(#arrow-rose)"/>
+<rect x="36" y="288" width="324" height="216" rx="14" fill="#ffffff" stroke="#ccd5e2" stroke-width="1.5"/>
+<path d="M56 288v5" fill="none" stroke="#ccd5e2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M65 288v5" fill="none" stroke="#ccd5e2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M74 288v5" fill="none" stroke="#ccd5e2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<text x="60" y="320" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#1d4ed8" text-anchor="start">REFERENCE</text>
+<text x="60" y="357" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="700" fill="#182235" text-anchor="start">Qwen-Image-2.1</text>
+<g transform="translate(60 388) scale(1.2916666666666667)" aria-hidden="true">
+<rect x="1" y="1" width="46" height="46" rx="6" fill="url(#alpha)" stroke="#ccd5e2" stroke-width="1.5"/>
+<path d="M14 31V22H29V34H14ZM18 22V16H26V22M29 27H36V18H31" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<circle cx="18" cy="35" r="3" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="1.5"/>
+<circle cx="28" cy="35" r="3" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="1.5"/>
+</g>
+<text x="140" y="408" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="600" fill="#182235" text-anchor="start">RGBA PNG</text>
+<text x="140" y="438" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#526176" text-anchor="start">Preserve native alpha</text>
+<text x="140" y="463" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#526176" text-anchor="start">Matte opaque output</text>
+<path d="M360 396L390 396" fill="none" stroke="#526176" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="1" marker-end="url(#arrow-route)"/>
+<rect x="390" y="320" width="220" height="152" rx="14" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5"/>
+<path d="M410 320v5" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M419 320v5" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M428 320v5" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<text x="414" y="351" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#1d4ed8" text-anchor="start">GATE 01</text>
+<text x="414" y="386" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#182235" text-anchor="start">Image QA</text>
+<text x="414" y="418" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#526176" text-anchor="start">Framing + alpha</text>
+<text x="414" y="443" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#526176" text-anchor="start">Safety screen</text>
+<path d="M610 396L640 396" fill="none" stroke="#526176" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="1" marker-end="url(#arrow-route)"/>
+<rect x="640" y="288" width="444" height="216" rx="14" fill="#ffffff" stroke="#ccd5e2" stroke-width="1.5"/>
+<path d="M660 288v5" fill="none" stroke="#ccd5e2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M669 288v5" fill="none" stroke="#ccd5e2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M678 288v5" fill="none" stroke="#ccd5e2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<text x="664" y="320" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#1d4ed8" text-anchor="start">RECONSTRUCTION</text>
+<text x="664" y="357" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="700" fill="#182235" text-anchor="start">TRELLIS.2-4B</text>
+<text x="664" y="394" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="400" fill="#526176" text-anchor="start">DINOv3 conditioning</text>
+<text x="664" y="420" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="400" fill="#526176" text-anchor="start">+ trained structure decoder</text>
+<g transform="translate(998 372) scale(1.2916666666666667)" aria-hidden="true">
+<path d="M24 3L44 14V35L24 46L4 35V14ZM4 14L24 25L44 14M24 25V46" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M14 9L34 20V41M34 9L14 20V41M4 25L24 36L44 25" fill="none" stroke="#1d4ed8" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+</g>
+<rect x="660" y="448" width="404" height="38" rx="8" fill="#eff6ff" stroke="none" stroke-width="1.5"/>
+<text x="862" y="473" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="600" fill="#1d4ed8" text-anchor="middle">Decoded mesh + voxel attributes</text>
+<path d="M862 504L862 536L284 536L284 564" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="1" marker-end="url(#arrow-blue)"/>
+<path d="M862 536L828 536L828 564" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="1" marker-end="url(#arrow-blue)"/>
+<circle cx="862" cy="536" r="4" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="1.5"/>
+<rect x="36" y="564" width="496" height="176" rx="14" fill="#ffffff" stroke="#ccd5e2" stroke-width="1.5"/>
+<path d="M56 564v5" fill="none" stroke="#ccd5e2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M65 564v5" fill="none" stroke="#ccd5e2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M74 564v5" fill="none" stroke="#ccd5e2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<text x="60" y="595" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#1d4ed8" text-anchor="start">TEXTURE BAKE</text>
+<text x="60" y="630" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#182235" text-anchor="start">Textured GLB</text>
+<g transform="translate(60 653) scale(1.0833333333333333)" aria-hidden="true">
+<path d="M10 13L29 5L43 20L38 38L16 44L4 29ZM10 13L24 25L29 5M24 25L43 20M24 25L38 38M24 25L16 44M24 25L4 29M10 13L4 29" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<circle cx="10" cy="13" r="2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="1.5"/>
+<circle cx="29" cy="5" r="2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="1.5"/>
+<circle cx="43" cy="20" r="2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="1.5"/>
+<circle cx="38" cy="38" r="2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="1.5"/>
+<circle cx="16" cy="44" r="2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="1.5"/>
+<circle cx="4" cy="29" r="2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="1.5"/>
+<circle cx="24" cy="25" r="2" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="1.5"/>
+</g>
+<text x="132" y="674" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="400" fill="#526176" text-anchor="start">PBR textures</text>
+<text x="132" y="700" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="400" fill="#526176" text-anchor="start">Y-up coordinates</text>
+<rect x="366" y="658" width="142" height="44" rx="22.0" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5"/>
+<text x="437.0" y="686.12" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="600" fill="#1d4ed8" text-anchor="middle">Mesh QA</text>
+<rect x="572" y="564" width="512" height="176" rx="14" fill="#ffffff" stroke="#ccd5e2" stroke-width="1.5"/>
+<path d="M592 564v5" fill="none" stroke="#ccd5e2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M601 564v5" fill="none" stroke="#ccd5e2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M610 564v5" fill="none" stroke="#ccd5e2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<text x="596" y="595" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#1d4ed8" text-anchor="start">GAUSSIAN EXPORT</text>
+<text x="596" y="630" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#182235" text-anchor="start">Gaussian container</text>
+<g transform="translate(596 653) scale(1.0833333333333333)" aria-hidden="true">
+<ellipse cx="13" cy="13" rx="7" ry="3.5" transform="rotate(-25 13 13)" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5"/>
+<circle cx="13" cy="13" r="1.4" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="1.5"/>
+<ellipse cx="27" cy="9" rx="6" ry="3.5" transform="rotate(30 27 9)" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5"/>
+<circle cx="27" cy="9" r="1.4" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="1.5"/>
+<ellipse cx="37" cy="20" rx="7" ry="3.5" transform="rotate(-30 37 20)" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5"/>
+<circle cx="37" cy="20" r="1.4" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="1.5"/>
+<ellipse cx="23" cy="23" rx="10" ry="3.5" transform="rotate(15 23 23)" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5"/>
+<circle cx="23" cy="23" r="1.4" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="1.5"/>
+<ellipse cx="10" cy="29" rx="7" ry="3.5" transform="rotate(50 10 29)" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5"/>
+<circle cx="10" cy="29" r="1.4" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="1.5"/>
+<ellipse cx="30" cy="37" rx="9" ry="3.5" transform="rotate(-15 30 37)" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5"/>
+<circle cx="30" cy="37" r="1.4" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="1.5"/>
+<ellipse cx="16" cy="40" rx="5" ry="3.5" transform="rotate(10 16 40)" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5"/>
+<circle cx="16" cy="40" r="1.4" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="1.5"/>
+<ellipse cx="41" cy="34" rx="5" ry="3.5" transform="rotate(50 41 34)" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5"/>
+<circle cx="41" cy="34" r="1.4" fill="#1d4ed8" stroke="#1d4ed8" stroke-width="1.5"/>
+</g>
+<text x="668" y="674" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="400" fill="#526176" text-anchor="start">SPZ / SPLAT</text>
+<text x="668" y="700" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="400" fill="#526176" text-anchor="start">From voxels · Z-up</text>
+<rect x="900" y="658" width="160" height="44" rx="22.0" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5"/>
+<text x="980.0" y="686.12" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="600" fill="#1d4ed8" text-anchor="middle">Gaussian QA</text>
+<text x="36" y="782" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="600" fill="#182235" text-anchor="start">PNG + GLB + Gaussian container + metadata</text>
+<text x="36" y="811" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#526176" text-anchor="start">Next: current QA evidence and a separate release-membership audit.</text>
+</svg>

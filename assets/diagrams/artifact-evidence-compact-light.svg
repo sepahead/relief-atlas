@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="1384" viewBox="0 0 480 1384" role="img" aria-labelledby="title description">
+<title id="title">From files to release membership</title>
+<desc id="description">Release eligibility has three distinct layers. Committed files include a PNG with matching image metadata and a GLB, recognized Gaussian container and geometry metadata. Image metadata binds the configured model and PNG hash; geometry records the actual source PNG hash. Current image, mesh and Gaussian QA must bind the inspected file hashes and current QA contract, including the required safety screen. Positive release membership additionally requires default policy eligibility, no override or quarantine and a complete deliverable. The local release manifest records included IDs and file hashes. The controller completes only when every saved target is included. Visual fidelity, metric scale, collision quality and physics suitability need separate review.</desc>
+<!-- Source: scripts/render_readme_diagrams.py. -->
+<defs>
+<marker id="arrow-route" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#526176"/></marker>
+<marker id="arrow-rose" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#9f1239"/></marker>
+<marker id="arrow-blue" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#1d4ed8"/></marker>
+<marker id="arrow-teal" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#0f766e"/></marker>
+<marker id="arrow-amber" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#92400e"/></marker>
+<pattern id="alpha" width="12" height="12" patternUnits="userSpaceOnUse">
+<rect width="12" height="12" fill="#ffffff"/>
+<path d="M0 0H6V6H0ZM6 6H12V12H6Z" fill="#e1e7ef"/>
+</pattern></defs>
+<rect x="0" y="0" width="480" height="1384" rx="20" fill="#f6f8fc" stroke="none" stroke-width="1.5"/>
+<rect x="0.75" y="0.75" width="478.5" height="1382.5" rx="20" fill="none" stroke="#ccd5e2" stroke-width="1.5"/>
+<path d="M354 18C300 62 440 62 402 119" fill="none" stroke="#9f1239" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity="0.14"/>
+<path d="M343 18C289 62 429 62 391 119" fill="none" stroke="#9f1239" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity="0.14"/>
+<path d="M332 18C278 62 418 62 380 119" fill="none" stroke="#9f1239" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity="0.14"/>
+<path d="M321 18C267 62 407 62 369 119" fill="none" stroke="#9f1239" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity="0.14"/>
+<path d="M310 18C256 62 396 62 358 119" fill="none" stroke="#9f1239" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" opacity="0.14"/>
+<text x="24" y="39" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#9f1239" text-anchor="start">RELIEF ATLAS  /  03  /  EVIDENCE + RELEASE</text>
+<text x="24" y="82" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="700" fill="#182235" text-anchor="start">From files to</text>
+<text x="24" y="118" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="700" fill="#182235" text-anchor="start">release membership</text>
+<text x="24" y="154" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#526176" text-anchor="start">Three distinct claims. One audit trail.</text>
+<rect x="24" y="184" width="432" height="320" rx="14" fill="#ffffff" stroke="#ccd5e2" stroke-width="1.5"/>
+<path d="M44 184v5" fill="none" stroke="#ccd5e2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M53 184v5" fill="none" stroke="#ccd5e2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M62 184v5" fill="none" stroke="#ccd5e2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<text x="48" y="217" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#9f1239" text-anchor="start">01 / COMMITTED FILES</text>
+<text x="48" y="254" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#182235" text-anchor="start">Reference + geometry bundle</text>
+<text x="48" y="298" font-family="Menlo, Consolas, monospace" font-size="18" font-weight="400" fill="#182235" text-anchor="start">&lt;id&gt;.png + image_meta.json</text>
+<text x="48" y="340" font-family="Menlo, Consolas, monospace" font-size="18" font-weight="400" fill="#182235" text-anchor="start">&lt;id&gt;.glb + Gaussian container</text>
+<text x="48" y="374" font-family="Menlo, Consolas, monospace" font-size="18" font-weight="400" fill="#182235" text-anchor="start">metadata.json</text>
+<text x="48" y="426" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#526176" text-anchor="start">Image metadata: PNG hash + model.</text>
+<text x="48" y="452" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#526176" text-anchor="start">Geometry: actual source PNG hash.</text>
+<text x="48" y="478" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#526176" text-anchor="start">Metadata binds files to their source.</text>
+<path d="M240 504L240 536" fill="none" stroke="#526176" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="1" marker-end="url(#arrow-route)"/>
+<rect x="24" y="536" width="432" height="272" rx="14" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5"/>
+<path d="M44 536v5" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M53 536v5" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M62 536v5" fill="none" stroke="#1d4ed8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<text x="48" y="569" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#1d4ed8" text-anchor="start">02 / CURRENT QA</text>
+<text x="48" y="606" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#182235" text-anchor="start">Inspect the actual artifacts</text>
+<text x="48" y="650" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#182235" text-anchor="start">Image: alpha + safety screening</text>
+<text x="48" y="684" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#182235" text-anchor="start">Mesh: geometry + views</text>
+<text x="48" y="718" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#182235" text-anchor="start">Gaussians: attributes + views</text>
+<text x="48" y="776" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="600" fill="#1d4ed8" text-anchor="start">Current contract + matching file hashes</text>
+<path d="M240 808L240 840" fill="none" stroke="#526176" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="1" marker-end="url(#arrow-route)"/>
+<rect x="24" y="840" width="432" height="272" rx="14" fill="#f0fdfa" stroke="#0f766e" stroke-width="1.5"/>
+<path d="M44 840v5" fill="none" stroke="#0f766e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M53 840v5" fill="none" stroke="#0f766e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M62 840v5" fill="none" stroke="#0f766e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<text x="48" y="873" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="700" fill="#0f766e" text-anchor="start">03 / POSITIVE MEMBERSHIP</text>
+<text x="48" y="910" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#182235" text-anchor="start">Release requires every rule</text>
+<circle cx="54" cy="943" r="3" fill="#0f766e" stroke="#0f766e" stroke-width="1.5"/>
+<text x="72" y="949" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#182235" text-anchor="start">Default policy eligible</text>
+<circle cx="54" cy="975" r="3" fill="#0f766e" stroke="#0f766e" stroke-width="1.5"/>
+<text x="72" y="981" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#182235" text-anchor="start">No recorded override</text>
+<circle cx="54" cy="1007" r="3" fill="#0f766e" stroke="#0f766e" stroke-width="1.5"/>
+<text x="72" y="1013" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#182235" text-anchor="start">No quarantine</text>
+<circle cx="54" cy="1039" r="3" fill="#0f766e" stroke="#0f766e" stroke-width="1.5"/>
+<text x="72" y="1045" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#182235" text-anchor="start">Complete deliverable</text>
+<circle cx="54" cy="1071" r="3" fill="#0f766e" stroke="#0f766e" stroke-width="1.5"/>
+<text x="72" y="1077" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400" fill="#182235" text-anchor="start">All required current QA</text>
+<path d="M240 1112L240 1144" fill="none" stroke="#0f766e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="1" marker-end="url(#arrow-teal)"/>
+<rect x="24" y="1144" width="432" height="104" rx="14" fill="#f0fdfa" stroke="#0f766e" stroke-width="1.5"/>
+<path d="M44 1144v5" fill="none" stroke="#0f766e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M53 1144v5" fill="none" stroke="#0f766e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<path d="M62 1144v5" fill="none" stroke="#0f766e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="1"/>
+<text x="48" y="1182" font-family="Menlo, Consolas, monospace" font-size="21" font-weight="600" fill="#0f766e" text-anchor="start">release_manifest.json</text>
+<text x="48" y="1211" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#526176" text-anchor="start">Included IDs + file hashes.</text>
+<text x="48" y="1235" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#526176" text-anchor="start">A local accounting record.</text>
+<text x="24" y="1290" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="600" fill="#182235" text-anchor="start">Every saved target must be included.</text>
+<text x="24" y="1324" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#526176" text-anchor="start">Visual fidelity, scale, collisions and physics</text>
+<text x="24" y="1349" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" fill="#526176" text-anchor="start">still need separate review.</text>
+</svg>

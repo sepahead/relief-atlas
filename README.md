@@ -56,18 +56,16 @@ A dry-run release command can succeed with zero included assets; read its counts
 
 ## What the local pipeline does
 
-```mermaid
-flowchart LR
-    A[Manifest selection] --> B[Text policy]
-    B --> C[Qwen reference image]
-    C --> D[Preserve alpha or matte]
-    D --> E[Image QA and NSFW screen]
-    E --> F[TRELLIS decode and export]
-    F --> G[Mesh QA]
-    G --> H[Gaussian QA]
-    H --> I[Certified artifacts]
-    I --> J[Release manifest]
-```
+<picture>
+  <source media="(max-width: 640px) and (prefers-color-scheme: dark)" srcset="assets/diagrams/local-pipeline-compact-dark.svg">
+  <source media="(max-width: 640px)" srcset="assets/diagrams/local-pipeline-compact-light.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="assets/diagrams/local-pipeline-dark.svg">
+  <img src="assets/diagrams/local-pipeline-light.svg" width="1120" alt="Managed local pipeline: a policy-screened saved selection feeds Qwen-Image-2.1 and required image QA, then TRELLIS.2 with DINOv3 and the trained structure decoder. One decoded mesh and voxel grid produce both a textured GLB and a Gaussian container, each with its required QA. Release membership is audited separately.">
+</picture>
+
+The managed offline path keeps the same saved selection through generation,
+QA and release. TRELLIS's shared decode feeds texture baking and Gaussian
+export; the arrows show data dependencies, while work runs sequentially.
 
 Every generation and QA stage receives the same selection. Failed samples retry
 with a changed seed; after three rejections an item is quarantined. Renderer or
@@ -236,6 +234,13 @@ does not regenerate already certified assets; choose a separate output/state
 pair for a new comparison.
 
 ### Recovery after an interruption
+
+<picture>
+  <source media="(max-width: 640px) and (prefers-color-scheme: dark)" srcset="assets/diagrams/offline-recovery-compact-dark.svg">
+  <source media="(max-width: 640px)" srcset="assets/diagrams/offline-recovery-compact-light.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="assets/diagrams/offline-recovery-dark.svg">
+  <img src="assets/diagrams/offline-recovery-light.svg" width="1120" loading="lazy" alt="Recovery follows saved intent and evidence. Pause is saved before stopping this worker's children; Status is read-only. Resume checks the saved plan, file hashes and QA, then generates a missing reference, rebuilds incomplete 3D from a committed image, inspects existing exports when QA is missing, or audits final release membership. A crashed worker can restart in the logged-in session if intent is running; reboot recovery also requires login. Resource waits recheck and unresolved failures need attention.">
+</picture>
 
 **You can pause between any stages, including after an image exists but before
 its GLB exists.** Resume inspects the files and their commit metadata, rather than
@@ -525,6 +530,17 @@ controlled settings comparison.
 
 ## Outputs, QA and release
 
+<picture>
+  <source media="(max-width: 640px) and (prefers-color-scheme: dark)" srcset="assets/diagrams/artifact-evidence-compact-dark.svg">
+  <source media="(max-width: 640px)" srcset="assets/diagrams/artifact-evidence-compact-light.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="assets/diagrams/artifact-evidence-dark.svg">
+  <img src="assets/diagrams/artifact-evidence-light.svg" width="1120" loading="lazy" alt="Three distinct claims: committed PNG and 3D files have matching model and source-image metadata; current image, mesh and Gaussian QA bind inspected file hashes; a separate release audit requires default policy eligibility, no override or quarantine, complete deliverables and all current passes. The local release manifest records included IDs and hashes. Controller completion requires every saved target; visual and physics suitability need separate review.">
+</picture>
+
+Committed files, current certification and release inclusion are separate claims.
+The release manifest records positive local membership; publication is a separate
+action. Visual fidelity and physical suitability require their own review.
+
 Each item lives at `<output>/<geography>/<category>/<item_id>/`:
 
 | File | Meaning |
@@ -769,6 +785,17 @@ python3 -m venv .venv
 The suite needs no model weights. Dependency-sensitive tests may skip; read the
 summary. For runtime-sensitive changes, also run it in the existing image and
 mesh environments. Unit tests do not prove GPU inference or a completed pilot.
+
+The custom [SVG diagrams](assets/diagrams/) have light/dark and wide/compact
+layouts. Their standard-library [source](scripts/render_readme_diagrams.py)
+keeps every variant consistent; compact layouts rearrange the content for a
+narrow screen. See [diagram maintenance](docs/readme-diagrams.md) for the source
+contracts and visual checks.
+
+```bash
+python3 scripts/render_readme_diagrams.py          # render the authored vectors
+python3 scripts/render_readme_diagrams.py --check  # read-only consistency check
+```
 
 [Stage recovery tests](tests/test_resume_recovery.py) inject interruptions during
 image sampling, file promotion, geometry exports and QA commits, using fake models
