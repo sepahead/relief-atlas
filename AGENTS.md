@@ -24,6 +24,11 @@ release are different claims. Never substitute one for another. Manifest counts
 are planned coverage. Automated QA does not establish metric scale, collision
 quality, mass properties or physical suitability for a simulator.
 
+Do not cite social-media posts. A post can be deleted or edited, and it can state an
+opinion as a fact, which biases readers and agents and weakens scientific rigor. State
+the substance in your own words with its date, cite the primary source, and do not link
+the post or name its author.
+
 ## Delivery and the shared index
 
 Work within the owner's current authorization. Documentation delivery uses
