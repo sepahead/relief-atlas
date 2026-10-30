@@ -16,8 +16,10 @@ of the baked GLB texture. It is systemic, not per-item hand work:
   pinhole convention as the QA turntable, then a 2D scale/offset refinement
   that absorbs the reference framing margins. Deterministic.
 * Projection: per-pixel ray/face intersection with a rendered position + face
-  id pass, eroded visibility mask and a feathered blend band, so untouched
-  faces keep the baked texture exactly.
+  id pass, eroded visibility mask and a feathered blend band, restricted to the
+  reference emblem footprint, so every texel outside the decal keeps the baked
+  bytes exactly. A whole-side repaint from one viewpoint smears panels and
+  panel gaps, which is worse than a missing cross.
 * The fitted camera and blob record are stored in metadata.json, so mesh QA
   can verify the transfer from the identical pose instead of refitting.
 
@@ -40,6 +42,21 @@ from pipeline_utils import durable_replace, file_sha256, write_json
 # body paint / livery (handled fine by the texture latent).
 BLOB_MIN_FRAC = 0.0005
 BLOB_MAX_FRAC = 0.05
+# Dark areas need a much tighter ceiling than saturated ones. Windows, door
+# openings, grilles and shadowed panels are dark and can be several percent of
+# the silhouette; the old single ceiling accepted them as "emblems" and the
+# projection then painted window grey across the shell. Lettering and dark
+# outlines are small: at 0.02 of the foreground a tent door or window block is
+# excluded while a cross, badge or unit code still passes.
+DARK_BLOB_MAX_FRAC = 0.02
+# Decal-restricted projection. Only texels landing inside the detected emblem
+# footprint may be rewritten: repainting every camera-visible texel from a
+# single photo viewpoint smears panels, grid lines and panel gaps across the
+# whole side whenever the frame map is a pixel or two off.
+DECAL_FEATHER_MIN = 0.02
+MAX_PROJECTED_TEXEL_SHARE = 0.25
+# Write-back tolerance (0-255) for a texel that was written at full weight.
+WRITEBACK_TOLERANCE = 12.0
 # Camera fit quality below this means the pose cannot be trusted; the caller
 # must skip projection rather than smear pixels from a wrong viewpoint.
 FIT_IOU_MIN = 0.5
@@ -85,11 +102,12 @@ def emblem_blobs(rgba: Image.Image):
     mask = np.zeros(fg.shape, bool)
     for i in range(1, n + 1):
         frac = float(sizes[i]) / n_px if len(sizes) > i else 0.0
-        if BLOB_MIN_FRAC <= frac <= BLOB_MAX_FRAC:
-            comp = lbl == i
+        comp = lbl == i
+        kind = "saturated" if (saturated[comp].mean() > 0.5) else "dark"
+        cap = BLOB_MAX_FRAC if kind == "saturated" else DARK_BLOB_MAX_FRAC
+        if BLOB_MIN_FRAC <= frac <= cap:
             mask |= comp
             ys, xs = np.nonzero(comp)
-            kind = "saturated" if (saturated[comp].mean() > 0.5) else "dark"
             records.append({
                 "bbox": [int(xs.min()), int(ys.min()), int(xs.max()), int(ys.max())],
                 "pixels": int(sizes[i]),
@@ -342,11 +360,33 @@ void main() { color0 = vec4(wpos, 1.0); }
 """
 
 
-def project_reference(geoms_zup, texture_img, ref_rgba, fit, *, size=RENDER_SIZE):
-    """Overwrite camera-visible texels with true reference pixels.
+def decal_weights(blob_mask):
+    """Blurred, dilated emblem footprint in reference space (float 0..1).
 
-    Returns (new_texture, report). Faces outside the view or failing the
-    depth test keep the baked texels exactly.
+    The projection may only write where this is nonzero. Growing by a few
+    reference pixels and blurring gives the blend band that fades a decal into
+    the baked paint instead of cutting a hard seam around it.
+    """
+    m = np.asarray(blob_mask).astype(bool)
+    if not m.any():
+        return np.zeros(m.shape, np.float32)
+    grow = max(2, int(round(0.004 * max(m.shape[-2:]))))
+    img = Image.fromarray((m * 255).astype(np.uint8))
+    for _ in range(grow):
+        img = img.filter(ImageFilter.MaxFilter(3))
+    img = img.filter(ImageFilter.GaussianBlur(max(1.0, grow / 2.0)))
+    return np.asarray(img).astype(np.float32) / 255.0
+
+
+def project_reference(geoms_zup, texture_img, ref_rgba, fit, *, blob_mask=None,
+                      size=RENDER_SIZE):
+    """Write true reference pixels into the emblem decal texels only.
+
+    Returns (new_texture, report). Texels outside the detected emblem
+    footprint, outside the view, or failing the depth test keep the baked
+    bytes exactly. Passing no blob_mask is a no-op, never a whole-surface
+    repaint: one viewpoint cannot describe a body's panels, so an unrestricted
+    write trades a missing cross for a smeared, streaky model.
     """
     import moderngl
     ref = ref_rgba.convert("RGBA")
@@ -532,6 +572,23 @@ def project_reference(geoms_zup, texture_img, ref_rgba, fit, *, size=RENDER_SIZE
         return texture_img.copy(), {"projected_texels": 0,
                                     "visible_faces": int(len(set(fids.tolist()))),
                                     "note": "no overlap with reference foreground"}
+    # Decal restriction: sample the emblem footprint at the mapped reference
+    # position of each visible pixel. Only pixels landing on it may write.
+    footprint = (decal_weights(blob_mask) if blob_mask is not None
+                 else np.zeros(ref_alpha.shape, np.float32))
+    if not footprint.any():
+        return texture_img.copy(), {"projected_texels": 0,
+                                    "visible_faces": int(len(set(fids.tolist()))),
+                                    "note": "no emblem footprint; refusing whole-surface projection"}
+    ry_i = np.clip(ryf.astype(int), 0, footprint.shape[0] - 1)
+    rx_i = np.clip(rxf.astype(int), 0, footprint.shape[1] - 1)
+    on_decal = footprint[ry_i, rx_i] > DECAL_FEATHER_MIN
+    ys, xs, tu, tv, t = ys[on_decal], xs[on_decal], tu[on_decal], tv[on_decal], t[on_decal]
+    rxf, ryf, ry_i, rx_i = rxf[on_decal], ryf[on_decal], ry_i[on_decal], rx_i[on_decal]
+    if not len(ys):
+        return texture_img.copy(), {"projected_texels": 0,
+                                    "visible_faces": int(len(set(fids.tolist()))),
+                                    "note": "emblem footprint not visible from the fitted pose"}
     # Erode the visibility set so silhouette rims keep baked texels, then a
     # narrow feather band blends the seam.
     vis = np.zeros((size, size), np.float32)
@@ -540,16 +597,19 @@ def project_reference(geoms_zup, texture_img, ref_rgba, fit, *, size=RENDER_SIZE
                         .filter(ImageFilter.MinFilter(5))) > 0
     feather = np.asarray(Image.fromarray((eroded * 255).astype(np.uint8))
                          .filter(ImageFilter.GaussianBlur(2))) / 255.0
-    wgt = feather[ys, xs]
+    # The written weight is the visibility feather times the decal footprint:
+    # a texel needs to be both visible and inside the emblem. Never falls back
+    # to an unweighted whole-surface write.
+    wgt = feather[ys, xs] * footprint[ry_i, rx_i]
     keep_w = wgt > 0.01
     if not keep_w.any():
-        # Sparse visibility (thin decals, small emblems): erosion ate the whole
-        # set. Fall back to the uneroded pixels at full weight instead of
-        # crashing on an empty selection below.
-        wgt = np.ones_like(wgt)
-        keep_w = np.ones_like(keep_w)
+        # Erosion ate a decal that sits against the silhouette (thin cross arms,
+        # edge lettering). The footprint weight is already soft and confined to
+        # the decal, so use it alone rather than widening the mask.
+        wgt = footprint[ry_i, rx_i]
+        keep_w = wgt > 0.01
     ys, xs, tu, tv, t = ys[keep_w], xs[keep_w], tu[keep_w], tv[keep_w], t[keep_w]
-    rxf, ryf = rxf[keep_w], ryf[keep_w]
+    rxf, ryf, ry_i, rx_i = rxf[keep_w], ryf[keep_w], ry_i[keep_w], rx_i[keep_w]
     wgt = wgt[keep_w]
     if not len(ys):
         return texture_img.copy(), {"projected_texels": 0,
@@ -577,12 +637,29 @@ def project_reference(geoms_zup, texture_img, ref_rgba, fit, *, size=RENDER_SIZE
         keep_list.append(idx)
     idxs = np.array(keep_list, dtype=np.int64)
     keys = np.stack([tv[idxs], tu[idxs]], axis=1)
+    if len(keys) > MAX_PROJECTED_TEXEL_SHARE * tw * th:
+        return texture_img.copy(), {
+            "projected_texels": 0,
+            "texel_share": round(float(len(keys)) / (tw * th), 4),
+            "visible_faces": int(len(set(fids.tolist()))),
+            "note": "emblem footprint covers most of the texture; refusing"}
     out[keys[:, 0], keys[:, 1]] = (
         sample[idxs] * wgt[idxs][:, None] +
         out[keys[:, 0], keys[:, 1]] * (1 - wgt[idxs][:, None]))
+    # Real write-back check: texels written at full weight must carry (close
+    # to) the reference sample. Catches a silent no-op, a colorspace slip and
+    # an off-by-one splat that the coverage ratio cannot see.
+    strong = wgt[idxs] > 0.9
+    if strong.any():
+        err = np.abs(out[keys[strong, 0], keys[strong, 1]] - sample[idxs][strong]).max(axis=1)
+        writeback = float((err <= WRITEBACK_TOLERANCE).mean())
+    else:
+        writeback = 0.0
     report = {
         "projected_texels": int(len(keys)),
         "texel_share": round(float(len(keys)) / (tw * th), 4),
+        "blob_pixels": int(np.asarray(blob_mask).sum()),
+        "writeback_match": round(writeback, 4),
         "visible_faces": int(len(set(fids.tolist()))),
         "frame_scale": round(float(scale), 4),
         "frame_offset": [round(float(ox), 2), round(float(oy), 2)],
@@ -959,7 +1036,13 @@ def verify_transfer(new_texture: Image.Image, ref_rgba: Image.Image,
         blob_px = int(np.asarray(blob_mask).sum())
         got = int(proj_report.get("projected_texels", 0) or 0)
         ratio = (got / blob_px) if blob_px else 0.0
-        ok = ratio >= TRANSFER_MATCH_MIN
+        writeback = proj_report.get("writeback_match")
+        # Prefer the write-back metric when the projection reported one: the
+        # coverage ratio only proves the code ran, not that the color landed.
+        if writeback is not None:
+            ok = got > 0 and float(writeback) >= TRANSFER_MATCH_MIN
+        else:
+            ok = ratio >= TRANSFER_MATCH_MIN
         # Independent hue check on the rewritten texture: emblem-hue pixels
         # must exist (guards a silent blend-to-zero / colorspace slip).
         arr = np.asarray(new_texture.convert("RGB")).astype(np.float32)
@@ -969,6 +1052,7 @@ def verify_transfer(new_texture: Image.Image, ref_rgba: Image.Image,
         if not hue_px:
             ok = False
         return {"ok": bool(ok), "match_ratio": round(float(ratio), 4),
+                "writeback_match": writeback,
                 "hue_pixels": hue_px, "blob_pixels": blob_px,
                 "threshold": TRANSFER_MATCH_MIN,
                 "note": "" if ok else "transfer below threshold; pose or blend suspect"}
@@ -1002,7 +1086,8 @@ def process_item(item_dir: Path, item_id: str, *, dry_run=False):
         report["note"] = f"pose fit too poor (iou {fit['iou']}); skipped"
         return report
     texture, _ = base_color_texture(geoms)
-    new_texture, proj = project_reference(geoms, texture, ref, fit)
+    new_texture, proj = project_reference(geoms, texture, ref, fit,
+                                          blob_mask=blob_mask)
     report["projection"] = proj
     if dry_run or not proj.get("projected_texels"):
         report["note"] = report.get("note", "dry run or nothing to project")
@@ -1100,7 +1185,8 @@ def try_emblem_fix(item_dir: Path, item_id: str):
                     "fit_iou": fit["iou"],
                     "note": f"pose fit too poor (iou {fit['iou']}); skipped"}
         texture, _ = base_color_texture(geoms)
-        new_texture, proj = project_reference(geoms, texture, ref, fit)
+        new_texture, proj = project_reference(geoms, texture, ref, fit,
+                                              blob_mask=blob_mask)
         if not proj.get("projected_texels"):
             return {"applied": False, "blobs": len(records),
                     "fit_iou": fit["iou"], "projection": proj,

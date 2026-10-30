@@ -53,6 +53,26 @@ class TestEmblemBlobs(unittest.TestCase):
         mask, records = self.mod.emblem_blobs(img)
         self.assertEqual(records, [])
 
+    def test_dark_window_is_not_an_emblem(self):
+        """Door openings and window blocks are dark but bigger than lettering."""
+        from PIL import ImageDraw
+        img = self.blank()
+        d = ImageDraw.Draw(img)
+        # ~5.5% of the opaque area: a tent door / truck window block.
+        d.rectangle([88, 88, 168, 168], fill=(30, 30, 32, 255))
+        mask, records = self.mod.emblem_blobs(img)
+        self.assertEqual(records, [], "a large dark opening must not be a decal")
+        self.assertFalse(mask.any())
+
+    def test_dark_lettering_is_an_emblem(self):
+        from PIL import ImageDraw
+        img = self.blank(color=(230, 230, 225))
+        d = ImageDraw.Draw(img)
+        d.rectangle([110, 118, 148, 134], fill=(25, 25, 28, 255))
+        _, records = self.mod.emblem_blobs(img)
+        self.assertTrue([r for r in records if r["kind"] == "dark"],
+                        "small dark unit codes must still trip the gate")
+
     def test_detection_is_deterministic(self):
         from PIL import Image, ImageDraw
         img = self.blank()
@@ -156,6 +176,33 @@ class TestFrameMap(unittest.TestCase):
         self.assertAlmostEqual(scale, 2.0, places=6)
 
 
+class TestDecalFootprint(unittest.TestCase):
+    """The projection may only write inside the emblem footprint."""
+
+    @classmethod
+    def setUpClass(cls):
+        for name in ("numpy", "PIL"):
+            if importlib.util.find_spec(name) is None:
+                raise unittest.SkipTest(f"decal tests require {name}")
+        import emblem_project
+        cls.mod = emblem_project
+
+    def test_footprint_is_confined_to_the_blob(self):
+        import numpy as np
+        blob = np.zeros((128, 128), bool)
+        blob[60:68, 60:68] = True
+        w = self.mod.decal_weights(blob)
+        self.assertGreater(w[64, 64], 0.9)
+        self.assertEqual(float(w[:30, :30].max()), 0.0)
+        self.assertEqual(float(w[100:, 100:].max()), 0.0)
+        # The blend band exists but stays local to the decal.
+        self.assertGreater(float(w[56:72, 56:72].max()), 0.0)
+
+    def test_empty_mask_has_no_footprint(self):
+        import numpy as np
+        self.assertFalse(self.mod.decal_weights(np.zeros((16, 16), bool)).any())
+
+
 class TestVerifyTransfer(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -178,6 +225,20 @@ class TestVerifyTransfer(unittest.TestCase):
         self.assertGreaterEqual(v["match_ratio"], 0.5)
         bad = self.mod.verify_transfer(tex, ref, mask, {"projected_texels": 0})
         self.assertFalse(bad["ok"])
+
+    def test_writeback_metric_decides(self):
+        from PIL import Image
+        tex = Image.new("RGB", (32, 32), (200, 30, 30))
+        ref = Image.new("RGBA", (32, 32), (200, 200, 200, 255))
+        import numpy as np
+        mask = np.zeros((32, 32), bool)
+        mask[10:20, 10:20] = True
+        good = self.mod.verify_transfer(tex, ref, mask, {
+            "projected_texels": 4, "writeback_match": 0.97})
+        self.assertTrue(good["ok"])
+        bad = self.mod.verify_transfer(tex, ref, mask, {
+            "projected_texels": 4, "writeback_match": 0.10})
+        self.assertFalse(bad["ok"], "a low write-back match must refuse the write")
 
     def test_face_id_offset_decodes_background(self):
         import numpy as np
