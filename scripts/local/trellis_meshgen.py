@@ -315,6 +315,20 @@ def main():
             for ext in GS_EXTENSIONS:
                 if ext not in kept:
                     (out_dir / f"{item_id}.{ext}").unlink(missing_ok=True)
+            # Systemic emblem transfer: reference-anchored decal projection for
+            # items whose PNG carries insignia blobs (red cross, roundels,
+            # lettering). No-op without blobs; best-effort so it never fails
+            # a freshly decoded item. Runs before the metadata commit marker.
+            emblem_report = None
+            try:
+                import emblem_project as _emblem
+                emblem_report = _emblem.try_emblem_fix(out_dir, item_id)
+                if emblem_report.get("applied"):
+                    print(f"    emblem projection: "
+                          f"{emblem_report['projection']['projected_texels']:,} texels, "
+                          f"{emblem_report['gaussians'].get('patched_gaussians', 0):,} gaussians")
+            except Exception as _e:
+                emblem_report = {"applied": False, "note": f"emblem hook error: {_e}"}
             t_total = time.time() - t0
 
             metadata = {
@@ -352,6 +366,7 @@ def main():
                 "generation_seconds": round(t_gen, 1),
                 "total_seconds": round(t_total, 1),
                 "timestamp": datetime.now(timezone.utc).isoformat(),
+                "emblem_project": emblem_report,
             }
             if image_meta:
                 metadata["image_meta"] = image_meta
