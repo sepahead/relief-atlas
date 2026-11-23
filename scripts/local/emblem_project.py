@@ -509,14 +509,21 @@ def _panel_text_entries(rgb, fg, fg_dist, fg_extent, edge_margin, has_bg, n_px, 
             cw = xb - xa
             if ch < min_ch or ch > max_ch or cw > max_cw:
                 continue
-            if max(cw, ch) / max(min(cw, ch), 1) > 4.5:
-                continue
             stroke = max_inscribed_radius(crop)
             g_fill = float(px) / float(max(cw * ch, 1))
-            if (g_fill > 0.68 and (stroke / max(min(cw, ch), 1)) > 0.34):
-                continue
-            if stroke > max(5.5, 0.38 * min(cw, ch)) or stroke > 0.015 * fg_extent:
-                continue
+            is_bar = (g_fill > 0.68 and (stroke / max(min(cw, ch), 1)) > 0.34)
+            if is_bar:
+                # Allow slender vertical bar strokes (capital "I" in POLIZEI, ICRC,
+                # PUNAINEN RISTI) to join real letters; solid square/wide blocks are
+                # rejected and clusters must still contain >=2 non-bar glyphs.
+                if not (ch >= 2.2 * cw and ch / max(cw, 1) <= 6.5
+                        and stroke <= max(5.0, 0.012 * fg_extent)):
+                    continue
+            else:
+                if max(cw, ch) / max(min(cw, ch), 1) > 4.5:
+                    continue
+                if stroke > max(5.5, 0.38 * min(cw, ch)) or stroke > 0.015 * fg_extent:
+                    continue
             if has_bg and float(fg_dist[ya:yb, xa:xb][crop].min()) < edge_margin:
                 continue
             g_rgb = rgb[ya:yb, xa:xb][crop].mean(axis=0)
@@ -524,7 +531,7 @@ def _panel_text_entries(rgb, fg, fg_dist, fg_extent, edge_margin, has_bg, n_px, 
                 "cid": cid, "ya": ya, "yb": yb, "xa": xa, "xb": xb,
                 "h": float(ch), "w": float(cw), "px": px,
                 "cx": 0.5 * (xa + xb - 1), "cy": 0.5 * (ya + yb - 1),
-                "rgb": g_rgb,
+                "rgb": g_rgb, "is_bar": is_bar,
             })
 
         ng = len(glyphs)
@@ -566,6 +573,8 @@ def _panel_text_entries(rgb, fg, fg_dist, fg_extent, edge_margin, has_bg, n_px, 
                         seen[v] = True
                         stack.append(v)
             if len(cluster) < 3:
+                continue
+            if sum(1 for idx in cluster if not glyphs[idx]["is_bar"]) < 2:
                 continue
             hs = np.array([glyphs[idx]["h"] for idx in cluster], dtype=np.float64)
             med_h = float(np.median(hs))
@@ -792,16 +801,63 @@ def _emblem_blob_components(rgba: Image.Image):
             rec["stroke_radius_px"] = int(stroke)
         entries.append((rec, comp_full))
 
+    # Pass 1 (`entries` so far) holds saturated/dark components, which can include
+    # bold individual letters of large colored/dark inscriptions (e.g. red
+    # "RØDE KORS" on white) whose narrower sibling letters ("E", "S", "I", "L")
+    # exceed BLOB_MAX_ASPECT or fall below BLOB_MIN_FRAC. Lock Pass-2 badges and
+    # non-glyph Pass-1 emblems first, then let Pass-3 multi-character text bands
+    # supersede fragmented Pass-1 single letters into one complete word decal.
     taken = np.zeros(fg.shape, bool)
     for _rec, comp_full in entries:
         taken |= comp_full
     badge_entries = _panel_badge_entries(
         rgb, fg, fg_dist, fg_extent, edge_margin, has_bg, n_px, taken)
     entries.extend(badge_entries)
-    for _rec, comp_b in badge_entries:
-        taken |= comp_b
-    entries.extend(_panel_text_entries(
-        rgb, fg, fg_dist, fg_extent, edge_margin, has_bg, n_px, taken))
+
+    glyph_px_max = max(40, int(round(0.004 * n_px)))
+    max_ch = max(48, int(round(0.085 * fg_extent)))
+    max_cw = max(64, int(round(0.095 * fg_extent)))
+    locked_taken = np.zeros(fg.shape, bool)
+    absorbable_idx = set()
+    for idx, (rec, comp_m) in enumerate(entries):
+        if rec.get("kind") in ("saturated", "dark"):
+            x0, y0, x1, y1 = rec["bbox"]
+            cw, ch = x1 - x0 + 1, y1 - y0 + 1
+            stroke = max_inscribed_radius(comp_m[y0:y1 + 1, x0:x1 + 1])
+            if (rec["pixels"] <= glyph_px_max
+                    and ch <= max_ch and cw <= max_cw
+                    and stroke <= max(5.5, 0.38 * min(cw, ch))
+                    and stroke <= 0.015 * fg_extent):
+                absorbable_idx.add(idx)
+                continue
+        locked_taken |= comp_m
+
+    text_entries = _panel_text_entries(
+        rgb, fg, fg_dist, fg_extent, edge_margin, has_bg, n_px, locked_taken)
+    superseded = set()
+    accepted_text = []
+    for t_rec, t_mask in text_entries:
+        t_px = max(1, int(t_mask.sum()))
+        overlap_non_absorbed = 0
+        hits = []
+        for idx in absorbable_idx:
+            _, p_mask = entries[idx]
+            inter = int((t_mask & p_mask).sum())
+            if inter == 0:
+                continue
+            p_px = max(1, int(p_mask.sum()))
+            if inter / p_px >= 0.80:
+                hits.append(idx)
+            else:
+                overlap_non_absorbed += inter
+        if overlap_non_absorbed > 0.10 * t_px:
+            continue
+        superseded.update(hits)
+        accepted_text.append((t_rec, t_mask))
+
+    if superseded:
+        entries = [item for idx, item in enumerate(entries) if idx not in superseded]
+    entries.extend(accepted_text)
 
     entries.sort(key=lambda item: (item[0]["bbox"][1], item[0]["bbox"][0]))
     union_mask = np.zeros(fg.shape, bool)

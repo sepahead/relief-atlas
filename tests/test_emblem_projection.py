@@ -1248,6 +1248,60 @@ class TestQaEmblemAndTrellisClean(unittest.TestCase):
         self.assertEqual(float(fp[base_y + h_c + 60, 180]), 0.0, "text collar must not blow up vertically to word width")
         self.assertGreater(float(fp[base_y + 10, 112]), 0.9, "letter strokes must retain full projection weight")
 
+    def test_large_saturated_word_absorbs_pass1_letters_and_rescues_narrow_glyphs(self):
+        from PIL import Image, ImageDraw
+        import emblem_project as ep
+
+        # Bold red word on white panel (e.g. "RØDE KORS") where wide letters exceed
+        # Pass-1 BLOB_MIN_FRAC while a narrow "I" exceeds BLOB_MAX_ASPECT (2.6).
+        # Pass 3 must unify all glyphs into one coherent text band without dropping
+        # the narrow letter, while leaving an adjacent large red cross untouched.
+        img = Image.new("RGBA", (512, 512), (0, 0, 0, 0))
+        d = ImageDraw.Draw(img)
+        d.rectangle([28, 28, 484, 484], fill=(240, 240, 238, 255))
+
+        red = (210, 24, 24, 255)
+        # Adjacent large red cross on the left panel (must remain its own saturated emblem).
+        d.rectangle([82, 260, 102, 340], fill=red)
+        d.rectangle([52, 290, 132, 310], fill=red)
+
+        # 5 large red capitals ("H-E-F-U-I") with ~36px height; wide letters cross
+        # Pass-1 area threshold, while trailing narrow "I" (7x36 -> aspect 5.1,
+        # solid bar) fails Pass-1 and cannot be covered merely by interior bridging.
+        y0, h_c = 130, 36
+        # H
+        d.rectangle([170, y0, 176, y0 + h_c], fill=red)
+        d.rectangle([188, y0, 194, y0 + h_c], fill=red)
+        d.rectangle([170, y0 + 15, 194, y0 + 21], fill=red)
+        # E
+        d.rectangle([204, y0, 210, y0 + h_c], fill=red)
+        d.rectangle([204, y0, 224, y0 + 6], fill=red)
+        d.rectangle([204, y0 + 15, 221, y0 + 21], fill=red)
+        d.rectangle([204, y0 + h_c - 6, 224, y0 + h_c], fill=red)
+        # F
+        d.rectangle([234, y0, 240, y0 + h_c], fill=red)
+        d.rectangle([234, y0, 254, y0 + 6], fill=red)
+        d.rectangle([234, y0 + 15, 251, y0 + 21], fill=red)
+        # U
+        d.rectangle([264, y0, 270, y0 + h_c], fill=red)
+        d.rectangle([282, y0, 288, y0 + h_c], fill=red)
+        d.rectangle([264, y0 + h_c - 6, 288, y0 + h_c], fill=red)
+        # Trailing narrow I (aspect > 2.6, solid vertical bar — like final "I" in POLIZEI)
+        d.rectangle([299, y0, 305, y0 + h_c], fill=red)
+
+        # Row of 4 identical vertical louver bars below must NOT trigger text (0 non-bar glyphs).
+        for bx in (200, 218, 236, 254):
+            d.rectangle([bx, 310, bx + 6, 346], fill=red)
+
+        union, _comps, recs = ep._emblem_blob_components(img)
+        text_recs = [r for r in recs if r["kind"] == "text"]
+        sat_recs = [r for r in recs if r["kind"] == "saturated"]
+        self.assertEqual(len(text_recs), 1, f"expected 1 unified text band, got {recs}")
+        self.assertEqual(text_recs[0]["glyphs"], 5, f"trailing narrow 'I' must be rescued: {text_recs[0]}")
+        self.assertTrue(bool(union[y0 + 18, 302]), "trailing 'I' stroke must be covered by unified text band")
+        self.assertFalse(bool(union[310:347, 200:261].any()), "louver bars with 0 non-bar glyphs must not trigger")
+        self.assertEqual(len(sat_recs), 1, f"only the red cross should remain saturated, got {sat_recs}")
+
 
 if __name__ == "__main__":
     unittest.main()
