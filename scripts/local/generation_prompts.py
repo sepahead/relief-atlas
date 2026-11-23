@@ -107,6 +107,15 @@ _MARKING_PATTERNS = [
     (re.compile(r"\bunicef\b", re.I), "UNICEF"),
     (re.compile(r"\bicrc\b", re.I), "ICRC"),
     (re.compile(r"\bdlrg\b", re.I), "DLRG"),
+    # Local-language society names and acronyms authored verbatim in EU rows.
+    (re.compile(r"\brotes\s+kreuz\b", re.I), "ROTES KREUZ"),
+    (re.compile(r"\br[øo]de\s+kors\b", re.I), "RØDE KORS"),
+    (re.compile(r"\bpunainen\s+risti\b", re.I), "PUNAINEN RISTI"),
+    (re.compile(r"\bpck\b", re.I), "PCK"),
+    (re.compile(r"\bbergrettung\b", re.I), "BERGRETTUNG"),
+    (re.compile(r"\bstra[żz]\s+po[żz]arna\b", re.I), "STRAŻ"),
+    (re.compile(r"\bume\b", re.I), "UME"),
+    (re.compile(r"\bmsb\b", re.I), "MSB"),
 ]
 
 

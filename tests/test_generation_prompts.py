@@ -84,6 +84,23 @@ class TestGenerationPrompts(unittest.TestCase):
         self.assertIn("license plates completely blank", fw)
         rc = gp.compose_prompt("Spanish Red Cross (Cruz Roja) ambulance, white with red cross, Spanish markings")
         self.assertIn('spelled exactly "CRUZ ROJA"', rc)
+        # Local-language names and acronyms authored in the subject are spelled verbatim;
+        # the generic "Red Cross" phrase never overrides an explicit national inscription.
+        for subject, label in (
+            ("Austrian Red Cross (Rotes Kreuz) rescue vehicle, white with red cross", "ROTES KREUZ"),
+            ("Danish Red Cross (Røde Kors) mobile response unit, white van", "RØDE KORS"),
+            ("Finnish Red Cross (Punainen Risti) modular aid station", "PUNAINEN RISTI"),
+            ("Polish Red Cross (PCK) aid distribution truck, white with red cross", "PCK"),
+            ("Austria Bergrettung mountain rescue vehicle, white and red", "BERGRETTUNG"),
+            ("Poland Państwowa Straż Pożarna fire and rescue unit, red", "STRAŻ"),
+            ("Spain UME (Unidad Militar de Emergencias) fire truck, green and red", "UME"),
+            ("Sweden MSB (Myndigheten för samhällsskydd) forest fire truck, red", "MSB"),
+            ("German Red Cross (DRK) ambulance", "DRK"),
+        ):
+            self.assertEqual(gp.expected_marking_text(subject), label, subject)
+        for subject in ("Ukrainian Red Cross ambulance, white with red cross",
+                        "volume pump unit for flood relief", "consumer drone"):
+            self.assertIsNone(gp.expected_marking_text(subject), subject)
         # Unmarked subjects must not invent an agency name.
         rubble = gp.compose_prompt("collapsed building rubble pile, concrete debris with exposed rebar")
         self.assertNotIn("spelled exactly", rubble)
