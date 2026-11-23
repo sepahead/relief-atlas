@@ -57,11 +57,16 @@ def voxels_to_gaussians(coords, attrs, origin, voxel_size, layout,
     f_dc = (rgb - 0.5) / C0
 
     if opacity_channel and "alpha" in layout:
-        a = np.clip(attrs[:, layout["alpha"]], 0.0, 1.0)
-        # only keep voxels the model considers occupied
-        keep = (a > 0.05).ravel()
+        a = np.clip(attrs[:, layout["alpha"]], 0.0, 1.0).ravel()
+        # only keep voxels the model considers occupied; match o_voxel's
+        # opaque-surface guard so bf16 sub-1.0 alpha drift (<5% of voxels)
+        # cannot punch translucent pinholes into solid shells.
+        keep = a > 0.05
         xyz, f_dc, a = xyz[keep], f_dc[keep], a[keep]
-        opacity = np.log(a / (1.0 - a + 1e-6) + 1e-6)  # inverse sigmoid
+        if len(a) and float((a < 0.95).mean()) <= 0.05:
+            a = np.maximum(a, 0.99)
+        a_safe = np.clip(a, 1e-4, 1.0 - 1e-4)
+        opacity = np.log(a_safe / (1.0 - a_safe)).astype(np.float32)  # inverse sigmoid
     else:
         opacity = np.full((len(xyz), 1), 8.0, dtype=np.float32)
 
@@ -218,9 +223,146 @@ def write_spz(path: str, g: dict) -> int:
     return n if ok else 0
 
 
+def _supplement_surface_gaps_from_glb(g: dict, glb_path, voxel_size: float) -> dict:
+    """Populate sparse thin-shell pinholes using watertight baked GLB triangles.
+
+    When narrow-band Dual Contouring seals a 1-2 voxel pinhole on a thin tent
+    canopy or panel where `mesh_out.coords` had a local gap, sampling surface
+    Gaussians onto triangles whose centroids sit `> 1.8 * voxel_size` from the
+    nearest active voxel keeps the 3DGS container just as hole-free as the GLB.
+    """
+    if glb_path is None or not len(g.get("x", ())):
+        return g
+    glb_p = Path(glb_path)
+    if not glb_p.is_file() or glb_p.stat().st_size == 0:
+        return g
+    try:
+        import math
+        import trimesh
+        from scipy.spatial import cKDTree
+    except Exception:
+        return g
+
+    vs = float(voxel_size)
+    if not (vs > 0.0):
+        return g
+
+    try:
+        xyz_orig = np.column_stack([g["x"], g["y"], g["z"]]).astype(np.float32)
+        tree = cKDTree(xyz_orig)
+        budget = min(50_000, max(512, int(0.15 * len(xyz_orig))))
+
+        scene = trimesh.load(str(glb_p), force="scene")
+        new_pts = []
+        new_fdc = []
+        total_added = 0
+
+        for node in scene.graph.nodes_geometry:
+            if total_added >= budget:
+                break
+            transform, geom_name = scene.graph[node]
+            mesh = scene.geometry[geom_name].copy()
+            if not isinstance(mesh, trimesh.Trimesh) or not len(mesh.faces):
+                continue
+            mesh.apply_transform(transform)
+            v_yup = np.asarray(mesh.vertices, dtype=np.float32)
+            # Inverse of `gltf_vertices([x, y, z]) = [x, z, -y]`.
+            v_zup = np.column_stack([v_yup[:, 0], -v_yup[:, 2], v_yup[:, 1]])
+            faces = np.asarray(mesh.faces, dtype=np.int64)
+
+            v0 = v_zup[faces[:, 0]]
+            v1 = v_zup[faces[:, 1]]
+            v2 = v_zup[faces[:, 2]]
+            tri_c = (v0 + v1 + v2) * (1.0 / 3.0)
+            dists, _ = tree.query(tri_c, k=1)
+            gap_sel = np.nonzero((dists > 1.8 * vs) & (dists < 24.0 * vs))[0]
+            if not len(gap_sel):
+                continue
+            # Prioritize largest true surface gaps first so the 50k budget is
+            # spent sealing real voids rather than small remesh surface offsets.
+            gap_sel = gap_sel[np.argsort(-dists[gap_sel])]
+
+            uv_all = getattr(getattr(mesh, "visual", None), "uv", None)
+            uv_np = np.asarray(uv_all, dtype=np.float32) if uv_all is not None else None
+            mat = getattr(getattr(mesh, "visual", None), "material", None)
+            tex_img = getattr(mat, "baseColorTexture", None) or getattr(mat, "image", None)
+            tex_rgb = (np.asarray(tex_img.convert("RGB"), dtype=np.float32) / 255.0
+                       if tex_img is not None else None)
+
+            cand_pts = []
+            cand_uvs = []
+            areas = 0.5 * np.linalg.norm(np.cross(v1[gap_sel] - v0[gap_sel],
+                                                  v2[gap_sel] - v0[gap_sel]), axis=1)
+            cell_area = max(0.55 * vs * vs, 1e-12)
+            for idx_local, fi in enumerate(gap_sel):
+                m_steps = max(1, min(8, int(math.ceil(math.sqrt(float(areas[idx_local]) / cell_area)))))
+                ii, jj = np.meshgrid(np.arange(m_steps), np.arange(m_steps), indexing="ij")
+                ok_ij = (ii + jj) < m_steps
+                b1 = (ii[ok_ij].astype(np.float32) + (1.0 / 3.0)) / float(m_steps)
+                b2 = (jj[ok_ij].astype(np.float32) + (1.0 / 3.0)) / float(m_steps)
+                b0 = 1.0 - b1 - b2
+                pts_f = (b0[:, None] * v0[fi][None, :]
+                         + b1[:, None] * v1[fi][None, :]
+                         + b2[:, None] * v2[fi][None, :])
+                cand_pts.append(pts_f)
+                if uv_np is not None and len(uv_np) == len(v_zup):
+                    u0, u1, u2 = uv_np[faces[fi, 0]], uv_np[faces[fi, 1]], uv_np[faces[fi, 2]]
+                    cand_uvs.append(b0[:, None] * u0[None, :]
+                                    + b1[:, None] * u1[None, :]
+                                    + b2[:, None] * u2[None, :])
+
+            if not cand_pts:
+                continue
+            pts_cat = np.vstack(cand_pts)
+            d_sub, nn_sub = tree.query(pts_cat, k=1)
+            keep_sub = d_sub > (1.35 * vs)
+            if not bool(keep_sub.any()):
+                continue
+            keep_idx = np.nonzero(keep_sub)[0]
+            if total_added + len(keep_idx) > budget:
+                cap_n = budget - total_added
+                keep_idx = keep_idx[np.argsort(-d_sub[keep_idx])[:cap_n]]
+            pts_keep = pts_cat[keep_idx]
+
+            if tex_rgb is not None and cand_uvs:
+                uv_cat = np.vstack(cand_uvs)[keep_idx]
+                th, tw = tex_rgb.shape[:2]
+                tu = np.clip((uv_cat[:, 0] * tw).astype(np.int64), 0, tw - 1)
+                tv = np.clip(((1.0 - uv_cat[:, 1]) * th).astype(np.int64), 0, th - 1)
+                rgb_s = np.clip(tex_rgb[tv, tu], 0.0, 1.0)
+                fdc_s = ((rgb_s - 0.5) / C0).astype(np.float32)
+            else:
+                fdc_s = np.asarray(g["f_dc"], dtype=np.float32)[nn_sub[keep_idx]]
+
+            new_pts.append(pts_keep.astype(np.float32))
+            new_fdc.append(fdc_s)
+            total_added += len(pts_keep)
+
+        if not new_pts:
+            return g
+
+        add_xyz = np.vstack(new_pts)
+        add_fdc = np.vstack(new_fdc)
+        m_add = len(add_xyz)
+        return {
+            "x": np.concatenate([g["x"], add_xyz[:, 0]]),
+            "y": np.concatenate([g["y"], add_xyz[:, 1]]),
+            "z": np.concatenate([g["z"], add_xyz[:, 2]]),
+            "f_dc": np.vstack([g["f_dc"], add_fdc]),
+            "f_rest": np.vstack([g["f_rest"], np.zeros((m_add, 45), dtype=np.float32)]),
+            "opacity": np.vstack([g["opacity"], np.full((m_add, 1), 5.0, dtype=np.float32)]),
+            "scale": np.vstack([g["scale"], np.full((m_add, 3), np.log(vs * 0.65), dtype=np.float32)]),
+            "rot": np.vstack([g["rot"], np.tile(np.array([1, 0, 0, 0], dtype=np.float32), (m_add, 1))]),
+        }
+    except Exception as exc:
+        print(f"  warning: 3DGS GLB gap supplement failed for {glb_p.name}: {exc}", flush=True)
+        return g
+
+
 def export_gaussians_from_mesh_with_voxel(mesh_out, path_stem: str,
                                           condensed: bool = True,
-                                          gs_format: str = "both"):
+                                          gs_format: str = "both",
+                                          glb_path=None):
     """Convenience wrapper taking a TRELLIS.2 MeshWithVoxel object.
 
     Condensed mode writes BOTH containers so every item carries the compact
@@ -249,6 +391,8 @@ def export_gaussians_from_mesh_with_voxel(mesh_out, path_stem: str,
         voxel_size=mesh_out.voxel_size,
         layout=mesh_out.layout,
     )
+    if glb_path is not None:
+        g = _supplement_surface_gaps_from_glb(g, glb_path, float(mesh_out.voxel_size))
     if not condensed:
         ply_path = Path(f"{path_stem}.ply")
         return (ply_path,), write_ply(str(tmp_sibling(ply_path)), g)

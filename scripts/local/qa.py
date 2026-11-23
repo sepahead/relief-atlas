@@ -59,6 +59,7 @@ import argparse
 import json
 import math
 import re
+import struct
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -69,11 +70,11 @@ from PIL import Image
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import content_policy  # noqa: E402
 from prompt_utils import (  # noqa: E402
-    GS_EXTENSIONS, MANIFESTS, OUTPUT_DIR, PROJECT_DIR, QA_VERSION, STATE_DIR,
+    GS_EXTENSIONS, MANIFESTS, OUTPUT_DIR, PROJECT_DIR, QA_VERSION, SELECTION_ORDERS, STATE_DIR,
     current_verdicts, load_manifest, mesh_complete, select_manifest_items,
     verdict_is_current,
 )
-from pipeline_utils import artifact_fingerprints, verdict_matches  # noqa: E402
+from pipeline_utils import artifact_fingerprints, file_sha256, verdict_matches  # noqa: E402
 
 # Image thresholds
 FG_MIN, FG_MAX = 0.03, 0.75          # object coverage of frame
@@ -159,7 +160,8 @@ def select_items(args):
     return select_manifest_items(getattr(args, "geographies", None),
                                  getattr(args, "ids", None),
                                  getattr(args, "limit", None),
-                                 getattr(args, "only_policy", None))
+                                 getattr(args, "only_policy", None),
+                                 order=getattr(args, "order", "interleaved"))
 
 
 def load_json(path):
@@ -416,14 +418,18 @@ def run_images(args):
         guard = NsfwGuard()
 
     # Compare against certified live images across the corpus, including other
-    # batches. Keys preserve identity so a rescan cannot match itself. Hashes
-    # attached to missing or replaced PNGs are not valid duplicate references.
+    # batches. Keys preserve identity so a rescan cannot match itself. Check
+    # live file presence and recorded byte size instead of hashing every PNG on
+    # disk on each invocation (which would turn a 9,509-item run into O(N^2)
+    # SHA-256 reads); target items below still undergo full SHA-256 checks.
     peers = {}
     for it in all_items():
         v = verdicts.get(it["id"])
-        d = OUTPUT_DIR / it["geography"] / it["category"] / it["id"]
-        if (v and v.get("phash")
-                and verdict_matches(v, d, it["id"], "images", require_nsfw=False)):
+        if not (v and verdict_is_current(v) and v.get("pass") and v.get("phash")):
+            continue
+        png = OUTPUT_DIR / it["geography"] / it["category"] / it["id"] / f"{it['id']}.png"
+        rec_png = (v.get("artifacts") or {}).get("png") or {}
+        if png.is_file() and (not rec_png.get("size") or png.stat().st_size == rec_png.get("size")):
             peers.setdefault(it["category"], {})[it["id"]] = v["phash"]
 
     n_fail = 0
@@ -477,6 +483,7 @@ def run_images(args):
                     "reasons": reasons, "retries": retries.get(it["id"], 0),
                     "at": datetime.now(timezone.utc).isoformat(),
                 }
+                save_json(STATE_DIR / "qa_quarantine.json", quarantine)
             else:
                 # Everything else is treated as worth another sample. Rejected
                 # content is removed unconditionally, even once the item is out
@@ -492,6 +499,8 @@ def run_images(args):
                 wipe_image(d, it["id"])
                 if quarantine_if_exhausted(retries, quarantine, it["id"], reasons):
                     n_quarantined += 1
+                save_json(STATE_DIR / "qa_retries.json", retries)
+                save_json(STATE_DIR / "qa_quarantine.json", quarantine)
         print(f"{it['id']}: {'PASS' if passed else 'FAIL ' + '; '.join(reasons)}")
         save_json(STATE_DIR / "qa_images.json", verdicts)
 
@@ -503,8 +512,51 @@ def run_images(args):
 
 # ---------------------------------------------------------------- mesh mode
 
+def glb_alignment_errors(glb_path: Path) -> list[str]:
+    """Verify glTF 2.0 4-byte chunk and accessor bufferView alignment."""
+    data = Path(glb_path).read_bytes()
+    if len(data) < 20:
+        return ["GLB truncated"]
+    magic, version, total_len = struct.unpack("<III", data[:12])
+    if magic != 0x46546C67 or version != 2:
+        return []
+    errs = []
+    if total_len != len(data):
+        errs.append(f"GLB length mismatch ({total_len} != {len(data)})")
+    if len(data) % 4 != 0:
+        errs.append(f"GLB size not 4-byte aligned ({len(data) % 4})")
+    off = 12
+    js = None
+    while off + 8 <= len(data):
+        clen, ctype = struct.unpack("<II", data[off:off + 8])
+        if clen % 4 != 0:
+            cname = "JSON" if ctype == 0x4E4F534A else ("BIN" if ctype == 0x004E4942 else hex(ctype))
+            errs.append(f"GLB {cname} chunk length not 4-byte aligned ({clen % 4})")
+        payload = data[off + 8:off + 8 + clen]
+        if ctype == 0x4E4F534A and js is None:
+            js = json.loads(payload.decode("utf-8"))
+        off += 8 + clen
+    if isinstance(js, dict):
+        bvs = js.get("bufferViews") or []
+        comp_sizes = {5120: 1, 5121: 1, 5122: 2, 5123: 2, 5125: 4, 5126: 4}
+        bad_bvs = set()
+        for acc in js.get("accessors") or []:
+            bv_idx = acc.get("bufferView")
+            if bv_idx is None or not (0 <= bv_idx < len(bvs)):
+                continue
+            comp = comp_sizes.get(acc.get("componentType"), 4)
+            bv_off = int(bvs[bv_idx].get("byteOffset", 0))
+            acc_off = int(acc.get("byteOffset", 0))
+            if bv_off % comp != 0 or (bv_off + acc_off) % comp != 0:
+                bad_bvs.add(bv_idx)
+        if bad_bvs:
+            errs.append(f"unaligned glTF accessor bufferViews {sorted(bad_bvs)}")
+    return errs
+
+
 def glb_scores(glb_path: Path):
     import trimesh
+    align_errs = glb_alignment_errors(glb_path)
     m = trimesh.load(glb_path, force="scene")
     if isinstance(m, trimesh.Scene):
         geoms = []
@@ -526,7 +578,7 @@ def glb_scores(glb_path: Path):
     footprint = float((ext[0] * ext[2]) ** 0.5) + 1e-9
     aspect = float(ext[1] / footprint)
 
-    tex_white = tex_magenta = 0.0
+    tex_white = tex_magenta = tex_void_black = 0.0
     degenerate = 0.0
     for g in geoms:
         if hasattr(g, "visual") and getattr(g.visual, "material", None) is not None:
@@ -541,6 +593,20 @@ def glb_scores(glb_path: Path):
                 magenta = ((r > 120) & (b > 120) & (gr < 90) & (sat > 0.45)).mean()
                 tex_white = max(tex_white, float(white))
                 tex_magenta = max(tex_magenta, float(magenta))
+                uv = getattr(g.visual, "uv", None)
+                if uv is not None and len(uv) == len(g.vertices) and len(g.faces):
+                    uv_np = np.nan_to_num(np.asarray(uv, dtype=np.float64), nan=0.0)
+                    f_uv = uv_np[np.asarray(g.faces, dtype=np.int64)].mean(axis=1)
+                    th, tw = arr.shape[:2]
+                    tu = np.clip((np.mod(f_uv[:, 0], 1.0) * tw).astype(np.int64), 0, tw - 1)
+                    tv = np.clip(((1.0 - np.mod(f_uv[:, 1], 1.0)) * th).astype(np.int64), 0, th - 1)
+                    f_mx = arr[tv, tu].max(axis=-1)
+                    areas = np.asarray(g.area_faces, dtype=np.float64) if hasattr(g, "area_faces") else None
+                    if areas is not None and len(areas) == len(f_mx) and float(areas.sum()) > 1e-12:
+                        vb = float(areas[f_mx <= 3.0].sum() / areas.sum())
+                    else:
+                        vb = float((f_mx <= 3.0).mean())
+                    tex_void_black = max(tex_void_black, vb)
         if hasattr(g, "area_faces") and len(g.area_faces):
             degenerate = max(degenerate, float((g.area_faces < 1e-12).mean()))
     return {
@@ -550,7 +616,10 @@ def glb_scores(glb_path: Path):
         "dim_ratio": round(float(ext.max() / (ext.min() + 1e-9)), 2),
         "tex_white": round(tex_white, 4),
         "tex_magenta": round(tex_magenta, 4),
+        "tex_void_black": round(tex_void_black, 4),
         "degenerate_frac": round(degenerate, 5),
+        "glb_aligned": not align_errs,
+        **({"glb_alignment_errors": align_errs} if align_errs else {}),
     }, geoms
 
 
@@ -566,6 +635,9 @@ def mesh_pass(s):
     reasons = []
     if s["vertices"] == 0:
         reasons.append("empty mesh")
+    if s.get("glb_aligned") is False:
+        detail = "; ".join(s.get("glb_alignment_errors") or ["unaligned glTF 2.0 binary"])
+        reasons.append(f"glTF alignment error: {detail}")
     if not (ASPECT_MIN <= s["aspect"] <= ASPECT_MAX):
         reasons.append(f"aspect {s['aspect']}")
     if s["dim_ratio"] > DIM_RATIO_MAX:
@@ -575,12 +647,52 @@ def mesh_pass(s):
         reasons.append(f"white slab? tex_white {s['tex_white']}")
     if s["tex_magenta"] > MAGENTA_TEX_MAX:
         reasons.append(f"magenta residue {s['tex_magenta']}")
+    if s.get("tex_void_black", 0.0) > 0.03:
+        reasons.append(f"void black texture {s['tex_void_black']}")
     if s.get("degenerate_frac", 0.0) > 0.01:
         reasons.append(f"degenerate triangles {s['degenerate_frac']}")
     return reasons
 
 
-def mesh_silhouettes(geoms, res=96):
+MIN_EMBLEM_SCHEMA = 4
+
+
+def emblem_qa_reasons(d: Path, item_id: str, metadata: dict = None):
+    """Fail meshes carrying retired, unverified, or hash-detached emblem patches."""
+    if metadata is None:
+        meta_path = Path(d) / "metadata.json"
+        if not meta_path.is_file():
+            return []
+        try:
+            metadata = load_json(meta_path)
+        except Exception as exc:
+            return [f"metadata error: {exc}"]
+    if not isinstance(metadata, dict):
+        return []
+    ep = metadata.get("emblem_project")
+    if not isinstance(ep, dict):
+        return []
+    # Schema-1 records stored a blob list under `blobs` and omitted `applied`.
+    applied = bool(ep.get("applied") or isinstance(ep.get("blobs"), list))
+    if not applied:
+        return []
+    reasons = []
+    schema = ep.get("schema")
+    if not isinstance(schema, int) or schema < MIN_EMBLEM_SCHEMA:
+        reasons.append(f"legacy emblem_project schema {schema}")
+    glb_path = Path(d) / f"{item_id}.glb"
+    if glb_path.is_file() and ep.get("glb_sha256") != file_sha256(glb_path):
+        reasons.append("emblem_project glb_sha256 mismatch")
+    pose = ep.get("pose")
+    if isinstance(pose, dict) and pose.get("ambiguous"):
+        reasons.append("emblem projected from ambiguous pose")
+    ver = ep.get("verification")
+    if not (isinstance(ver, dict) and ver.get("ok") is True and ver.get("multiview_checked") is True):
+        reasons.append("unverified emblem projection")
+    return reasons
+
+
+def mesh_silhouettes(geoms, res=96, rig=None):
     """Rasterize the mesh silhouette from every turntable camera.
 
     Projects the (decimated) triangles with the same pinhole rig as the
@@ -595,13 +707,32 @@ def mesh_silhouettes(geoms, res=96):
     if len(mesh.faces) == 0:
         raise ValueError("mesh has no faces")
     if len(mesh.faces) > MESH_RAY_MAX_FACES:
-        mesh = mesh.simplify_quadric_decimation(MESH_RAY_DECIMATE)
+        # GLB meshes carry duplicate vertices along UV/material seams; QEM
+        # decimation on unwelded vertices treats every UV seam as a free
+        # boundary and tears watertight shells into Swiss-cheese slits.
+        # Spatially weld coincident vertices and drop degenerate faces first
+        # (silhouette rasterization needs only geometry, not UVs).
+        v_raw = np.asarray(mesh.vertices, dtype=np.float64)
+        f_raw = np.asarray(mesh.faces, dtype=np.int64)
+        q_raw = np.round(v_raw * 1e5).astype(np.int64)
+        _, idx_u, inv_u = np.unique(q_raw, axis=0, return_index=True, return_inverse=True)
+        v_welded = v_raw[idx_u]
+        f_welded = inv_u[f_raw]
+        valid_f = (
+            (f_welded[:, 0] != f_welded[:, 1])
+            & (f_welded[:, 1] != f_welded[:, 2])
+            & (f_welded[:, 0] != f_welded[:, 2])
+        )
+        if valid_f.any():
+            mesh = trimesh.Trimesh(vertices=v_welded, faces=f_welded[valid_f], process=False)
+        if len(mesh.faces) > MESH_RAY_MAX_FACES:
+            mesh = mesh.simplify_quadric_decimation(MESH_RAY_DECIMATE)
     V = np.asarray(mesh.vertices, dtype=np.float64)
     # The shared orbit rig is Z-up. Undo the GLB export's [x,z,-y]
     # conversion so mesh and native-voxel splat views use the same rig.
     V = V[:, [0, 2, 1]] * np.array([1.0, -1.0, 1.0])
     F = np.asarray(mesh.faces)
-    center, radius = _obj_rig(V)
+    center, radius = rig if rig is not None else _obj_rig(V)
     focal = 1.5 * res
     masks, shades = [], []
     for cam, right, up, forward in _turntable_cameras(center, radius):
@@ -701,7 +832,7 @@ def run_meshes(args):
             png = d / f"{it['id']}.png"
             if png.is_file():
                 s["source_white_frac"] = round(reference_white_fraction(png), 4)
-            reasons = mesh_pass(s)
+            reasons = mesh_pass(s) + emblem_qa_reasons(d, it["id"])
             try:
                 masks, shades = mesh_silhouettes(geoms)
                 view_stats = silhouette_view_metrics(masks)
@@ -746,6 +877,8 @@ def run_meshes(args):
                 wipe_mesh(d, it["id"])
                 if quarantine_if_exhausted(retries, quarantine, it["id"], reasons):
                     n_quarantined += 1
+                save_json(STATE_DIR / "qa_retries.json", retries)
+                save_json(STATE_DIR / "qa_quarantine.json", quarantine)
         print(f"{it['id']}: {'PASS' if passed else 'FAIL ' + '; '.join(reasons)}")
         save_json(STATE_DIR / "qa_meshes.json", verdicts)
     save_json(STATE_DIR / "qa_retries.json", retries)
@@ -800,10 +933,12 @@ def _turntable_cameras(center, radius, n_az=GS_AZIMUTHS,
 
 
 def _obj_rig(points):
-    """Centroid + orbit radius that keeps the whole object in frame."""
+    """Bounding-box center + orbit radius that keeps asymmetric objects in frame."""
     pts = np.asarray(points, dtype=np.float64)
-    center = pts.mean(axis=0)
-    ext = pts.max(axis=0) - pts.min(axis=0)
+    lo = pts.min(axis=0)
+    hi = pts.max(axis=0)
+    center = 0.5 * (lo + hi)
+    ext = hi - lo
     radius = float(np.linalg.norm(ext)) * 1.25 + 1e-3
     return center, radius
 
@@ -1018,13 +1153,15 @@ def render_splat_views(g, res=GS_VIEW_RES, max_gaussians=GS_MAX_GAUSSIANS):
 
     masks, weights, colours = [], [], []
     pix_area = res * res
+    z_near = max(0.05 * float(radius), 1e-4)
+    tau_z = max(0.02 * float(radius), 1e-4)
     for cam, right, up, forward in cams:
         Rc = np.stack([right, up, forward]).astype(np.float32)  # world->cam
         Rc_t = torch.from_numpy(Rc)
         dcam = (pos_t - torch.from_numpy(np.asarray(cam, np.float32))) @ Rc_t.T
         zc = dcam[:, 2]
-        ok = (zc > 0.05) & (zc < 1e3) & torch.isfinite(dcam).all(dim=1)
-        zc_safe = torch.clamp(zc, 0.05, None)
+        ok = (zc > z_near) & (zc < 1e3) & torch.isfinite(dcam).all(dim=1)
+        zc_safe = torch.clamp(zc, z_near, None)
         u = focal * dcam[:, 0] / zc_safe + res / 2
         # Camera up increases upward, while image rows increase downward.
         v = -focal * dcam[:, 1] / zc_safe + res / 2
@@ -1046,41 +1183,60 @@ def render_splat_views(g, res=GS_VIEW_RES, max_gaussians=GS_MAX_GAUSSIANS):
         ui = u.round().long()
         vi = v.round().long()
         wmap = torch.zeros(pix_area, dtype=torch.float32)
-        cmap = torch.zeros(pix_area, 3, dtype=torch.float32)
+        zbuf = torch.full((pix_area,), float("inf"), dtype=torch.float32)
+        inf_like = torch.full_like(zc_safe, float("inf"))
+        inv_2s2 = 1.0 / (2.0 * sigma * sigma)
+        # Pass 1: exact opacity-weight map (unchanged for silhouette/solidity
+        # metrics) plus front-most visible depth buffer per pixel.
         for dy, dx in offs:
             pu = ui + dx
             pv = vi + dy
             in_img = ok & (pu >= 0) & (pu < res) & (pv >= 0) & (pv < res)
             pix = (pv * res + pu).clamp(0, pix_area - 1)
-            wk = torch.exp(-(dx * dx + dy * dy)
-                           / (2.0 * sigma * sigma)) * alpha_t
+            wk = torch.exp(-(dx * dx + dy * dy) * inv_2s2) * alpha_t
             wk = wk * in_img.float()
             wmap.scatter_add_(0, pix, wk)
+            z_cand = torch.where(in_img & (wk > 1e-3), zc_safe, inf_like)
+            zbuf.scatter_reduce_(0, pix, z_cand, reduce="amin", include_self=True)
+
+        # Pass 2: front-slab weighted color accumulation so back-facing walls
+        # do not bleed through solid vehicles/structures as X-ray ghosts.
+        cmap = torch.zeros(pix_area, 3, dtype=torch.float32)
+        cwmap = torch.zeros(pix_area, dtype=torch.float32)
+        zeros_like = torch.zeros_like(zc_safe)
+        for dy, dx in offs:
+            pu = ui + dx
+            pv = vi + dy
+            in_img = ok & (pu >= 0) & (pu < res) & (pv >= 0) & (pv < res)
+            pix = (pv * res + pu).clamp(0, pix_area - 1)
+            wk = torch.exp(-(dx * dx + dy * dy) * inv_2s2) * alpha_t
+            wk = wk * in_img.float()
+            z_front = zbuf[pix]
+            dz = torch.where(
+                in_img & torch.isfinite(z_front),
+                torch.clamp(zc_safe - z_front, min=0.0),
+                zeros_like,
+            )
+            wf = wk * torch.exp(-((dz / tau_z) ** 2))
+            cwmap.scatter_add_(0, pix, wf)
             cmap.scatter_add_(0, pix.unsqueeze(1).expand(m, 3),
-                              wk.unsqueeze(1) * rgb_t)
+                              wf.unsqueeze(1) * rgb_t)
         masks.append((wmap > 0.05).numpy().reshape(res, res))
         weights.append(wmap.numpy().reshape(res, res))
-        col = cmap / torch.clamp(wmap.unsqueeze(1), 1e-6, None)
+        col = cmap / torch.clamp(cwmap.unsqueeze(1), 1e-6, None)
         colours.append((col.clamp(0, 1) * 255).byte().numpy().reshape(res, res, 3))
     return masks, weights, colours
 
 
 # ------------------------------------------------------------- view metrics
 
-def enclosed_hole_frac(mask):
-    """Enclosed background share of a silhouette (pure numpy, no scipy).
-
-    Flood-fills the background from the image border; anything background
-    that the flood cannot reach is enclosed by the object. Only components at
-    least GS_HOLE_MIN_SHARE of the silhouette count, so real object cutouts
-    (wheel arches, trusses) do not read as defects.
-    """
+def enclosed_hole_mask(mask):
+    """Boolean mask of significant enclosed background components (>= GS_HOLE_MIN_SHARE)."""
+    mask = np.asarray(mask, dtype=bool)
     total = int(mask.sum())
     if total == 0:
-        return 0.0
-    h, w = mask.shape
+        return np.zeros_like(mask, dtype=bool)
     bg = ~mask
-    # Seed the flood with border background pixels.
     border = np.zeros_like(bg)
     border[0, :] = bg[0, :]
     border[-1, :] = bg[-1, :]
@@ -1097,24 +1253,38 @@ def enclosed_hole_frac(mask):
                     interior.discard(nb)
                     nxt.add(nb)
         frontier = nxt
-    # interior now holds only enclosed background pixels; group them into
-    # connected components (BFS over the small remaining set).
     min_px = GS_HOLE_MIN_SHARE * total
-    big = 0
+    out = np.zeros_like(mask, dtype=bool)
     while interior:
         start = interior.pop()
-        comp, queue = 0, [start]
+        pts, queue = [], [start]
         while queue:
             y, x = queue.pop()
-            comp += 1
+            pts.append((y, x))
             for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
                 nb = (y + dy, x + dx)
                 if nb in interior:
                     interior.discard(nb)
                     queue.append(nb)
-        if comp >= min_px:
-            big += comp
-    return float(big / total)
+        if len(pts) >= min_px:
+            ys, xs = zip(*pts)
+            out[ys, xs] = True
+    return out
+
+
+def enclosed_hole_frac(mask):
+    """Enclosed background share of a silhouette (pure numpy, no scipy).
+
+    Flood-fills the background from the image border; anything background
+    that the flood cannot reach is enclosed by the object. Only components at
+    least GS_HOLE_MIN_SHARE of the silhouette count, so real object cutouts
+    (wheel arches, trusses) do not read as defects.
+    """
+    mask = np.asarray(mask, dtype=bool)
+    total = int(mask.sum())
+    if total == 0:
+        return 0.0
+    return float(enclosed_hole_mask(mask).sum() / total)
 
 
 def _dilate(mask, px=2):
@@ -1174,6 +1344,75 @@ def silhouette_view_metrics(masks, weight_maps=None, colours=None):
     return stats
 
 
+def _reconcile_structural_mesh_apertures(view_stats, gs_masks, g, glb_path):
+    """Distinguish genuine 3D open-frame topology from missing-splat defects.
+
+    Open-frame assets (octocopter arms + skids, robotic gripper arms, excavator
+    booms, lattice masts) legitimately enclose >5% sky across multiple views,
+    either as closed O-loops in both silhouettes or as narrow-throat C-bays
+    (e.g. gripper claw tip ~1.5 px from hull, adjacent rotor tips) whose throat
+    is open in crisp polygon rasterization (`mm_b`) but bridged by the 5x5
+    Gaussian splat kernel in `gm_b`. Bridging true 3D empty air (`~mm_b`, plus
+    1-px rasterization boundary tolerance) clears both O-loops and C-bays while
+    leaving missing-splat holes on solid mesh panels (`mm_b == True`) 100%
+    unmasked.
+    """
+    if not gs_masks or glb_path is None or not Path(glb_path).is_file():
+        return view_stats
+    try:
+        import trimesh
+        m = trimesh.load(str(glb_path), force="scene")
+        if isinstance(m, trimesh.Scene):
+            geoms = []
+            for node in m.graph.nodes_geometry:
+                transform, name = m.graph[node]
+                geom = m.geometry[name].copy()
+                if isinstance(geom, trimesh.Trimesh):
+                    geom.apply_transform(transform)
+                    geoms.append(geom)
+        else:
+            geoms = [m]
+        if not geoms or not any(len(gm.faces) for gm in geoms):
+            return view_stats
+        pos = np.stack([
+            np.asarray(g["x"], dtype=np.float64),
+            np.asarray(g["y"], dtype=np.float64),
+            np.asarray(g["z"], dtype=np.float64),
+        ], axis=1)
+        rig = _obj_rig(pos)
+        res = int(np.asarray(gs_masks[0]).shape[0])
+        mesh_masks, _ = mesh_silhouettes(geoms, res=res, rig=rig)
+        if len(mesh_masks) != len(gs_masks):
+            return view_stats
+    except Exception:
+        return view_stats
+
+    unexplained = []
+    mesh_holes = []
+    for gm_s, mm_s in zip(gs_masks, mesh_masks):
+        gm_b = np.asarray(gm_s, dtype=bool)
+        mm_b = np.asarray(mm_s, dtype=bool)
+        mesh_holes.append(enclosed_hole_frac(mm_b))
+        tot = int(gm_b.sum())
+        if tot == 0:
+            unexplained.append(0.0)
+            continue
+        if int(mm_b.sum()) < 0.5 * tot:
+            unexplained.append(enclosed_hole_frac(gm_b))
+            continue
+        empty_air = _dilate(~mm_b, px=1)
+        rem = enclosed_hole_mask(gm_b | empty_air) & ~gm_b
+        unexplained.append(float(rem.sum() / tot))
+
+    out = dict(view_stats)
+    out["raw_holes_max"] = out.get("holes_max", 0.0)
+    out["raw_holes_over_count"] = out.get("holes_over_count", 0)
+    out["mesh_holes_max"] = round(max(mesh_holes), 4) if mesh_holes else 0.0
+    out["holes_max"] = round(max(unexplained), 4) if unexplained else 0.0
+    out["holes_over_count"] = int(sum(1 for h in unexplained if h > GS_HOLE_MAX))
+    return out
+
+
 def gaussians_view_reasons(stats):
     reasons = []
     if stats["coverage_min"] < GS_COV_MIN:
@@ -1230,6 +1469,30 @@ def wipe_gaussians(d: Path, item_id: str):
     (d / "metadata.json").unlink(missing_ok=True)
 
 
+def gaussian_metadata_reasons(metadata, prim_stats, d: Path = None, item_id: str = None):
+    """Verify 3DGS container point counts and emblem-patch integrity against metadata."""
+    if not isinstance(metadata, dict):
+        return []
+    reasons = []
+    expected = metadata.get("gaussians")
+    actual = (prim_stats or {}).get("gaussians")
+    if isinstance(expected, int) and not isinstance(expected, bool) and isinstance(actual, int):
+        if actual != expected:
+            reasons.append(f"gaussian count mismatch ({actual} vs metadata {expected})")
+    ep = metadata.get("emblem_project")
+    if isinstance(ep, dict) and (ep.get("applied") or isinstance(ep.get("blobs"), list)):
+        schema = ep.get("schema")
+        if not isinstance(schema, int) or schema < MIN_EMBLEM_SCHEMA:
+            reasons.append(f"legacy emblem_project schema {schema}")
+        gs_hashes = ep.get("gs_sha256")
+        if isinstance(gs_hashes, dict) and d is not None:
+            for name, digest in gs_hashes.items():
+                p = Path(d) / name
+                if p.is_file() and file_sha256(p) != digest:
+                    reasons.append(f"emblem_project {name} sha256 mismatch")
+    return reasons
+
+
 def run_gaussians(args):
     """Turntable + primitive QA on the 3DGS containers.
 
@@ -1253,22 +1516,23 @@ def run_gaussians(args):
             continue
         view_stats = {}
         ext = None
-        metadata = load_json(d / "metadata.json")
-        if ((d / f"{it['id']}.spz").exists()
-                and metadata.get("mesh_model") == "local/trellis.2-4b"
-                and metadata.get("gs_color_encodings", {}).get("spz") != "sh_dc"):
-            error = "SPZ colour encoding is unverified; repair the legacy export before certification"
-            verdicts[it["id"]] = stamp({"pass": False, "container": "spz", "view_error": error,
-                "reasons": [error], "artifacts": artifact_fingerprints(d, it["id"], "gaussians"),
-                "at": datetime.now(timezone.utc).isoformat()})
-            infrastructure_errors.append(f"{it['id']}: {error}")
-            n_fail += 1
-            save_json(STATE_DIR / "qa_gaussians.json", verdicts)
-            print(f"{it['id']}: NEEDS REPAIR: {error}")
-            continue
         try:
+            metadata = load_json(d / "metadata.json")
+            if ((d / f"{it['id']}.spz").exists()
+                    and metadata.get("mesh_model") == "local/trellis.2-4b"
+                    and metadata.get("gs_color_encodings", {}).get("spz") != "sh_dc"):
+                error = "SPZ colour encoding is unverified; repair the legacy export before certification"
+                verdicts[it["id"]] = stamp({"pass": False, "container": "spz", "view_error": error,
+                    "reasons": [error], "artifacts": artifact_fingerprints(d, it["id"], "gaussians"),
+                    "at": datetime.now(timezone.utc).isoformat()})
+                infrastructure_errors.append(f"{it['id']}: {error}")
+                n_fail += 1
+                save_json(STATE_DIR / "qa_gaussians.json", verdicts)
+                print(f"{it['id']}: NEEDS REPAIR: {error}")
+                continue
             g, ext = load_gaussians(d, it["id"])
             prim_stats, reasons = gaussian_primitive_stats(g)
+            reasons += gaussian_metadata_reasons(metadata, prim_stats, d, it["id"])
             try:
                 rendered = render_splat_views(g)
                 if rendered is None:
@@ -1285,6 +1549,9 @@ def run_gaussians(args):
                         masks, weights, colours = render_splat_views(g, max_gaussians=len(g["x"]))
                         view_stats = silhouette_view_metrics(masks, weights, colours)
                         view_stats.update(refined_render=True, rendered_gaussians=len(g["x"]))
+                    if any(r.startswith("holes ") for r in gaussians_view_reasons(view_stats)):
+                        view_stats = _reconcile_structural_mesh_apertures(
+                            view_stats, masks, g, d / f"{it['id']}.glb")
                     reasons += gaussians_view_reasons(view_stats)
                     labels = [f"{i+1}" for i in range(len(masks))]
                     write_view_montage(
@@ -1319,6 +1586,8 @@ def run_gaussians(args):
                 if quarantine_if_exhausted(retries, quarantine, it["id"],
                                            reasons):
                     n_quarantined += 1
+                save_json(STATE_DIR / "qa_retries.json", retries)
+                save_json(STATE_DIR / "qa_quarantine.json", quarantine)
         print(f"{it['id']}: {'PASS' if passed else 'FAIL ' + '; '.join(reasons)}")
         save_json(STATE_DIR / "qa_gaussians.json", verdicts)
     save_json(STATE_DIR / "qa_retries.json", retries)
@@ -1426,6 +1695,7 @@ def main():
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--ids", nargs="*", default=None,
                     help="explicit item ids (overrides geographies/limit)")
+    ap.add_argument("--order", choices=list(SELECTION_ORDERS), default="interleaved")
     ap.add_argument("--rescan", action="store_true",
                     help="re-check items that already have verdicts")
     ap.add_argument("--no-wipe", action="store_true",

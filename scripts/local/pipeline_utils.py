@@ -16,7 +16,7 @@ OUTPUT_DIR = Path(os.environ.get("RELIEF_OUTPUT_DIR", PROJECT_DIR / "outputs_rel
 STATE_DIR = Path(os.environ.get("RELIEF_STATE_DIR", PROJECT_DIR / "state")).resolve()
 MODEL_DIR = LOCAL_DIR / "models"
 GS_EXTENSIONS = ("spz", "splat", "ply")
-QA_VERSION = 6
+QA_VERSION = 7
 GS_COLOR_ENCODINGS = {"spz": "sh_dc", "splat": "rgb", "ply": "sh_dc"}
 IMAGE_MODEL_ID = "local/qwen-image-2.1"
 

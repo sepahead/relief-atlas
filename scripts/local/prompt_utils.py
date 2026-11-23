@@ -41,6 +41,8 @@ OUTPUT_DIR_NAME = "outputs_relief"
 # of face ordering and depth-preview shading.
 # v6 reads SPZ colours as SH DC, matching external viewers, and prevents
 # unverified legacy local SPZ encodings from being recertified automatically.
+# v7 enforces Schema-4 multiview-verified emblem projection records and
+# checks metadata vs container Gaussian count and emblem hash integrity.
 
 
 def verdict_is_current(verdict) -> bool:
@@ -451,16 +453,74 @@ def all_items() -> list[dict]:
     return items
 
 
-def select_manifest_items(geographies=None, ids=None, limit=None, only_policy=None):
+SELECTION_ORDERS = ("interleaved", "sequential")
+
+
+def interleave_manifest_items(items: list[dict]) -> list[dict]:
+    """Order items proportionally across all (geography, category) buckets.
+
+    Buckets are ordered round-robin across geographies (preserving first-seen
+    geography and within-geography category order), and items within each
+    bucket are scheduled at exact rational progress Fraction(pos, len(bucket)).
+    This ensures every active category is represented in the first round and
+    partial completions (10%, 30%, 60%, 80%) maintain balanced, proportional
+    coverage across all categories without exhausting smaller categories early.
+    Strictly idempotent and preserves within-bucket item order.
+    """
+    from fractions import Fraction
+
+    if len(items) <= 1:
+        return list(items)
+
+    geo_order = []
+    geo_cats = {}
+    buckets = {}
+    for item in items:
+        geo = item.get("geography", "")
+        cat = item.get("category", "")
+        key = (geo, cat)
+        if geo not in geo_cats:
+            geo_order.append(geo)
+            geo_cats[geo] = []
+        if key not in buckets:
+            geo_cats[geo].append(key)
+            buckets[key] = []
+        buckets[key].append(item)
+
+    ordered_keys = []
+    max_cats = max((len(v) for v in geo_cats.values()), default=0)
+    for cat_slot in range(max_cats):
+        for geo in geo_order:
+            cats = geo_cats[geo]
+            if cat_slot < len(cats):
+                ordered_keys.append(cats[cat_slot])
+
+    scheduled = []
+    for bucket_idx, key in enumerate(ordered_keys):
+        bucket = buckets[key]
+        size = len(bucket)
+        for pos, item in enumerate(bucket):
+            scheduled.append((Fraction(pos, size), bucket_idx, pos, item))
+    scheduled.sort(key=lambda entry: (entry[0], entry[1], entry[2]))
+    return [entry[3] for entry in scheduled]
+
+
+def select_manifest_items(geographies=None, ids=None, limit=None, only_policy=None,
+                          order="interleaved"):
     """One selection contract for generators, QA, accounting and orchestration.
 
-    Explicit IDs preserve requested order and override geography/limit. Tier
-    filtering precedes the limit, as documented by the generation CLI.
+    Explicit IDs preserve requested order and override geography/limit/order.
+    Tier filtering precedes interleaving and the limit, as documented by the
+    generation CLI.
     """
     import content_policy
 
     if limit is not None and limit < 1:
         raise ValueError("--limit must be positive")
+    if order not in SELECTION_ORDERS:
+        raise ValueError(
+            f"Unknown selection order: {order!r} (expected one of {', '.join(SELECTION_ORDERS)})"
+        )
     if ids:
         by_id = {it["id"]: it for it in all_items()}
         missing = [item_id for item_id in ids if item_id not in by_id]
@@ -472,8 +532,10 @@ def select_manifest_items(geographies=None, ids=None, limit=None, only_policy=No
         unknown = set(geographies) - set(MANIFESTS)
         if unknown:
             raise ValueError(f"Unknown geographies: {', '.join(sorted(unknown))}")
-        items = [dict(it) for geo in geographies for it in load_manifest(geo)]
+        items = [dict(it) for geo in dict.fromkeys(geographies) for it in load_manifest(geo)]
     items = content_policy.select_tier(items, only_policy)
+    if not ids and order == "interleaved":
+        items = interleave_manifest_items(items)
     return items[:limit] if limit is not None and not ids else items
 
 

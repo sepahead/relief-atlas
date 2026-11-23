@@ -330,7 +330,7 @@ To check the guided geometry preset:
 ```bash
 /usr/bin/sandbox-exec -p '(version 1)(allow default)(deny network*)' \
   meshmaker/local/imgenv/bin/python scripts/local/preflight.py --phase all \
-  --ids ger_uav_0001 --pipeline-type 1024_cascade --texture-size 2048
+  --ids ger_uav_0001 --pipeline-type 1536_cascade --texture-size 2048
 ```
 
 The checks use local files and existing Python environments. They neither
@@ -471,12 +471,18 @@ GLBs. These diffuse-light previews do not simulate all metallic/roughness PBR
 effects and do not issue QA passes. Compare them with the reference and inspect
 hidden sides, markings, thin parts and surface noise before accepting quality.
 
-Defaults are 40 Qwen steps, guidance 1.0, a 1024-pixel reference, 512 geometry,
-1024 textures and SPZ export. Higher geometry settings are `1024` and
-`1024_cascade`; textures can be 512, 1024 or 2048. `--mesh-steps 16` overrides the
+Defaults are 40 Qwen steps, guidance 1.0, a 1024-pixel reference, `1024_cascade`
+geometry, 2048 textures, 300,000 target faces, SPZ export (with `1536_cascade`
+for guided radial octocopter items in the offline controller) and
+`--order interleaved` scheduling (proportionally rotating across all geographies
+and categories so partial completions cover every category; pass
+`--order sequential` to walk manifests sequentially, while explicit `--ids`
+always preserve caller order). Alternative geometry
+settings include `512`, `1024`, `1024_cascade` and `1536_cascade`; textures can be
+512, 1024, 2048 or 4096. `--mesh-steps 16` overrides the
 structure, shape and texture samplers together; omitting it uses the pinned
 model's settings. `--target-faces` controls the triangle target before baking
-(default 200,000). Effective sampler parameters and the face target are recorded
+(default 300,000). Effective sampler parameters and the face target are recorded
 in new geometry metadata. More detail costs memory and time and requires visual
 comparison; a higher setting is not itself evidence of better output. Batch size
 bounds the item selection per pass; it does not imply parallel GPU inference.
@@ -564,7 +570,9 @@ GLB uses Y-up coordinates and splats native Z-up. Position mapping to GLB is
 | Mesh | Loadability, bounds, degenerate triangles, backdrop/slab regressions, ten-view silhouettes |
 | Gaussian | Primitive attributes and ten-view coverage, solidity, holes and consistency |
 
-Current QA contract v6 binds passes to file hashes. Image foreground bounds need
+Current QA contract v7 binds passes to file hashes, enforces multiview-verified
+emblem projection provenance when applied, and checks Gaussian container count
+consistency against metadata. Image foreground bounds need
 0.5% clearance from each frame edge, including thin rotor/antenna tips. Mesh
 coverage is measured independently of depth-preview shading. Older verdicts
 require revalidation. Geometry must match its
@@ -576,7 +584,7 @@ remove rejected references or geometry before regeneration.
 
 SPZ stores colour as SH DC coefficients; SPLAT stores display RGB. The SPZ
 writer and QA reader follow the [pinned Niantic format contract](https://github.com/nianticlabs/spz/blob/affd0ecea7fbb4c265ee119475af7ee5b2997482/src/cc/splat-types.h#L322-L328).
-New metadata records `gs_color_encodings`. QA v6 stops certification of older
+New metadata records `gs_color_encodings`. QA v6+ stops certification of older
 local SPZ files with unverified encoding while preserving their artifacts and
 retry budget. An earlier local writer stored RGB directly in the SPZ DC field;
 its paired QA reader masked that error, so a successful old round-trip test
@@ -633,18 +641,18 @@ Budget independently for weights, runtime environments, output and scratch:
 | Fresh weights plus environments | Approximately 55–60 GB; builds/caches may add more |
 | 9,509 GLB + SPZ + reference deliverables | Approximately 165 GB, based on nine existing local samples |
 | 9,509 deliverables retaining both SPZ and SPLAT | Approximately 625 GB, same sample basis |
-| Generic CLI compact budget, 512 geometry / 1024 textures | Approximately 284 GB for 9,509 pending outputs, headroom and scratch |
-| Offline preset compact budget, 512 geometry / 2048 textures | Approximately 1.11 TB for 9,509 pending outputs under the conservative preflight formula; guided geometry can add more |
+| Generic CLI compact budget, 512 geometry / 1024 textures | Approximately 233 GB for 9,509 pending outputs, headroom and scratch |
+| Offline preset compact budget, `1024_cascade` geometry / 2048 textures | Approximately 546 GB for 9,509 pending outputs under the conservative preflight formula (~370 GB extrapolated from observed ~38.8 MB/item `1024_cascade`/2048/SPZ samples; 2D texture maps scale independently of 3DGS container size) |
 
 GB here is decimal; downloader GiB/MiB are binary. Model storage is additional
 to the output budget. Legacy artifacts, optional models, caches and backups add
 space. Preflight scales its budget with pending items, actual container support,
 geometry and texture settings; use that report for the selected run.
 
-The nine-sample output estimates above describe earlier measured artifacts;
-they are not a measurement of the current 2048-texture offline preset. The offline
+The nine-sample output estimates above describe earlier `512` artifacts; the
+`1024_cascade`/2048 preset uses more storage as shown in the table. The offline
 controller checks one item's budget at a time and can start without reserving
-the entire collection's estimated storage. Its 12 GB floor does not make that
+the entire collection's estimated storage. Its 16 GB floor does not make that
 total budget smaller: it waits when space becomes insufficient, preserves saved
 work, and continues after space is made available. Available storage can therefore
 limit how much of a large collection finishes unattended.

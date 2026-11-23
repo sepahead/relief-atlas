@@ -88,9 +88,9 @@ def load_profile(path=DEFAULT_PROFILE, overrides=None):
         if profile[key] is not None and (type(profile[key]) is not int or profile[key] < 1):
             raise ValueError(f"{key} must be positive or null")
     for key in ("pipeline_type", "guided_pipeline_type"):
-        if profile[key] not in ("512", "1024", "1024_cascade"):
+        if profile[key] not in ("512", "1024", "1024_cascade", "1536_cascade"):
             raise ValueError(f"Invalid {key}")
-    if profile["texture_size"] not in (512, 1024, 2048) or profile["gs_format"] not in ("spz", "splat", "both"):
+    if profile["texture_size"] not in (512, 1024, 2048, 4096) or profile["gs_format"] not in ("spz", "splat", "both"):
         raise ValueError("Invalid texture size or Gaussian format")
     if type(profile["image_size"]) is not int or profile["image_size"] < 256 or profile["image_size"] % 16:
         raise ValueError("image_size must be at least 256 and divisible by 16")
@@ -103,9 +103,11 @@ def load_profile(path=DEFAULT_PROFILE, overrides=None):
     if (any(type(profile[k]) is not int for k in ("low_battery_percent", "resume_battery_percent"))
             or not 0 <= profile["low_battery_percent"] < profile["resume_battery_percent"] <= 100):
         raise ValueError("Battery thresholds must satisfy 0 <= low < resume <= 100")
-    from prompt_utils import MANIFESTS
+    from prompt_utils import MANIFESTS, SELECTION_ORDERS
     if not isinstance(profile["geographies"], list) or not profile["geographies"] or set(profile["geographies"]) - set(MANIFESTS):
         raise ValueError("Invalid geographies")
+    if profile["order"] not in SELECTION_ORDERS:
+        raise ValueError(f"Invalid order: {profile['order']!r}")
     if profile["ids"] is not None and (not isinstance(profile["ids"], list) or not profile["ids"]
                                       or any(not isinstance(i, str) for i in profile["ids"])):
         raise ValueError("ids must be a nonempty list or null")
@@ -116,7 +118,7 @@ def load_profile(path=DEFAULT_PROFILE, overrides=None):
 
 def source_selection(profile, manifest_dir=None):
     import content_policy
-    from prompt_utils import MANIFESTS
+    from prompt_utils import MANIFESTS, interleave_manifest_items
 
     manifest_dir = Path(manifest_dir or PROJECT_DIR / "manifests")
     documents, source_hashes, rows = {}, {}, []
@@ -135,16 +137,27 @@ def source_selection(profile, manifest_dir=None):
         unknown = set(profile["ids"]) - set(by_id)
         if unknown:
             raise ValueError("Unknown item IDs: " + ", ".join(sorted(unknown)))
-        selected = [by_id[i] for i in dict.fromkeys(profile["ids"])]
+        selected = [dict(by_id[i]) for i in dict.fromkeys(profile["ids"])]
+        permitted, refused = content_policy.screen_items(selected, False, False)
     else:
-        selected = [r for r in rows if r["geography"] in profile["geographies"]]
+        selected = [dict(r) for geo in dict.fromkeys(profile["geographies"])
+                    for r in documents[geo]["meshes"]]
+        permitted, refused = content_policy.screen_items(selected, False, False)
+        if profile.get("order", "interleaved") == "interleaved":
+            permitted = interleave_manifest_items(permitted)
         if profile["limit"]:
-            selected = selected[:profile["limit"]]
-    permitted, refused = content_policy.screen_items([dict(r) for r in selected], False, False)
+            permitted = permitted[:profile["limit"]]
     return documents, source_hashes, permitted, refused
 
 
-def prepare_plan(control, profile, *, manifest_dir=None):
+GENERATION_PROFILE_KEYS = (
+    "order", "pipeline_type", "texture_size", "mesh_steps", "target_faces", "gs_format",
+    "image_steps", "image_guidance", "image_size", "structure_guides",
+    "guided_pipeline_type", "disk_reserve_gb",
+)
+
+
+def prepare_plan(control, profile, *, manifest_dir=None, profile_source="default"):
     """Freeze only the selected permitted rows, in every phase's manifest format."""
     import content_policy
     from prompt_utils import MANIFESTS
@@ -165,12 +178,51 @@ def prepare_plan(control, profile, *, manifest_dir=None):
         write_json(snapshots / filename, document)
         hashes[filename] = file_sha256(snapshots / filename)
     plan = {"version": 1, "run_id": run_id, "created_at": now(), "profile": profile,
+            "profile_source": profile_source,
             "directory": str(directory), "manifest_dir": str(snapshots), "manifest_sha256": hashes,
             "source_manifest_sha256": source_hashes, "target_ids": [r["id"] for r in permitted],
             "refused_ids": [r["id"] for r in refused], "policy_version": content_policy.POLICY_VERSION}
     write_json(directory / "plan.json", plan)
     write_json(Path(control) / "plan.json", plan)
     return plan
+
+
+def refresh_saved_profile(control, plan, profile_path=DEFAULT_PROFILE, *, persist=True):
+    """Sync default generation/resolution/ordering settings onto a saved run without altering selection."""
+    if not plan or plan.get("profile_source") == "custom":
+        return plan
+    if Path(profile_path).resolve() != DEFAULT_PROFILE.resolve():
+        return plan
+    fresh = load_profile(profile_path)
+    current = dict(plan.get("profile") or {})
+    desired_ids = list(plan.get("target_ids") or [])
+    if (not current.get("ids") and fresh.get("order") == "interleaved"
+            and plan.get("manifest_dir") and plan.get("manifest_sha256")):
+        from prompt_utils import MANIFESTS, interleave_manifest_items
+        manifest_dir = Path(plan["manifest_dir"])
+        geos = [g for g in dict.fromkeys(current.get("geographies") or list(MANIFESTS)) if g in MANIFESTS]
+        frozen_rows = []
+        for geo in geos:
+            filename = MANIFESTS[geo]
+            if filename in plan["manifest_sha256"]:
+                path = manifest_dir / filename
+                if path.is_file():
+                    frozen_rows.extend(load_json(path).get("meshes", []))
+        if len(frozen_rows) == len(desired_ids) and {r["id"] for r in frozen_rows} == set(desired_ids):
+            desired_ids = [r["id"] for r in interleave_manifest_items(frozen_rows)]
+    if (all(current.get(k) == fresh.get(k) for k in GENERATION_PROFILE_KEYS)
+            and desired_ids == list(plan.get("target_ids") or [])):
+        return plan
+    for k in GENERATION_PROFILE_KEYS:
+        current[k] = fresh[k]
+    updated = {**plan, "profile": current, "target_ids": desired_ids}
+    if persist:
+        run_plan = Path(updated["directory"]) / "plan.json"
+        if run_plan.parent.is_dir():
+            write_json(run_plan, updated)
+        if (Path(control) / "plan.json").is_file():
+            write_json(Path(control) / "plan.json", updated)
+    return updated
 
 
 def verify_plan(plan):
@@ -360,6 +412,10 @@ class Backend:
         if set(by_id) != set(plan["target_ids"]) or len(by_id) != len(self.items):
             raise ValueError("Saved selection does not match the saved manifests")
         self.items = [by_id[i] for i in plan["target_ids"]]
+        default_order = "sequential" if plan.get("profile_source") == "custom" else "interleaved"
+        if not self.profile.get("ids") and self.profile.get("order", default_order) == "interleaved":
+            from prompt_utils import interleave_manifest_items
+            self.items = interleave_manifest_items(self.items)
 
     def env(self, control):
         return {**os.environ, **OFFLINE_ENV, "RELIEF_OUTPUT_DIR": str(self.output),
@@ -489,40 +545,47 @@ class Worker:
     def stop_children(self, *, keep_awake=False):
         if self.group != os.getpid() or os.getpgrp() != self.group:
             raise RuntimeError("Refusing to signal a process group not owned by this worker")
-        self.internal_stop = True
-        try:
-            excluded = {self.awake.pid} if keep_awake and self.awake and self.awake.poll() is None else set()
-            if not keep_awake and (self.child or self.awake):
+        excluded = {self.awake.pid} if keep_awake and self.awake and self.awake.poll() is None else set()
+        if not keep_awake and (self.child or self.awake):
+            self.internal_stop = True
+            try:
                 os.killpg(self.group, signal.SIGTERM)
-            members = [pid for pid in group_members(self.group) if pid not in excluded]
-            if keep_awake:
-                for pid in members:
-                    try:
-                        if os.getpgid(pid) == self.group:
-                            os.kill(pid, signal.SIGTERM)
-                    except ProcessLookupError:
-                        pass
-            deadline = time.monotonic() + 8
-            while members and time.monotonic() < deadline:
-                if self.child:
-                    self.child.poll()
-                if self.awake:
-                    self.awake.poll()
-                time.sleep(0.05)
-                members = [pid for pid in group_members(self.group) if pid not in excluded]
+                # Keep one bytecode instruction inside try so the Python signal
+                # handler for our own process-group SIGTERM runs while
+                # internal_stop is True, without masking later external signals.
+                _ = self.group
+            finally:
+                self.internal_stop = False
+        members = [pid for pid in group_members(self.group) if pid not in excluded]
+        if keep_awake:
             for pid in members:
                 try:
                     if os.getpgid(pid) == self.group:
-                        os.kill(pid, signal.SIGKILL)
+                        os.kill(pid, signal.SIGTERM)
                 except ProcessLookupError:
                     pass
+        deadline = time.monotonic() + 8
+        while members and time.monotonic() < deadline:
             if self.child:
-                self.child.wait(timeout=5)
-            self.child = None
+                self.child.poll()
             if self.awake:
                 self.awake.poll()
-        finally:
-            self.internal_stop = False
+            time.sleep(0.05)
+            members = [pid for pid in group_members(self.group) if pid not in excluded]
+        for pid in members:
+            try:
+                if os.getpgid(pid) == self.group:
+                    os.kill(pid, signal.SIGKILL)
+            except ProcessLookupError:
+                pass
+        if self.child:
+            try:
+                self.child.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                pass
+        self.child = None
+        if self.awake:
+            self.awake.poll()
 
     def checkpoint(self):
         if self.signalled or not self.wanted():
@@ -828,6 +891,7 @@ def main(argv=None):
     parser.add_argument("--profile", type=Path, default=DEFAULT_PROFILE)
     parser.add_argument("--ids", nargs="+")
     parser.add_argument("--limit", type=int)
+    parser.add_argument("--order", choices=["interleaved", "sequential"])
     parser.add_argument("--output-dir")
     parser.add_argument("--state-dir")
     parser.add_argument("--new-run", action="store_true", help="start a new frozen plan; preserve all existing assets")
@@ -857,7 +921,7 @@ def main(argv=None):
             return 0
         if args.action in ("pause", "uninstall"):
             with exclusive(control / ".commands.lock"):
-                if not (control / "plan.json").exists() and args.action == "pause":
+                if not saved_plan(control) and args.action == "pause":
                     print("Nothing is running.")
                     return 0
                 pause_request = change_control(control, "paused")
@@ -879,13 +943,15 @@ def main(argv=None):
                     (Path.home() / "Library/LaunchAgents" / (job_label(control) + ".plist")).unlink(missing_ok=True)
                     print("Offline service removed. Saved assets and run are preserved; Start reinstalls it.")
             return 0
-        overrides = {k: v for k, v in {"ids": args.ids, "limit": args.limit,
+        overrides = {k: v for k, v in {"ids": args.ids, "limit": args.limit, "order": args.order,
                       "output_dir": args.output_dir, "state_dir": args.state_dir}.items() if v is not None}
+        is_default_profile = Path(args.profile).resolve() == DEFAULT_PROFILE.resolve()
         plan = saved_plan(control)
         if args.action == "plan":
-            if plan and not args.new_run and not overrides and args.profile == DEFAULT_PROFILE:
-                print(json.dumps({"saved_run": plan["run_id"], "items": len(plan["target_ids"]),
-                                  "profile": plan["profile"], "created_at": plan["created_at"]}, indent=2))
+            if plan and not args.new_run and not overrides and is_default_profile:
+                preview = refresh_saved_profile(control, plan, args.profile, persist=False)
+                print(json.dumps({"saved_run": preview["run_id"], "items": len(preview["target_ids"]),
+                                  "profile": preview["profile"], "created_at": preview["created_at"]}, indent=2))
             else:
                 profile = load_profile(args.profile, overrides)
                 _documents, _hashes, permitted, refused = source_selection(profile)
@@ -894,13 +960,16 @@ def main(argv=None):
             return 0
         with exclusive(control / ".commands.lock"):
             plan = saved_plan(control)
-            if plan and not args.new_run and (overrides or args.profile != DEFAULT_PROFILE):
+            if plan and not args.new_run and (overrides or not is_default_profile):
                 raise ValueError("Resume uses the saved selection/settings; use start --new-run to change them")
             if args.new_run and (args.action != "start" or lock_busy(control / ".worker.lock")):
                 raise ValueError("Pause the worker before start --new-run; existing assets will be preserved")
             if not plan or args.new_run:
                 profile = load_profile(args.profile, overrides)
-                plan = prepare_plan(control, profile)
+                src_kind = "default" if is_default_profile else "custom"
+                plan = prepare_plan(control, profile, profile_source=src_kind)
+            else:
+                plan = refresh_saved_profile(control, plan, args.profile, persist=True)
             verify_plan(plan)
             old = load_json(control / "control.json")
             # The login definition is durable before running intent is

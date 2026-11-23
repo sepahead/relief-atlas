@@ -24,7 +24,7 @@ import content_policy  # noqa: E402
 from generation_prompts import RGBA_PREFIX, digest, is_optimized_prompt  # noqa: E402
 from matting import composite_checker, has_object, reference_rgba  # noqa: E402
 from prompt_utils import (  # noqa: E402
-    MANIFESTS, OUTPUT_DIR, PROJECT_DIR, STATE_DIR, clean_prompt, item_seed,
+    MANIFESTS, OUTPUT_DIR, PROJECT_DIR, SELECTION_ORDERS, STATE_DIR, clean_prompt, item_seed,
     select_manifest_items,
 )
 from pipeline_utils import (  # noqa: E402
@@ -42,6 +42,7 @@ def parse_args(argv=None):
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--ids", nargs="*", default=None,
                     help="explicit item ids (overrides geographies/limit)")
+    ap.add_argument("--order", choices=list(SELECTION_ORDERS), default="interleaved")
     ap.add_argument("--steps", type=int, default=40)
     ap.add_argument("--guidance", type=float, default=1.0)
     ap.add_argument("--size", type=int, default=1024)
@@ -206,7 +207,8 @@ def save_json_atomic(path: Path, data):
 def main():
     args = parse_args()
 
-    items = select_manifest_items(args.geographies, args.ids, args.limit, args.only_policy)
+    items = select_manifest_items(args.geographies, args.ids, args.limit, args.only_policy,
+                                  order=args.order)
 
     retries = load_qa_retries()
     quarantine = load_quarantine()

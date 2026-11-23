@@ -109,8 +109,11 @@ cut during preparation of a replacement plan cannot change the active selection.
 ./atlas logs
 ```
 
-If a plan already exists, Start and Resume keep its settings. To deliberately
-change selection or configuration, pause first and use `./atlas start --new-run`
+If a plan already exists, Start and Resume preserve its frozen item selection,
+manifest snapshots, and output/state paths while syncing non-selection default
+generation settings from `config/offline_run.json` (unless the run was prepared
+with a custom `--profile`). To deliberately change item selection or output/state
+directories, pause first and use `./atlas start --new-run`
 with the desired options. Old plans and all generated assets remain on disk.
 Changing settings does not force already certified assets to regenerate; choose
 a separate output/state pair for a controlled comparison.
@@ -131,10 +134,15 @@ a separate output/state pair for a controlled comparison.
   reported as **needs attention**, never as completed. Resume rechecks the
   environment and can retry controller failures; it does not erase QA quarantine.
 
-The standard preset uses sequential item processing, native sampler defaults,
-2048 textures and SPZ with the existing SPLAT fallback. The supported radial
-cargo-octocopter recipe gets a cached authored guide and native `1024_cascade`
-geometry. Guides are distinct from Qwen output and have their own input hashes.
+The standard preset processes one item at a time on the GPU in
+**category-interleaved order** (`"order": "interleaved"`, proportionally
+rotating across all geographies and active categories so partial completions at
+30%, 60%, or 80% yield balanced samples across every category; pass
+`--order sequential` on a new run to disable interleaving, while explicit
+`--ids` always preserve caller order). It uses native sampler defaults,
+`1024_cascade` geometry, 2048 textures, 300,000 target faces and SPZ with the
+existing SPLAT fallback. The supported radial cargo-octocopter recipe gets a
+cached authored guide and native `1536_cascade` geometry. Guides are distinct from Qwen output and have their own input hashes.
 Existing valid configured-model references are reused; guides apply when a fresh
 reference is needed. Use a separate output/state pair to replace older references.
 Each distinct geometry/texture/container preset receives its own prerequisite

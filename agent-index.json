@@ -48,7 +48,7 @@
   "gates": [
     {
       "id": "pipeline-tests",
-      "when": "scripts/, meshmaker/, tests/ or a manifest changes",
+      "when": "scripts/, config/, meshmaker/, tests/ or a manifest changes",
       "command": "python3 -m unittest discover -s tests",
       "cost": "fast",
       "environment": "requirements-local.txt"

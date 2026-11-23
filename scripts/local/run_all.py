@@ -18,7 +18,9 @@ from pipeline_utils import (
     LOCAL_DIR, OUTPUT_DIR, PROJECT_DIR, STATE_DIR, image_model_matches, item_certified, load_json,
     pipeline_lock, source_image_matches, verdict_matches, write_json,
 )
-from prompt_utils import MANIFESTS, mesh_complete, select_manifest_items
+from prompt_utils import (
+    MANIFESTS, SELECTION_ORDERS, interleave_manifest_items, mesh_complete, select_manifest_items,
+)
 
 IMG_PYTHON = LOCAL_DIR / "imgenv" / "bin" / "python"
 MESH_PYTHON = LOCAL_DIR / "trellis-mac" / ".venv" / "bin" / "python"
@@ -41,12 +43,14 @@ def parse_args(argv=None):
     ap.add_argument("--geographies", nargs="+", choices=list(MANIFESTS))
     ap.add_argument("--ids", nargs="+")
     ap.add_argument("--limit", type=int)
+    ap.add_argument("--order", choices=list(SELECTION_ORDERS), default="interleaved",
+                    help="category ordering when --ids is not given (default: interleaved across categories)")
     ap.add_argument("--batch-size", type=int, default=32)
-    ap.add_argument("--pipeline-type", choices=["512", "1024", "1024_cascade"], default="512")
-    ap.add_argument("--texture-size", type=int, choices=[512, 1024, 2048], default=1024)
+    ap.add_argument("--pipeline-type", choices=["512", "1024", "1024_cascade", "1536_cascade"], default="1024_cascade")
+    ap.add_argument("--texture-size", type=int, choices=[512, 1024, 2048, 4096], default=2048)
     ap.add_argument("--mesh-steps", type=int, default=None,
                     help="override sampling steps for structure, shape and texture")
-    ap.add_argument("--target-faces", type=int, default=200000)
+    ap.add_argument("--target-faces", type=int, default=300000)
     ap.add_argument("--gs-format", choices=["spz", "splat", "both"], default="spz")
     ap.add_argument("--image-steps", type=int, default=40)
     ap.add_argument("--image-guidance", type=float, default=1.0)
@@ -151,8 +155,11 @@ def process_batch(items, args):
 def main(argv=None):
     args = parse_args(argv)
     try:
-        selected = select_manifest_items(args.geographies, args.ids, args.limit, args.only_policy)
+        selected = select_manifest_items(args.geographies, args.ids, args.limit, args.only_policy,
+                                         order=args.order)
         permitted, refused = content_policy.screen_items(selected, args.allow_restricted, args.allow_blocked)
+        if not args.ids and args.order == "interleaved":
+            permitted = interleave_manifest_items(permitted)
         current = ledgers()
         quarantine = load_json(STATE_DIR / "qa_quarantine.json")
         todo = [it for it in permitted if it["id"] not in quarantine
@@ -171,6 +178,7 @@ def main(argv=None):
                 from preflight import check
                 report = check(phase=args.phase, geographies=args.geographies, ids=args.ids,
                                limit=args.limit, only_policy=args.only_policy,
+                               order=args.order,
                                allow_restricted=args.allow_restricted, allow_blocked=args.allow_blocked,
                                gs_format=args.gs_format, pipeline_type=args.pipeline_type,
                                texture_size=args.texture_size, pending_count=len(todo))

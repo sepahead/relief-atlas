@@ -58,7 +58,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import content_policy  # noqa: E402
 from prompt_utils import (  # noqa: E402
-    MANIFESTS, OUTPUT_DIR, STATE_DIR, mesh_complete, select_manifest_items,
+    MANIFESTS, OUTPUT_DIR, SELECTION_ORDERS, STATE_DIR, mesh_complete, select_manifest_items,
 )
 from pipeline_utils import item_certified, load_json  # noqa: E402
 
@@ -113,18 +113,19 @@ def classify(items, output_dir, *, quarantine=(), allow_restricted=False,
     return buckets
 
 
-def select_items(geographies=None, ids=None, limit=None, only_policy=None) -> list:
+def select_items(geographies=None, ids=None, limit=None, only_policy=None,
+                 order="interleaved") -> list:
     """The manifest rows this count covers, scoped like the phases scope theirs."""
-    return select_manifest_items(geographies, ids, limit, only_policy)
+    return select_manifest_items(geographies, ids, limit, only_policy, order=order)
 
 
 def report(output_dir=None, state_dir=None, geographies=None, ids=None,
-           limit=None, **kw) -> dict:
+           limit=None, order="interleaved", **kw) -> dict:
     """Classify the selected manifest rows against the workspace on disk."""
     quarantine = load_state("qa_quarantine.json", state_dir)
     ledgers = {mode: load_state(f"qa_{mode}.json", state_dir)
                for mode in ("images", "meshes", "gaussians")}
-    items = select_items(geographies, ids, limit, kw.get("only_policy"))
+    items = select_items(geographies, ids, limit, kw.get("only_policy"), order=order)
     return classify(items, output_dir or OUTPUT_DIR,
                     quarantine=quarantine, ledgers=ledgers, **kw)
 
@@ -165,6 +166,7 @@ def main(argv=None):
                     choices=list(MANIFESTS))
     ap.add_argument("--ids", nargs="*", default=None,
                     help="explicit item ids (overrides --geographies)")
+    ap.add_argument("--order", choices=list(SELECTION_ORDERS), default="interleaved")
     content_policy.add_policy_args(ap)
     # parse_known_args so run_forever.sh can forward run_all.py's whole argv
     # verbatim; selection and policy flags are shared, while generation settings
@@ -172,6 +174,7 @@ def main(argv=None):
     args, _ignored = ap.parse_known_args(argv)
 
     buckets = report(geographies=args.geographies, ids=args.ids, limit=args.limit,
+                     order=args.order,
                      certified=args.certified,
                      allow_restricted=args.allow_restricted,
                      allow_blocked=args.allow_blocked,

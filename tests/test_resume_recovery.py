@@ -114,7 +114,7 @@ class GenerationHarness(contextlib.ExitStack):
         for module in (qwen, self.mesh, run_all):
             self.enter_context(patch.object(module, "OUTPUT_DIR", self.output))
             self.enter_context(patch.object(module, "STATE_DIR", self.state))
-            self.enter_context(patch.object(module, "select_manifest_items", side_effect=lambda *_a: [dict(self.row)]))
+            self.enter_context(patch.object(module, "select_manifest_items", side_effect=lambda *_a, **_kw: [dict(self.row)]))
         for module in (qwen, self.mesh):
             self.enter_context(patch.object(module, "generation_provenance", return_value={"test_fixture": True}))
             self.enter_context(patch.object(module, "durable_replace", side_effect=self.promote))

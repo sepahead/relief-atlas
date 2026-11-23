@@ -14,7 +14,7 @@ from pipeline_utils import (
     verdict_matches, write_json,
 )
 from prepare_models import catalog, model_errors
-from prompt_utils import MANIFESTS, select_manifest_items
+from prompt_utils import MANIFESTS, SELECTION_ORDERS, select_manifest_items
 
 IMG_PYTHON = LOCAL_DIR / "imgenv" / "bin" / "python"
 MESH_PYTHON = LOCAL_DIR / "trellis-mac" / ".venv" / "bin" / "python"
@@ -27,7 +27,8 @@ def probe_environment(python, mode):
     modules = (["torch", "torchvision", "diffusers", "transformers", "accelerate",
                 "numpy", "PIL", "scipy", "imagehash", "timm"] if mode == "images"
                else ["torch", "torchvision", "transformers", "numpy", "PIL", "scipy",
-                     "trimesh", "fast_simplification", "xatlas", "easydict"])
+                     "trimesh", "fast_simplification", "xatlas", "easydict",
+                     "moderngl", "cv2"])
     code = '''
 import importlib, json, sys
 from importlib.metadata import version, PackageNotFoundError
@@ -84,11 +85,18 @@ print(json.dumps(report))
         return {"errors": [f"Environment probe failed: {exc}"]}
 
 
-def storage_estimate(count, gs_format="spz", pipeline_type="512", texture_size=1024):
-    # Conservative budgets above the observed sample means, plus scratch space.
-    per_item = {"spz": 24_000_000, "splat": 80_000_000, "both": 85_000_000}[gs_format]
-    factor = (4 if pipeline_type != "512" else 1) * max(1, (texture_size / 1024) ** 2)
-    return int(count * per_item * factor * 1.2 + 10_000_000_000)
+def storage_estimate(count, gs_format="spz", pipeline_type="1024_cascade", texture_size=2048):
+    # Conservative budgets above the observed 1024_cascade/2048/spz sample mean
+    # (~38.8 MB/item), plus 20% headroom and scratch space.
+    # Texture resolution scales only the 2D PNG maps embedded in the GLB, never
+    # the 3DGS container whose splat count depends solely on voxel resolution.
+    geom_bytes = 10_000_000 if pipeline_type == "512" else 12_000_000
+    tex_bytes = int(3_500_000 * max(1.0, (texture_size / 1024) ** 2))
+    gs_base = {"spz": 6_000_000, "splat": 48_000_000, "both": 54_000_000}[gs_format]
+    gs_scale = {"512": 1.0, "1024": 3.5, "1024_cascade": 3.5,
+                "1536_cascade": 6.0}.get(pipeline_type, 3.5)
+    per_item = geom_bytes + tex_bytes + int(gs_base * gs_scale)
+    return int(count * per_item * 1.2 + 10_000_000_000)
 
 
 def nearest_existing(path):
@@ -99,10 +107,11 @@ def nearest_existing(path):
 
 
 def check(phase="all", geographies=None, ids=None, limit=None, only_policy=None,
+          order="interleaved",
           allow_restricted=False, allow_blocked=False, gs_format="spz",
-          pipeline_type="512", texture_size=1024, pending_count=None):
+          pipeline_type="1024_cascade", texture_size=2048, pending_count=None):
     errors, notes = [], []
-    items = select_manifest_items(geographies, ids, limit, only_policy)
+    items = select_manifest_items(geographies, ids, limit, only_policy, order=order)
     if len({it["id"] for it in items}) != len(items):
         errors.append("Manifest selection contains duplicate IDs")
     permitted, refused = content_policy.screen_items(items, allow_restricted, allow_blocked)
@@ -136,7 +145,7 @@ def check(phase="all", geographies=None, ids=None, limit=None, only_policy=None,
         environments["meshes"] = probe_environment(MESH_PYTHON, "meshes")
         if not (LOCAL_DIR / "trellis-mac" / "TRELLIS.2" / "trellis2").is_dir():
             errors.append("Missing TRELLIS.2 source under trellis-mac")
-        if not environments["meshes"].get("spz") and gs_format in ("spz", "both"):
+        if environments["meshes"].get("spz") is False and gs_format in ("spz", "both"):
             notes.append("Niantic SPZ binding unavailable; generation will retain larger SPLAT files")
             gs_format = "splat"
     for report in environments.values():
@@ -162,9 +171,10 @@ def main(argv=None):
     ap.add_argument("--geographies", nargs="+", choices=list(MANIFESTS))
     ap.add_argument("--ids", nargs="+")
     ap.add_argument("--limit", type=int)
+    ap.add_argument("--order", choices=list(SELECTION_ORDERS), default="interleaved")
     ap.add_argument("--gs-format", choices=["spz", "splat", "both"], default="spz")
-    ap.add_argument("--pipeline-type", choices=["512", "1024", "1024_cascade"], default="512")
-    ap.add_argument("--texture-size", choices=[512, 1024, 2048], type=int, default=1024)
+    ap.add_argument("--pipeline-type", choices=["512", "1024", "1024_cascade", "1536_cascade"], default="1024_cascade")
+    ap.add_argument("--texture-size", choices=[512, 1024, 2048, 4096], type=int, default=2048)
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--write", action="store_true", help="save state/preflight.json")
     content_policy.add_policy_args(ap)

@@ -78,6 +78,30 @@ class TestGenerationPrompts(unittest.TestCase):
         self.assertNotIn("no logos", transparent)
         self.assertEqual(transparent.count("Geometry: "), 1)
 
+    def test_typography_guidance_spells_named_agencies_and_upgrades_legacy_capture_line(self):
+        fw = gp.compose_prompt("German Feuerwehr HLF 20 fire engine, Mercedes Atego, red with reflective stripes")
+        self.assertIn('spelled exactly "FEUERWEHR"', fw)
+        self.assertIn("license plates completely blank", fw)
+        rc = gp.compose_prompt("Spanish Red Cross (Cruz Roja) ambulance, white with red cross, Spanish markings")
+        self.assertIn('spelled exactly "CRUZ ROJA"', rc)
+        # Unmarked subjects must not invent an agency name.
+        rubble = gp.compose_prompt("collapsed building rubble pile, concrete debris with exposed rebar")
+        self.assertNotIn("spelled exactly", rubble)
+        self.assertIn("accurately spelled block capitals", rubble)
+        # Stored v2 manifest prompts upgrade cleanly and idempotently via normalize_generation_prompt.
+        legacy_stored = (
+            "Subject: German Feuerwehr HLF 20 fire engine.\n"
+            "Geometry: Preserve the stated chassis.\n"
+            "Surface: Clean finish.\n"
+            "View: three-quarter.\n"
+            f"Capture: {gp.LEGACY_CAPTURE_TEXT_CLAUSE} Preserve supports.\n"
+            f"{gp.GRAY_BACKGROUND}"
+        )
+        upgraded = gp.normalize_generation_prompt(legacy_stored, transparent=True)
+        self.assertIn('spelled exactly "FEUERWEHR"', upgraded)
+        self.assertNotIn(gp.LEGACY_CAPTURE_TEXT_CLAUSE, upgraded)
+        self.assertEqual(gp.normalize_generation_prompt(upgraded, transparent=True), upgraded)
+
     def test_all_six_image_prompt_consumers_preserve_the_shared_recipe(self):
         cases = [("scripts/generate_relief.py", "enhance_prompt"),
                  ("meshmaker/generate_meshes.py", "enhance_image_prompt"),

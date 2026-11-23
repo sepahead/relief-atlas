@@ -796,6 +796,76 @@ class TestMeshViews(unittest.TestCase):
         self.assertTrue(any("inconsistent" in r
                             for r in self.qa.mesh_view_reasons(stats)))
 
+    def test_structural_mesh_apertures_pass_while_solid_panel_splat_holes_fail(self):
+        import tempfile
+        import numpy as np
+        import trimesh
+
+        # 1. Open-frame torus/ring: both GLB and 3DGS silhouettes enclose central sky.
+        torus = trimesh.creation.torus(major_radius=0.8, minor_radius=0.18)
+        verts_yup = np.asarray(torus.vertices, dtype=np.float64)
+        verts_zup = verts_yup[:, [0, 2, 1]] * np.array([1.0, -1.0, 1.0])
+        g_ring = {
+            "x": verts_zup[:, 0],
+            "y": verts_zup[:, 1],
+            "z": verts_zup[:, 2],
+        }
+        rig = self.qa._obj_rig(verts_zup)
+        gs_ring_masks, _ = self.qa.mesh_silhouettes([torus], res=128, rig=rig)
+        raw_ring_stats = self.qa.silhouette_view_metrics(gs_ring_masks)
+        self.assertGreater(raw_ring_stats["holes_max"], self.qa.GS_HOLE_MAX)
+
+        with tempfile.TemporaryDirectory() as td:
+            torus_glb = Path(td) / "ring.glb"
+            torus.export(str(torus_glb), file_type="glb")
+            rec_ring = self.qa._reconcile_structural_mesh_apertures(
+                raw_ring_stats, gs_ring_masks, g_ring, torus_glb)
+            self.assertEqual(self.qa.gaussians_view_reasons(rec_ring), [])
+            self.assertGreater(rec_ring["raw_holes_max"], self.qa.GS_HOLE_MAX)
+            self.assertEqual(rec_ring["holes_max"], 0.0)
+
+            # 2. Solid GLB box with missing-splat holes punched in 3DGS silhouettes MUST still fail!
+            box = trimesh.creation.box(extents=(1.6, 1.6, 1.6))
+            bv_yup = np.asarray(box.vertices, dtype=np.float64)
+            bv_zup = bv_yup[:, [0, 2, 1]] * np.array([1.0, -1.0, 1.0])
+            g_box = {"x": bv_zup[:, 0], "y": bv_zup[:, 1], "z": bv_zup[:, 2]}
+            box_glb = Path(td) / "box.glb"
+            box.export(str(box_glb), file_type="glb")
+            broken_gs_masks = []
+            for m in self.qa.mesh_silhouettes([box], res=128, rig=self.qa._obj_rig(bv_zup))[0]:
+                mb = m.copy()
+                mb[46:82, 46:82] = False
+                broken_gs_masks.append(mb)
+            raw_box_stats = self.qa.silhouette_view_metrics(broken_gs_masks)
+            rec_box = self.qa._reconcile_structural_mesh_apertures(
+                raw_box_stats, broken_gs_masks, g_box, box_glb)
+            self.assertTrue(any(r.startswith("holes ") for r in self.qa.gaussians_view_reasons(rec_box)),
+                            "missing-splat holes on a solid GLB surface must still fail")
+
+            # 3. Open C-bay (gripper claw ~1.5 px from hull): throat is open in polygon
+            # rasterization (`mm_b` has 0 enclosed holes) but pinched shut by the 5x5
+            # Gaussian kernel (`_dilate(mm_b, px=2)`). Must reconcile to 0 holes!
+            c_bars = [
+                trimesh.creation.box(extents=(1.6, 0.35, 0.4), transform=trimesh.transformations.translation_matrix((0.0, -0.55, 0.0))),
+                trimesh.creation.box(extents=(0.30, 1.25, 0.4), transform=trimesh.transformations.translation_matrix((-0.65, 0.15, 0.0))),
+                trimesh.creation.box(extents=(1.6, 0.25, 0.4), transform=trimesh.transformations.translation_matrix((0.0, 0.65, 0.0))),
+                trimesh.creation.box(extents=(0.25, 0.88, 0.4), transform=trimesh.transformations.translation_matrix((0.65, 0.30, 0.0))),
+            ]
+            c_mesh = trimesh.util.concatenate(c_bars)
+            cv_yup = np.asarray(c_mesh.vertices, dtype=np.float64)
+            cv_zup = cv_yup[:, [0, 2, 1]] * np.array([1.0, -1.0, 1.0])
+            g_cbay = {"x": cv_zup[:, 0], "y": cv_zup[:, 1], "z": cv_zup[:, 2]}
+            cbay_glb = Path(td) / "cbay.glb"
+            c_mesh.export(str(cbay_glb), file_type="glb")
+            c_mm, _ = self.qa.mesh_silhouettes([c_mesh], res=128, rig=self.qa._obj_rig(cv_zup))
+            c_gs = [self.qa._dilate(m, px=2) for m in c_mm]
+            raw_cbay_stats = self.qa.silhouette_view_metrics(c_gs)
+            self.assertGreater(raw_cbay_stats["holes_max"], self.qa.GS_HOLE_MAX)
+            rec_cbay = self.qa._reconcile_structural_mesh_apertures(
+                raw_cbay_stats, c_gs, g_cbay, cbay_glb)
+            self.assertEqual(rec_cbay["holes_max"], 0.0)
+            self.assertEqual(self.qa.gaussians_view_reasons(rec_cbay), [])
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

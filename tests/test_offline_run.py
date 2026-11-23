@@ -151,6 +151,103 @@ class TestOfflinePlan(unittest.TestCase):
                 self.assertEqual(offline.main(["--control-dir", str(control), "start"]), 0)
             self.assertEqual(events, ["definition_durable", "start_service"])
 
+    def test_resume_and_start_upgrade_saved_generation_resolution_without_changing_selection(self):
+        with tempfile.TemporaryDirectory() as root:
+            control, plan, _sources = make_plan(root, ["a"])
+            offline.change_control(control, "paused", plan["run_id"])
+            old_plan = {
+                **plan,
+                "profile": {
+                    **plan["profile"],
+                    "pipeline_type": "512",
+                    "texture_size": 1024,
+                    "target_faces": 200000,
+                    "guided_pipeline_type": "1024_cascade",
+                },
+            }
+            pu.write_json(Path(plan["directory"]) / "plan.json", old_plan)
+            pu.write_json(control / "plan.json", old_plan)
+
+            with patch.object(offline, "prepare_service"), \
+                 patch.object(offline, "start_service"), \
+                 contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(offline.main(["--control-dir", str(control), "resume"]), 0)
+
+            refreshed = offline.saved_plan(control)
+            self.assertEqual(refreshed["run_id"], plan["run_id"])
+            self.assertEqual(refreshed["target_ids"], ["a"])
+            self.assertEqual(refreshed["manifest_sha256"], plan["manifest_sha256"])
+            self.assertEqual(refreshed["profile"]["output_dir"], plan["profile"]["output_dir"])
+            self.assertEqual(refreshed["profile"]["pipeline_type"], "1024_cascade")
+            self.assertEqual(refreshed["profile"]["texture_size"], 2048)
+            self.assertEqual(refreshed["profile"]["target_faces"], 300000)
+            self.assertEqual(refreshed["profile"]["guided_pipeline_type"], "1536_cascade")
+
+            # Custom --profile runs keep their explicit generation settings on resume.
+            custom_plan = {**old_plan, "profile_source": "custom"}
+            pu.write_json(Path(plan["directory"]) / "plan.json", custom_plan)
+            pu.write_json(control / "plan.json", custom_plan)
+            offline.change_control(control, "paused", plan["run_id"])
+            with patch.object(offline, "prepare_service"), \
+                 patch.object(offline, "start_service"), \
+                 contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(offline.main(["--control-dir", str(control), "resume"]), 0)
+            self.assertEqual(offline.saved_plan(control)["profile"]["pipeline_type"], "512")
+
+    def test_interleaved_plan_and_resume_upgrade_preserves_frozen_manifest_hashes(self):
+        with tempfile.TemporaryDirectory() as root:
+            root = Path(root)
+            sources = root / "sources"
+            sources.mkdir(parents=True)
+            ger_rows = [
+                {"id": f"g_cat1_{i}", "name": "pump", "prompt": "pump", "geography": "germany", "category": "cat1"}
+                for i in range(4)
+            ] + [
+                {"id": f"g_cat2_{i}", "name": "tent", "prompt": "tent", "geography": "germany", "category": "cat2"}
+                for i in range(2)
+            ]
+            eu_rows = [
+                {"id": f"e_cat1_{i}", "name": "truck", "prompt": "truck", "geography": "eu", "category": "cat1"}
+                for i in range(2)
+            ]
+            for geo, filename in prompt_utils.MANIFESTS.items():
+                meshes = ger_rows if geo == "germany" else (eu_rows if geo == "eu" else [])
+                pu.write_json(sources / filename, {"meshes": meshes})
+            profile = offline.load_profile(overrides={
+                "geographies": ["germany", "eu"], "order": "interleaved",
+                "output_dir": str(root / "outputs"), "state_dir": str(root / "pipeline"),
+            })
+            control = root / "control"
+            plan = offline.prepare_plan(control, profile, manifest_dir=sources)
+            # First 3 items hit all 3 buckets across both geographies.
+            self.assertEqual(plan["target_ids"][:3], ["g_cat1_0", "e_cat1_0", "g_cat2_0"])
+            # Simulate an older sequential default plan without 'order' key.
+            seq_ids = [r["id"] for r in ger_rows + eu_rows]
+            old_profile = {k: v for k, v in plan["profile"].items() if k != "order"}
+            old_profile["disk_reserve_gb"] = 8
+            old_plan = {**plan, "profile": old_profile, "target_ids": seq_ids}
+            pu.write_json(Path(plan["directory"]) / "plan.json", old_plan)
+            pu.write_json(control / "plan.json", old_plan)
+            offline.change_control(control, "paused", plan["run_id"])
+            with patch.object(offline, "prepare_service"), \
+                 patch.object(offline, "start_service"), \
+                 contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(offline.main(["--control-dir", str(control), "resume"]), 0)
+            refreshed = offline.saved_plan(control)
+            self.assertEqual(refreshed["manifest_sha256"], plan["manifest_sha256"])
+            self.assertEqual(set(refreshed["target_ids"]), set(seq_ids))
+            self.assertEqual(refreshed["target_ids"], plan["target_ids"])
+            self.assertEqual(refreshed["profile"]["order"], "interleaved")
+            self.assertEqual(refreshed["profile"]["disk_reserve_gb"], 16)
+            offline.verify_plan(refreshed)
+            # Backend also interleaves legacy sequential default plans idempotently.
+            backend = offline.Backend(old_plan)
+            self.assertEqual([it["id"] for it in backend.items], plan["target_ids"])
+            # Custom plans with sequential order stay sequential.
+            custom_seq = {**old_plan, "profile_source": "custom",
+                          "profile": {**plan["profile"], "order": "sequential"}}
+            self.assertEqual([it["id"] for it in offline.Backend(custom_seq).items], seq_ids)
+
     def test_uninstall_preserves_outputs_and_unrelated_agents(self):
         with tempfile.TemporaryDirectory() as root:
             control, plan, _sources = make_plan(root, ["a"])

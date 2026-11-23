@@ -195,6 +195,38 @@ class TestSelectionAndRunner(unittest.TestCase):
         self.assertNotIn("hydraulic cylinders", prompt)
         self.assertNotIn("arms folded inward", prompt)
 
+    def test_interleaved_order_covers_every_category_proportionally(self):
+        from collections import Counter
+        all_interleaved = prompt_utils.select_manifest_items(order="interleaved")
+        permitted, _refused = content_policy.screen_items(all_interleaved, False, False)
+        reinterleaved = prompt_utils.interleave_manifest_items(permitted)
+        # Strictly idempotent.
+        self.assertEqual([it["id"] for it in prompt_utils.interleave_manifest_items(reinterleaved)],
+                         [it["id"] for it in reinterleaved])
+        # First 4 items hit all 4 geographies; first 25 hit all 25 active categories.
+        self.assertEqual([it["geography"] for it in reinterleaved[:4]],
+                         list(prompt_utils.MANIFESTS))
+        totals = Counter((it["geography"], it["category"]) for it in reinterleaved)
+        self.assertEqual(len(totals), 25)
+        self.assertEqual(len({(it["geography"], it["category"]) for it in reinterleaved[:25]}), 25)
+        # At 10%, 30%, 60%, 80%, every active category is represented and main buckets stay within +/-1.
+        for frac in (0.10, 0.30, 0.60, 0.80):
+            k = int(round(len(reinterleaved) * frac))
+            counts = Counter((it["geography"], it["category"]) for it in reinterleaved[:k])
+            self.assertEqual(len(counts), 25)
+            for bucket, total in totals.items():
+                if total >= 10:
+                    expected = total * frac
+                    self.assertLessEqual(abs(counts[bucket] - expected), 1.5,
+                                         f"{bucket} at {frac}: {counts[bucket]} vs {expected}")
+        # Within-bucket order is preserved from the original manifests.
+        seq_drk = [it["id"] for it in prompt_utils.load_manifest("germany") if it["category"] == "drk"]
+        int_drk = [it["id"] for it in reinterleaved if it["geography"] == "germany" and it["category"] == "drk"]
+        self.assertEqual(int_drk, seq_drk)
+        # Sequential opt-out restores original manifest order.
+        seq_first = prompt_utils.select_manifest_items(limit=5, order="sequential")
+        self.assertEqual([it["id"] for it in seq_first], [f"ger_drk_{i:04d}" for i in range(1, 6)])
+
     def test_explicit_ids_override_geography_and_limit(self):
         result = prompt_utils.select_manifest_items(["germany"], ["gen_dis_0002", "eu_rc_0001"], 1)
         self.assertEqual([it["id"] for it in result], ["gen_dis_0002", "eu_rc_0001"])

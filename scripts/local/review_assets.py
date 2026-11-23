@@ -89,51 +89,58 @@ def render_glb(path, *, size=512):
     # The QA rig was designed for silhouette statistics. Review must include
     # every tip even for asymmetric objects; fit a sphere to the actual FOV.
     radius = float(np.linalg.norm(vertices - center, axis=1).max()) * np.sqrt(10) * 1.08
-    with moderngl.create_standalone_context(require=330) as ctx:
-        program = ctx.program(vertex_shader=VERTEX_SHADER, fragment_shader=FRAGMENT_SHADER)
-        framebuffer = ctx.simple_framebuffer((size, size), components=4)
-        framebuffer.use()
-        ctx.enable(moderngl.DEPTH_TEST)
-        draws = []
-        for mesh in geoms:
-            uv = getattr(mesh.visual, "uv", None)
-            if uv is None:
-                uv = np.zeros((len(mesh.vertices), 2))
-            material = getattr(mesh.visual, "material", None)
-            texture = getattr(material, "baseColorTexture", None)
-            if texture is None:
-                texture = getattr(material, "image", None)
-            if texture is None:
-                texture = Image.new("RGB", (1, 1), (210, 210, 210))
-            texture = texture.convert("RGB")
-            # OpenGL's first uploaded row is the bottom of the texture.
-            pixels = np.asarray(texture)[::-1].copy()
-            gpu_texture = ctx.texture(texture.size, 3, pixels.tobytes(), alignment=1)
-            gpu_texture.build_mipmaps()
-            gpu_texture.filter = (moderngl.LINEAR_MIPMAP_LINEAR, moderngl.LINEAR)
-            factor = getattr(material, "baseColorFactor", None)
-            factor = np.ones(4) if factor is None else np.asarray(factor) / 255.0
-            buffer = ctx.buffer(np.column_stack([mesh.vertices, mesh.vertex_normals, uv])
-                                .astype("f4").tobytes())
-            indices = ctx.buffer(np.asarray(mesh.faces, dtype="u4").tobytes())
-            vao = ctx.vertex_array(program, [(buffer, "3f 3f 2f", "position", "normal", "texcoord")],
-                                   indices, index_element_size=4)
-            draws.append((vao, gpu_texture, tuple(factor)))
-        textured, clay = [], []
-        for cam, right, up, forward in _turntable_cameras(center, radius):
-            matrix = camera_matrix(cam, right, up, forward, radius)
-            program["view_projection"].write(matrix.T.astype("f4").tobytes())
-            program["eye"].value = tuple(cam)
-            for is_clay, output in [(False, textured), (True, clay)]:
-                framebuffer.clear(0.10, 0.12, 0.15, 1, depth=1)
-                program["clay"].value = is_clay
-                for vao, texture, factor in draws:
-                    texture.use(0)
-                    program["color_factor"].value = factor
-                    vao.render()
-                output.append(np.asarray(Image.frombytes("RGB", (size, size),
-                    framebuffer.read(components=3, alignment=1)).transpose(Image.Transpose.FLIP_TOP_BOTTOM)))
-        renderer = ctx.info["GL_RENDERER"]
+    ctx = moderngl.create_standalone_context(require=330)
+    try:
+        with ctx:
+            program = ctx.program(vertex_shader=VERTEX_SHADER, fragment_shader=FRAGMENT_SHADER)
+            framebuffer = ctx.simple_framebuffer((size, size), components=4)
+            framebuffer.use()
+            ctx.enable(moderngl.DEPTH_TEST)
+            draws = []
+            for mesh in geoms:
+                uv = getattr(mesh.visual, "uv", None)
+                if uv is None:
+                    uv = np.zeros((len(mesh.vertices), 2))
+                material = getattr(mesh.visual, "material", None)
+                texture = getattr(material, "baseColorTexture", None)
+                if texture is None:
+                    texture = getattr(material, "image", None)
+                if texture is None:
+                    texture = Image.new("RGB", (1, 1), (210, 210, 210))
+                texture = texture.convert("RGB")
+                # OpenGL's first uploaded row is the bottom of the texture.
+                pixels = np.asarray(texture)[::-1].copy()
+                gpu_texture = ctx.texture(texture.size, 3, pixels.tobytes(), alignment=1)
+                gpu_texture.build_mipmaps()
+                gpu_texture.filter = (moderngl.LINEAR_MIPMAP_LINEAR, moderngl.LINEAR)
+                factor = getattr(material, "baseColorFactor", None)
+                factor = np.ones(4) if factor is None else np.asarray(factor) / 255.0
+                buffer = ctx.buffer(np.column_stack([mesh.vertices, mesh.vertex_normals, uv])
+                                    .astype("f4").tobytes())
+                indices = ctx.buffer(np.asarray(mesh.faces, dtype="u4").tobytes())
+                vao = ctx.vertex_array(program, [(buffer, "3f 3f 2f", "position", "normal", "texcoord")],
+                                       indices, index_element_size=4)
+                draws.append((vao, gpu_texture, tuple(factor)))
+            textured, clay = [], []
+            for cam, right, up, forward in _turntable_cameras(center, radius):
+                matrix = camera_matrix(cam, right, up, forward, radius)
+                program["view_projection"].write(matrix.T.astype("f4").tobytes())
+                program["eye"].value = tuple(cam)
+                for is_clay, output in [(False, textured), (True, clay)]:
+                    framebuffer.clear(0.10, 0.12, 0.15, 1, depth=1)
+                    program["clay"].value = is_clay
+                    for vao, texture, factor in draws:
+                        texture.use(0)
+                        program["color_factor"].value = factor
+                        vao.render()
+                    output.append(np.asarray(Image.frombytes("RGB", (size, size),
+                        framebuffer.read(components=3, alignment=1)).transpose(Image.Transpose.FLIP_TOP_BOTTOM)))
+            renderer = ctx.info["GL_RENDERER"]
+    finally:
+        try:
+            ctx.release()
+        except Exception:
+            pass
     return textured, clay, {"renderer": renderer, "vertices": sum(len(g.vertices) for g in geoms),
                              "triangles": sum(len(g.faces) for g in geoms)}
 

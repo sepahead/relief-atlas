@@ -79,6 +79,63 @@ SURFACES = {
 }
 
 
+LEGACY_CAPTURE_TEXT_CLAUSE = (
+    "Preserve requested emblems and inscriptions clearly; omit "
+    "unrelated text, watermarks, measurement arrows and extra props."
+)
+
+# Canonical short markings explicitly named in manifest subjects. Only matches
+# organizations already authored in the Subject line so prompts never invent
+# unrelated labels on unmarked tools, rubble, or generic equipment.
+_MARKING_PATTERNS = [
+    (re.compile(r"\b(?:german\s+)?feuerwehr\b", re.I), "FEUERWEHR"),
+    (re.compile(r"\bcruz\s+roja\b", re.I), "CRUZ ROJA"),
+    (re.compile(r"\bcroix[- ]rouge\b", re.I), "CROIX-ROUGE"),
+    (re.compile(r"\bcroce\s+rossa\b", re.I), "CROCE ROSSA"),
+    (re.compile(r"\brode\s+kruis\b", re.I), "RODE KRUIS"),
+    (re.compile(r"\br[oö]da\s+korset\b", re.I), "RODA KORSET"),
+    (re.compile(r"\b(?:technisches\s+hilfswerk|thw)\b", re.I), "THW"),
+    (re.compile(r"\b(?:deutsches\s+rotes\s+kreuz|german\s+red\s+cross|drk)\b", re.I), "DRK"),
+    (re.compile(r"\bbundespolizei\b", re.I), "POLIZEI"),
+    (re.compile(r"\bs[eé]curit[eé]\s+civile\b", re.I), "SECURITE CIVILE"),
+    (re.compile(r"\bprotezione\s+civile\b", re.I), "PROTEZIONE CIVILE"),
+    (re.compile(r"\bdsns\b", re.I), "DSNS"),
+    (re.compile(r"\bercc\b", re.I), "ERCC"),
+    (re.compile(r"\bresceu\b", re.I), "rescEU"),
+    (re.compile(r"\becho\b", re.I), "ECHO"),
+    (re.compile(r"\bunhcr\b", re.I), "UNHCR"),
+    (re.compile(r"\bunicef\b", re.I), "UNICEF"),
+    (re.compile(r"\bicrc\b", re.I), "ICRC"),
+    (re.compile(r"\bdlrg\b", re.I), "DLRG"),
+]
+
+
+def expected_marking_text(subject: str):
+    """Return the canonical short inscription already named in Subject, or None."""
+    text = str(subject or "")
+    for pattern, label in _MARKING_PATTERNS:
+        if pattern.search(text):
+            return label
+    return None
+
+
+def text_capture_clause(subject: str) -> str:
+    """Typography guidance that keeps Qwen-Image-2.1 lettering crisp and non-garbled."""
+    label = expected_marking_text(subject)
+    if label:
+        return (
+            f'Preserve requested emblems clearly; if body lettering appears, render it in '
+            f'large, bold, cleanly spaced sans-serif block capitals spelled exactly "{label}". '
+            f'Keep license plates completely blank and omit tiny unreadable fine print, '
+            f'phone numbers, garbled filler text, watermarks, measurement arrows and extra props.'
+        )
+    return (
+        "Preserve requested emblems and inscriptions clearly; render any visible lettering in "
+        "large, crisp, accurately spelled block capitals, keep license plates completely blank, "
+        "and omit tiny unreadable fine print, garbled filler text, watermarks, measurement arrows and extra props."
+    )
+
+
 def digest(text):
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
@@ -232,8 +289,7 @@ def compose_prompt(subject, *, name="", category="", ordinal=0, condition=None, 
              "70 percent of the canvas, centered and uncropped. Leave at least a 10% empty margin "
              "on every side, including all outer tips and protrusions. Even diffuse neutral studio lighting, deep focus and "
              "crisp edges. Coherent material regions and clean boundaries between specified patterns, without baked lighting or harsh "
-             "specular highlights. Preserve requested emblems and inscriptions clearly; omit "
-             "unrelated text, watermarks, measurement arrows and extra props. Preserve functional bases and supports.",
+             f"specular highlights. {text_capture_clause(subject)} Preserve functional bases and supports.",
              ALPHA_BACKGROUND if transparent else GRAY_BACKGROUND]
     result = "\n".join(lines)
     return RGBA_PREFIX + result if transparent else result
@@ -244,8 +300,15 @@ def normalize_generation_prompt(prompt, *, transparent=False, category=""):
     if not is_optimized_prompt(prompt):
         return compose_prompt(prompt, category=category, transparent=transparent)
     lines = prompt.removeprefix(RGBA_PREFIX).splitlines()
+    subject = ""
+    for line in lines:
+        if line.startswith("Subject: "):
+            subject = line.removeprefix("Subject: ").strip()
+            break
     for index, line in enumerate(lines):
-        if line.startswith("Background: "):
+        if line.startswith("Capture: ") and LEGACY_CAPTURE_TEXT_CLAUSE in line:
+            lines[index] = line.replace(LEGACY_CAPTURE_TEXT_CLAUSE, text_capture_clause(subject))
+        elif line.startswith("Background: "):
             lines[index] = ALPHA_BACKGROUND if transparent else GRAY_BACKGROUND
     result = "\n".join(lines)
     return RGBA_PREFIX + result if transparent else result
