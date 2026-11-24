@@ -161,7 +161,9 @@ def select_items(args):
                                  getattr(args, "ids", None),
                                  getattr(args, "limit", None),
                                  getattr(args, "only_policy", None),
-                                 order=getattr(args, "order", "interleaved"))
+                                 order=getattr(args, "order", "interleaved"),
+                                 allow_restricted=getattr(args, "allow_restricted", False),
+                                 allow_blocked=getattr(args, "allow_blocked", False))
 
 
 def load_json(path):
@@ -631,6 +633,14 @@ def reference_white_fraction(png):
     return float(np.all(arr[..., :3][foreground] > 240, axis=-1).mean()) if foreground.any() else 0.0
 
 
+def reference_void_black_fraction(png):
+    """Pitch-black source regions (`max(R,G,B) <= 3`) are valid; unbacked UV voids are a regression."""
+    with Image.open(png) as image:
+        arr = np.asarray(image.convert("RGBA"))
+    foreground = arr[..., 3] > 200
+    return float((arr[..., :3][foreground].max(axis=-1) <= 3).mean()) if foreground.any() else 0.0
+
+
 def mesh_pass(s):
     reasons = []
     if s["vertices"] == 0:
@@ -647,7 +657,8 @@ def mesh_pass(s):
         reasons.append(f"white slab? tex_white {s['tex_white']}")
     if s["tex_magenta"] > MAGENTA_TEX_MAX:
         reasons.append(f"magenta residue {s['tex_magenta']}")
-    if s.get("tex_void_black", 0.0) > 0.03:
+    if (s.get("tex_void_black", 0.0) > 0.03
+            and s.get("tex_void_black", 0.0) > s.get("source_void_black_frac", 0.0) + 0.03):
         reasons.append(f"void black texture {s['tex_void_black']}")
     if s.get("degenerate_frac", 0.0) > 0.01:
         reasons.append(f"degenerate triangles {s['degenerate_frac']}")
@@ -832,6 +843,7 @@ def run_meshes(args):
             png = d / f"{it['id']}.png"
             if png.is_file():
                 s["source_white_frac"] = round(reference_white_fraction(png), 4)
+                s["source_void_black_frac"] = round(reference_void_black_fraction(png), 4)
             reasons = mesh_pass(s) + emblem_qa_reasons(d, it["id"])
             try:
                 masks, shades = mesh_silhouettes(geoms)

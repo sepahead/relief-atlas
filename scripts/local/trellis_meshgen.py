@@ -1058,7 +1058,9 @@ def _build_subworker_args(args, chunk_ids: list[str]) -> list[str]:
 
 def _collect_todo(args, *, quiet: bool = False):
     items = select_manifest_items(args.geographies, args.ids, args.limit, args.only_policy,
-                                  order=getattr(args, "order", "interleaved"))
+                                  order=getattr(args, "order", "interleaved"),
+                                  allow_restricted=getattr(args, "allow_restricted", False),
+                                  allow_blocked=getattr(args, "allow_blocked", False))
     for it in items:
         it["prompt_clean"] = clean_prompt(it["prompt"], it["id"], transparent=True)
 

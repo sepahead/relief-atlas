@@ -604,8 +604,16 @@ def _panel_text_entries(rgb, fg, fg_dist, fg_extent, edge_margin, has_bg, n_px, 
             xb_c = max(glyphs[idx]["xb"] for idx in cluster)
             raw_crop = np.isin(lbl[ya_c:yb_c, xa_c:xb_c], cids)
             rys_l, rxs_l = np.nonzero(raw_crop)
-            major, minor, _v_maj = _oriented_extent(rys_l, rxs_l)
-            if major / max(minor, 1.0) < 2.0:
+            # Measure word span along the glyph-center baseline (`axis`, `perp`)
+            # rather than raw pixel-mass PCA, which tilts ~12 deg on short 3-letter
+            # acronyms with top-heavy/bottom-heavy letters (e.g. "THW", "PCK").
+            pts_xy = np.column_stack([rxs_l.astype(np.float64) + xa_c,
+                                      rys_l.astype(np.float64) + ya_c]) - c_mean[None, :]
+            proj_ax = np.einsum("ij,j->i", pts_xy, axis)
+            proj_pe = np.einsum("ij,j->i", pts_xy, perp)
+            major = max(1.0, float(proj_ax.max() - proj_ax.min()) + 1.0)
+            minor = max(1.0, float(proj_pe.max() - proj_pe.min()) + 1.0)
+            if major / max(minor, 1.0) < 1.75:
                 continue
             if has_bg and (major / max(fg_extent, 1.0) > 0.40 or minor / max(fg_extent, 1.0) > 0.10):
                 continue
@@ -1606,7 +1614,8 @@ def decal_weights(blob_mask):
     return np.asarray(img).astype(np.float32) / 255.0
 
 
-def badge_patch_weights(blob_comps, ref_rgb: np.ndarray, ref_alpha: np.ndarray):
+def badge_patch_weights(blob_comps, ref_rgb: np.ndarray, ref_alpha: np.ndarray,
+                        *, text_slots=None):
     """Build per-blob badge + host-panel patch weights and stroke/owner maps.
 
     Returns `(footprint, core_patch_mask, stroke_mask, owner_map)`:
@@ -1642,7 +1651,8 @@ def badge_patch_weights(blob_comps, ref_rgb: np.ndarray, ref_alpha: np.ndarray):
         y0, y1 = int(bys.min()), int(bys.max())
         x0, x1 = int(bxs.min()), int(bxs.max())
         major_s, minor_s, _ = _oriented_extent(bys, bxs)
-        is_text_band = (major_s / max(minor_s, 1.0)) > 2.8
+        is_text_band = ((slot in text_slots) if text_slots is not None and slot in text_slots
+                        else (major_s / max(minor_s, 1.0)) > 2.8)
         if is_text_band:
             span = minor_s
             pad_core = max(6, int(round(0.38 * span)))
@@ -2215,7 +2225,7 @@ def _gather_uv_decal_texels(
 
 
 def project_reference(geoms_zup, texture_img, ref_rgba, fit, *, blob_mask=None,
-                      size=RENDER_SIZE, out_state: dict = None):
+                      blob_records=None, size=RENDER_SIZE, out_state: dict = None):
     """Write true reference pixels into validated 3D emblem decal texels only."""
     import moderngl
     ref = ref_rgba.convert("RGBA")
@@ -2478,9 +2488,18 @@ def project_reference(geoms_zup, texture_img, ref_rgba, fit, *, blob_mask=None,
     hit_blob = b_lbl[ry_all, rx_all]
     accepted_blob_mask = np.zeros_like(bm_bool)
     accepted_comps = []
+    text_slots = set()
     blob_planes = {}
     accepted_blobs = 0
     rejected_reasons = []
+    text_boxes_ref = np.zeros_like(bm_bool)
+    if blob_records:
+        rh_b, rw_b = bm_bool.shape
+        for rec in blob_records:
+            if isinstance(rec, dict) and rec.get("kind") == "text" and rec.get("bbox"):
+                bx0, by0, bx1, by1 = rec["bbox"]
+                text_boxes_ref[max(0, int(by0)):min(rh_b, int(by1) + 1),
+                               max(0, int(bx0)):min(rw_b, int(bx1) + 1)] = True
 
     z_min_obj = float(V[:, 2].min())
     z_span_obj = max(float(V[:, 2].max()) - z_min_obj, 1e-6)
@@ -2527,7 +2546,9 @@ def project_reference(geoms_zup, texture_img, ref_rgba, fit, *, blob_mask=None,
                                  - ref_rgb[ry_all[in_ring_h], rx_all[in_ring_h]]).mean())
                     if int(in_ring_h.sum()) >= 6 else 999.0)
         major_b, minor_b, _ = _oriented_extent(bys, bxs)
-        wide_pad = (max(8, int(round(0.50 * minor_b))) if (major_b / max(minor_b, 1.0)) > 2.8
+        is_text_b = (bool((comp_ref & text_boxes_ref).any())
+                     or (major_b / max(minor_b, 1.0)) > 2.8)
+        wide_pad = (max(8, int(round(0.50 * minor_b))) if is_text_b
                     else max(8, int(round(0.75 * max(bys.max() - bys.min() + 1, bxs.max() - bxs.min() + 1)))))
         wide_ring_ref = _dilate_bool(comp_ref, wide_pad) & ~comp_ref & ref_alpha
         if near_ring_ref.any():
@@ -2544,6 +2565,8 @@ def project_reference(geoms_zup, texture_img, ref_rgba, fit, *, blob_mask=None,
         slot = accepted_blobs
         accepted_blob_mask |= comp_ref
         accepted_comps.append((slot, comp_ref))
+        if is_text_b:
+            text_slots.add(slot)
         blob_planes[slot] = (unit_n, hit[in_b].mean(axis=0))
 
     if not accepted_blob_mask.any():
@@ -2556,7 +2579,7 @@ def project_reference(geoms_zup, texture_img, ref_rgba, fit, *, blob_mask=None,
         }
 
     footprint, core_patch_mask, stroke_mask, owner_ref_map = badge_patch_weights(
-        accepted_comps, ref_rgb, ref_alpha)
+        accepted_comps, ref_rgb, ref_alpha, text_slots=text_slots)
     accepted_blob_mask = stroke_mask if stroke_mask.any() else accepted_blob_mask
 
     plane_tol = 0.042 * float(fit["radius"])
@@ -2570,7 +2593,8 @@ def project_reference(geoms_zup, texture_img, ref_rgba, fit, *, blob_mask=None,
         vis_plane_s[ys[cop_all], xs[cop_all]] = True
         vis_plane_s &= eroded_full
         ox_s, oy_s = _refine_local_decal_offset(
-            ren_rgb_frame, vis_plane_s, ref_rgb, ref_alpha, comp_ref, scale, ox, oy)
+            ren_rgb_frame, vis_plane_s, ref_rgb, ref_alpha, comp_ref, scale, ox, oy,
+            is_text=(slot in text_slots))
         slot_shifts[slot] = (float(ox_s - ox), float(oy_s - oy))
 
     owner_map, shift_maps = _build_per_blob_shift_maps(
@@ -2880,7 +2904,7 @@ def _refine_frame_map(ren_rgb, ren_core, ref_rgb, ref_core, scale, ox, oy):
 
 
 def _refine_local_decal_offset(ren_rgb, ren_vis_mask, ref_rgb, ref_alpha,
-                               blob_mask, scale, ox, oy):
+                               blob_mask, scale, ox, oy, *, is_text: bool = False):
     """Snap `(ox, oy)` locally to TRELLIS's baked panel features around one emblem.
 
     Whole-object silhouette registration (`_frame_map` / `_refine_frame_map`) can
@@ -2899,19 +2923,28 @@ def _refine_local_decal_offset(ren_rgb, ren_vis_mask, ref_rgb, ref_alpha,
         return ox, oy
 
     h_ref, w_ref = ref_alpha.shape
-    span_ref = max(int(bys.max() - bys.min() + 1), int(bxs.max() - bxs.min() + 1))
-    max_shift = min(
-        max(10, int(round(0.045 * max(h_ref, w_ref)))),
-        max(10, int(round(0.75 * span_ref))),
-    )
-    pad_ref = max(28, int(round(1.15 * span_ref)) + max_shift)
+    major_ref, minor_ref, _ = _oriented_extent(bys, bxs)
+    if is_text or (major_ref / max(minor_ref, 1.0)) > 2.8:
+        max_shift = min(
+            max(10, int(round(0.045 * max(h_ref, w_ref)))),
+            max(10, int(round(0.75 * minor_ref))),
+        )
+        pad_x = max(24, int(round(0.35 * major_ref)) + max_shift)
+        pad_y = max(20, int(round(1.00 * minor_ref)) + max_shift)
+    else:
+        span_ref = max(int(bys.max() - bys.min() + 1), int(bxs.max() - bxs.min() + 1))
+        max_shift = min(
+            max(10, int(round(0.045 * max(h_ref, w_ref)))),
+            max(10, int(round(0.75 * span_ref))),
+        )
+        pad_x = pad_y = max(28, int(round(1.15 * span_ref)) + max_shift)
     rx_init = (xs_s + 0.5) * scale + ox
     ry_init = (ys_s + 0.5) * scale + oy
     in_roi = (
-        (rx_init >= float(bxs.min() - pad_ref))
-        & (rx_init <= float(bxs.max() + pad_ref))
-        & (ry_init >= float(bys.min() - pad_ref))
-        & (ry_init <= float(bys.max() + pad_ref))
+        (rx_init >= float(bxs.min() - pad_x))
+        & (rx_init <= float(bxs.max() + pad_x))
+        & (ry_init >= float(bys.min() - pad_y))
+        & (ry_init <= float(bys.max() + pad_y))
     )
     if int(in_roi.sum()) < 28:
         return ox, oy
@@ -3720,7 +3753,8 @@ def process_item(item_dir: Path, item_id: str, *, dry_run=False):
     texture, _ = base_color_texture(geoms)
     state = {}
     new_texture, proj = project_reference(
-        geoms, texture, ref, fit, blob_mask=blob_mask, out_state=state)
+        geoms, texture, ref, fit, blob_mask=blob_mask, blob_records=records,
+        out_state=state)
     report["projection"] = proj
     if dry_run or not proj.get("projected_texels"):
         report["note"] = proj.get("note", "dry run or nothing to project")
@@ -3840,7 +3874,8 @@ def try_emblem_fix(item_dir: Path, item_id: str):
         texture, _ = base_color_texture(geoms)
         state = {}
         new_texture, proj = project_reference(
-            geoms, texture, ref, fit, blob_mask=blob_mask, out_state=state)
+            geoms, texture, ref, fit, blob_mask=blob_mask, blob_records=records,
+            out_state=state)
         if not proj.get("projected_texels"):
             return {"schema": EMBLEM_SCHEMA, "applied": False, "blobs": len(records),
                     "records": records, "fit_iou": fit["iou"], "camera": cam_rec,

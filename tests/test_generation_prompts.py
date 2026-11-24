@@ -89,6 +89,7 @@ class TestGenerationPrompts(unittest.TestCase):
         for subject, label in (
             ("Austrian Red Cross (Rotes Kreuz) rescue vehicle, white with red cross", "ROTES KREUZ"),
             ("Danish Red Cross (Røde Kors) mobile response unit, white van", "RØDE KORS"),
+            ("Swedish Red Cross (Röda Korset) field ambulance, white with red cross", "RÖDA KORSET"),
             ("Finnish Red Cross (Punainen Risti) modular aid station", "PUNAINEN RISTI"),
             ("Polish Red Cross (PCK) aid distribution truck, white with red cross", "PCK"),
             ("Austria Bergrettung mountain rescue vehicle, white and red", "BERGRETTUNG"),

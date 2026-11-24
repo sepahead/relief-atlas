@@ -208,7 +208,9 @@ def main():
     args = parse_args()
 
     items = select_manifest_items(args.geographies, args.ids, args.limit, args.only_policy,
-                                  order=args.order)
+                                  order=args.order,
+                                  allow_restricted=args.allow_restricted,
+                                  allow_blocked=args.allow_blocked)
 
     retries = load_qa_retries()
     quarantine = load_quarantine()

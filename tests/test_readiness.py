@@ -226,6 +226,14 @@ class TestSelectionAndRunner(unittest.TestCase):
         # Sequential opt-out restores original manifest order.
         seq_first = prompt_utils.select_manifest_items(limit=5, order="sequential")
         self.assertEqual([it["id"] for it in seq_first], [f"ger_drk_{i:04d}" for i in range(1, 6)])
+        # Bounded interleaved `--limit 25` hits all 25 permitted categories without wasting
+        # slots on refused military buckets, while `limit=None` retains refused rows for ledgers.
+        lim25 = prompt_utils.select_manifest_items(limit=25, order="interleaved")
+        perm25, ref25 = content_policy.screen_items(lim25, False, False)
+        self.assertEqual(len(perm25), 25)
+        self.assertEqual(len(ref25), 0)
+        self.assertEqual(len({(it["geography"], it["category"]) for it in perm25}), 25)
+        self.assertEqual(len(all_interleaved), 10079)
 
     def test_explicit_ids_override_geography_and_limit(self):
         result = prompt_utils.select_manifest_items(["germany"], ["gen_dis_0002", "eu_rc_0001"], 1)

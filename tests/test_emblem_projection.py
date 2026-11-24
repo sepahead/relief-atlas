@@ -1302,6 +1302,47 @@ class TestQaEmblemAndTrellisClean(unittest.TestCase):
         self.assertFalse(bool(union[310:347, 200:261].any()), "louver bars with 0 non-bar glyphs must not trigger")
         self.assertEqual(len(sat_recs), 1, f"only the red cross should remain saturated, got {sat_recs}")
 
+    def test_short_3letter_text_slot_uses_tight_collar_and_void_black_respects_source(self):
+        import numpy as np
+        from PIL import Image, ImageDraw
+        import emblem_project as ep
+        import qa
+
+        # Short 3-letter word ("THW" ~ 80x34 -> aspect ~2.35 <= 2.8) passed via text_slots={1}
+        # must keep a tight character-height collar and NOT absorb nearby frame strokes.
+        img = Image.new("RGBA", (512, 512), (0, 0, 0, 0))
+        d = ImageDraw.Draw(img)
+        d.rectangle([32, 32, 480, 480], fill=(24, 64, 150, 255))
+        y0, h_c = 200, 34
+        # T, H, W (~80px wide total -> aspect 80/34 = 2.35 <= 2.8)
+        d.rectangle([200, y0, 222, y0 + 5], fill=(248, 248, 248, 255))
+        d.rectangle([209, y0, 214, y0 + h_c], fill=(248, 248, 248, 255))
+        d.rectangle([230, y0, 235, y0 + h_c], fill=(248, 248, 248, 255))
+        d.rectangle([247, y0, 252, y0 + h_c], fill=(248, 248, 248, 255))
+        d.rectangle([230, y0 + 14, 252, y0 + 19], fill=(248, 248, 248, 255))
+        d.rectangle([260, y0, 265, y0 + h_c], fill=(248, 248, 248, 255))
+        d.rectangle([275, y0, 280, y0 + h_c], fill=(248, 248, 248, 255))
+        d.rectangle([260, y0 + h_c - 5, 280, y0 + h_c], fill=(248, 248, 248, 255))
+
+        arr = np.asarray(img)
+        _u, comps, recs = ep._emblem_blob_components(img)
+        self.assertEqual(len(recs), 1)
+        self.assertEqual(recs[0]["kind"], "text")
+        fp, _core, _stroke, _owners = ep.badge_patch_weights(
+            [(1, comps[0])], arr[..., :3].astype(np.float32), arr[..., 3] > 127,
+            text_slots={1})
+        self.assertEqual(float(fp[y0 - 45, 240]), 0.0, "3-letter text collar must scale to char height, not word width")
+        self.assertEqual(float(fp[y0 + h_c + 45, 240]), 0.0)
+
+        # Reference-relative void-black check in mesh_pass.
+        base_mesh = {
+            "vertices": 1000, "aspect": 0.6, "dim_ratio": 2.0,
+            "tex_white": 0.1, "tex_magenta": 0.0, "degenerate_frac": 0.0,
+            "glb_aligned": True,
+        }
+        self.assertEqual(qa.mesh_pass({**base_mesh, "tex_void_black": 0.08, "source_void_black_frac": 0.06}), [])
+        self.assertIn("void black texture 0.09", qa.mesh_pass({**base_mesh, "tex_void_black": 0.09, "source_void_black_frac": 0.01}))
+
 
 if __name__ == "__main__":
     unittest.main()

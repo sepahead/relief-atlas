@@ -506,12 +506,15 @@ def interleave_manifest_items(items: list[dict]) -> list[dict]:
 
 
 def select_manifest_items(geographies=None, ids=None, limit=None, only_policy=None,
-                          order="interleaved"):
+                          order="interleaved", allow_restricted=False, allow_blocked=False):
     """One selection contract for generators, QA, accounting and orchestration.
 
     Explicit IDs preserve requested order and override geography/limit/order.
     Tier filtering precedes interleaving and the limit, as documented by the
-    generation CLI.
+    generation CLI. Under default interleaved scheduling (`only_policy=None`),
+    policy-permitted items are interleaved ahead of refused items so `--limit N`
+    selects N eligible items across all active categories while full runs still
+    return refused items for policy-ledger accounting.
     """
     import content_policy
 
@@ -535,7 +538,12 @@ def select_manifest_items(geographies=None, ids=None, limit=None, only_policy=No
         items = [dict(it) for geo in dict.fromkeys(geographies) for it in load_manifest(geo)]
     items = content_policy.select_tier(items, only_policy)
     if not ids and order == "interleaved":
-        items = interleave_manifest_items(items)
+        if only_policy is None:
+            permitted, refused = content_policy.screen_items(
+                items, allow_restricted, allow_blocked)
+            items = interleave_manifest_items(permitted) + interleave_manifest_items(refused)
+        else:
+            items = interleave_manifest_items(items)
     return items[:limit] if limit is not None and not ids else items
 
 

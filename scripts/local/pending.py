@@ -114,9 +114,10 @@ def classify(items, output_dir, *, quarantine=(), allow_restricted=False,
 
 
 def select_items(geographies=None, ids=None, limit=None, only_policy=None,
-                 order="interleaved") -> list:
+                 order="interleaved", allow_restricted=False, allow_blocked=False) -> list:
     """The manifest rows this count covers, scoped like the phases scope theirs."""
-    return select_manifest_items(geographies, ids, limit, only_policy, order=order)
+    return select_manifest_items(geographies, ids, limit, only_policy, order=order,
+                                 allow_restricted=allow_restricted, allow_blocked=allow_blocked)
 
 
 def report(output_dir=None, state_dir=None, geographies=None, ids=None,
@@ -125,7 +126,9 @@ def report(output_dir=None, state_dir=None, geographies=None, ids=None,
     quarantine = load_state("qa_quarantine.json", state_dir)
     ledgers = {mode: load_state(f"qa_{mode}.json", state_dir)
                for mode in ("images", "meshes", "gaussians")}
-    items = select_items(geographies, ids, limit, kw.get("only_policy"), order=order)
+    items = select_items(geographies, ids, limit, kw.get("only_policy"), order=order,
+                         allow_restricted=kw.get("allow_restricted", False),
+                         allow_blocked=kw.get("allow_blocked", False))
     return classify(items, output_dir or OUTPUT_DIR,
                     quarantine=quarantine, ledgers=ledgers, **kw)
 

@@ -93,7 +93,7 @@ _MARKING_PATTERNS = [
     (re.compile(r"\bcroix[- ]rouge\b", re.I), "CROIX-ROUGE"),
     (re.compile(r"\bcroce\s+rossa\b", re.I), "CROCE ROSSA"),
     (re.compile(r"\brode\s+kruis\b", re.I), "RODE KRUIS"),
-    (re.compile(r"\br[oö]da\s+korset\b", re.I), "RODA KORSET"),
+    (re.compile(r"\br[oö]da\s+korset\b", re.I), "RÖDA KORSET"),
     (re.compile(r"\b(?:technisches\s+hilfswerk|thw)\b", re.I), "THW"),
     (re.compile(r"\b(?:deutsches\s+rotes\s+kreuz|german\s+red\s+cross|drk)\b", re.I), "DRK"),
     (re.compile(r"\bbundespolizei\b", re.I), "POLIZEI"),

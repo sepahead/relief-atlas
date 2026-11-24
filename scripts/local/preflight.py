@@ -111,7 +111,8 @@ def check(phase="all", geographies=None, ids=None, limit=None, only_policy=None,
           allow_restricted=False, allow_blocked=False, gs_format="spz",
           pipeline_type="1024_cascade", texture_size=2048, pending_count=None):
     errors, notes = [], []
-    items = select_manifest_items(geographies, ids, limit, only_policy, order=order)
+    items = select_manifest_items(geographies, ids, limit, only_policy, order=order,
+                                  allow_restricted=allow_restricted, allow_blocked=allow_blocked)
     if len({it["id"] for it in items}) != len(items):
         errors.append("Manifest selection contains duplicate IDs")
     permitted, refused = content_policy.screen_items(items, allow_restricted, allow_blocked)

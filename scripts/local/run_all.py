@@ -156,7 +156,9 @@ def main(argv=None):
     args = parse_args(argv)
     try:
         selected = select_manifest_items(args.geographies, args.ids, args.limit, args.only_policy,
-                                         order=args.order)
+                                         order=args.order,
+                                         allow_restricted=args.allow_restricted,
+                                         allow_blocked=args.allow_blocked)
         permitted, refused = content_policy.screen_items(selected, args.allow_restricted, args.allow_blocked)
         if not args.ids and args.order == "interleaved":
             permitted = interleave_manifest_items(permitted)
