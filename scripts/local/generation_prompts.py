@@ -119,6 +119,38 @@ _MARKING_PATTERNS = [
 ]
 
 
+_ROAD_VEHICLE_RE = re.compile(
+    r"\b(?:ambulance|fire\s+(?:engine|truck)|transporter|sprinter|unimog|atego|transit|"
+    r"truck|van|bus|suv|pickup|tanker|lorry|trailer|bloodmobile|"
+    r"(?:rescue|command|patrol|response|logistics|utility|support|armored|recovery|emergency)\s+vehicle|"
+    r"mobile\s+(?:response|command|medical|clinic|hospital|blood|decontamination|laboratory|kitchen)\s+(?:unit|vehicle|van|truck))\b",
+    re.I,
+)
+_NON_ROAD_VEHICLE_RE = re.compile(
+    r"\b(?:skid\s+steer|excavator|bulldozer|tower\s+crane|crane\s+tower|loader|forklift|"
+    r"ugv|robot|drone|uav|quadcopter|hexacopter|octocopter|helicopter|aircraft|boat|ship|"
+    r"frigate|vessel|tent|shelter|pallet|rubble|debris|containerized|"
+    r"modular\s+(?:tent|hospital|clinic|aid)|field\s+hospital|mine\s+clearing)\b",
+    re.I,
+)
+_EXPLICIT_MARKING_RE = re.compile(
+    r"\b(?:red\s+cross|emblem|insignia|marking|markings|symbol|symbols|flag|eu\s+stars|"
+    r"chevron|reflective\s+stripe|warning\s+sign|signage|decal|crest|patch|brassard|"
+    r"calibration|checkerboard|target\s+marker|blue\s+stripe|yellow\s+stripe|red\s+stripe|"
+    r"striped|logo|label|sign)\b",
+    re.I,
+)
+
+
+def _is_road_vehicle(subject: str) -> bool:
+    text = str(subject or "")
+    return bool(_ROAD_VEHICLE_RE.search(text)) and not bool(_NON_ROAD_VEHICLE_RE.search(text))
+
+
+def _has_explicit_marking(subject: str) -> bool:
+    return bool(_EXPLICIT_MARKING_RE.search(str(subject or "")))
+
+
 def expected_marking_text(subject: str):
     """Return the canonical short inscription already named in Subject, or None."""
     text = str(subject or "")
@@ -129,19 +161,39 @@ def expected_marking_text(subject: str):
 
 
 def text_capture_clause(subject: str) -> str:
-    """Typography guidance that keeps Qwen-Image-2.1 lettering crisp and non-garbled."""
-    label = expected_marking_text(subject)
+    """Typography and clean-surface guidance tailored to named, marked, and unmarked subjects."""
+    text = str(subject or "")
+    prefix = ""
+    if re.search(r"\bmultiple\s+attachments\b", text, re.I):
+        prefix += (
+            "Show one self-contained machine with one primary attachment mounted on its boom "
+            "and no loose detached spare attachments placed beside it. "
+        )
+    if re.search(r"\bsatellite\s+ground\s+terminal\b.*\bportable\s+antenna\b|\bportable\s+antenna\b.*\bsatellite", text, re.I):
+        prefix += (
+            "Show the portable parabolic satellite dish deployed on its tripod mount connected "
+            "to the compact transceiver unit, not closed inside a shipping crate. "
+        )
+    plate = " Keep any vehicle license plate completely blank." if _is_road_vehicle(text) else ""
+    label = expected_marking_text(text)
     if label:
         return (
-            f'Preserve requested emblems clearly; if body lettering appears, render it in '
-            f'large, bold, cleanly spaced sans-serif block capitals spelled exactly "{label}". '
-            f'Keep license plates completely blank and omit tiny unreadable fine print, '
-            f'phone numbers, garbled filler text, watermarks, measurement arrows and extra props.'
+            f'{prefix}Preserve only the requested emblem; if lettering appears, render it in '
+            f'large, bold, cleanly spaced sans-serif block capitals spelled exactly "{label}", '
+            f'with no subtitles or extra stickers.{plate} '
+            f'Omit watermarks, measurement arrows and extra props.'
+        )
+    if _has_explicit_marking(text):
+        return (
+            f"{prefix}Preserve only the explicitly requested graphic symbols or markings cleanly; "
+            f"keep all other panels plain and unbranded with no invented text, brand names, coats of arms, "
+            f"shipping labels, stickers, or fine print.{plate} "
+            f"Omit watermarks, measurement arrows and extra props."
         )
     return (
-        "Preserve requested emblems and inscriptions clearly; render any visible lettering in "
-        "large, crisp, accurately spelled block capitals, keep license plates completely blank, "
-        "and omit tiny unreadable fine print, garbled filler text, watermarks, measurement arrows and extra props."
+        f"{prefix}Keep all surfaces plain and completely unbranded: no text, lettering, brand names, "
+        f"logos, coats of arms, crests, shipping labels, stickers, or placards.{plate} "
+        f"Omit watermarks, measurement arrows and extra props."
     )
 
 

@@ -81,9 +81,18 @@ class TestGenerationPrompts(unittest.TestCase):
     def test_typography_guidance_spells_named_agencies_and_upgrades_legacy_capture_line(self):
         fw = gp.compose_prompt("German Feuerwehr HLF 20 fire engine, Mercedes Atego, red with reflective stripes")
         self.assertIn('spelled exactly "FEUERWEHR"', fw)
-        self.assertIn("license plates completely blank", fw)
+        self.assertIn("Keep any vehicle license plate completely blank.", fw)
+        self.assertIn("no subtitles or extra stickers", fw)
         rc = gp.compose_prompt("Spanish Red Cross (Cruz Roja) ambulance, white with red cross, Spanish markings")
         self.assertIn('spelled exactly "CRUZ ROJA"', rc)
+        self.assertIn("Keep any vehicle license plate completely blank.", rc)
+        # Non-road named structures (field hospitals, tents) must NOT mention license plates.
+        hosp = gp.compose_prompt("rescEU emergency field hospital, modular tent complex with EU flag")
+        self.assertIn('spelled exactly "rescEU"', hosp)
+        self.assertNotIn("license plate", hosp)
+        tent = gp.compose_prompt("UNHCR standard family tent, white canvas with blue stripe")
+        self.assertIn('spelled exactly "UNHCR"', tent)
+        self.assertNotIn("license plate", tent)
         # Local-language names and acronyms authored in the subject are spelled verbatim;
         # the generic "Red Cross" phrase never overrides an explicit national inscription.
         for subject, label in (
@@ -102,10 +111,25 @@ class TestGenerationPrompts(unittest.TestCase):
         for subject in ("Ukrainian Red Cross ambulance, white with red cross",
                         "volume pump unit for flood relief", "consumer drone"):
             self.assertIsNone(gp.expected_marking_text(subject), subject)
-        # Unmarked subjects must not invent an agency name.
+        # Unmapped subjects with explicit visual symbols preserve those symbols without inventing brands.
+        ua_rc = gp.compose_prompt("Ukrainian Red Cross ambulance, white with red cross")
+        self.assertIn("Preserve only the explicitly requested graphic symbols", ua_rc)
+        self.assertIn("Keep any vehicle license plate completely blank.", ua_rc)
+        # Unmarked plain subjects must ban invented text, logos, crests, labels and license plates.
         rubble = gp.compose_prompt("collapsed building rubble pile, concrete debris with exposed rebar")
         self.assertNotIn("spelled exactly", rubble)
-        self.assertIn("accurately spelled block capitals", rubble)
+        self.assertNotIn("license plate", rubble)
+        self.assertIn("plain and completely unbranded", rubble)
+        pallet = gp.compose_prompt("pallet of emergency blankets and bedding, shrink-wrapped")
+        self.assertIn("plain and completely unbranded", pallet)
+        self.assertNotIn("license plate", pallet)
+        # Self-contained machinery & deployed satellite dish guidance.
+        skid = gp.compose_prompt("compact skid steer loader with multiple attachments, clears narrow urban passages")
+        self.assertIn("no loose detached spare attachments", skid)
+        self.assertNotIn("license plate", skid)
+        sat = gp.compose_prompt("Copernicus Emergency Management Service satellite ground terminal, portable antenna system")
+        self.assertIn("parabolic satellite dish deployed on its tripod mount", sat)
+        self.assertIn("plain and completely unbranded", sat)
         # Stored v2 manifest prompts upgrade cleanly and idempotently via normalize_generation_prompt.
         legacy_stored = (
             "Subject: German Feuerwehr HLF 20 fire engine.\n"

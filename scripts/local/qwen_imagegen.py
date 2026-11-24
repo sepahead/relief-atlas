@@ -9,6 +9,7 @@ Run with: meshmaker/local/imgenv/bin/python scripts/local/qwen_imagegen.py
 """
 
 import argparse
+import gc
 import json
 import math
 import os
@@ -332,6 +333,10 @@ def main():
                 raise RuntimeError(f"Image generation infrastructure failed for {item_id}; assets retained") from e
         finally:
             save_json_atomic(failures_path, failures)
+            gen = rgb = rgba = None
+            gc.collect()
+            if hasattr(torch, "mps") and torch.backends.mps.is_available():
+                torch.mps.empty_cache()
 
     if generated_overrides:
         path = content_policy.record_overrides(generated_overrides,

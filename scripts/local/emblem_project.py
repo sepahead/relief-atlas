@@ -514,9 +514,10 @@ def _panel_text_entries(rgb, fg, fg_dist, fg_extent, edge_margin, has_bg, n_px, 
             is_bar = (g_fill > 0.68 and (stroke / max(min(cw, ch), 1)) > 0.34)
             if is_bar:
                 # Allow slender vertical bar strokes (capital "I" in POLIZEI, ICRC,
-                # PUNAINEN RISTI) to join real letters; solid square/wide blocks are
-                # rejected and clusters must still contain >=2 non-bar glyphs.
-                if not (ch >= 2.2 * cw and ch / max(cw, 1) <= 6.5
+                # PUNAINEN RISTI, including condensed/perspective-foreshortened side
+                # lettering up to ~11:1) to join real letters; solid square/wide blocks
+                # are rejected and clusters must still contain >=2 non-bar glyphs.
+                if not (ch >= 2.2 * cw and ch / max(cw, 1) <= 11.0
                         and stroke <= max(5.0, 0.012 * fg_extent)):
                     continue
             else:

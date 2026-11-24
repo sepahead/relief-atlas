@@ -1286,8 +1286,8 @@ class TestQaEmblemAndTrellisClean(unittest.TestCase):
         d.rectangle([264, y0, 270, y0 + h_c], fill=red)
         d.rectangle([282, y0, 288, y0 + h_c], fill=red)
         d.rectangle([264, y0 + h_c - 6, 288, y0 + h_c], fill=red)
-        # Trailing narrow I (aspect > 2.6, solid vertical bar — like final "I" in POLIZEI)
-        d.rectangle([299, y0, 305, y0 + h_c], fill=red)
+        # Trailing narrow I (aspect > 7.5, condensed perspective vertical bar — like "I" in POLIZEI)
+        d.rectangle([299, y0, 303, y0 + h_c], fill=red)
 
         # Row of 4 identical vertical louver bars below must NOT trigger text (0 non-bar glyphs).
         for bx in (200, 218, 236, 254):

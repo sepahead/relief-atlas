@@ -1166,7 +1166,7 @@ def render_splat_views(g, res=GS_VIEW_RES, max_gaussians=GS_MAX_GAUSSIANS):
     masks, weights, colours = [], [], []
     pix_area = res * res
     z_near = max(0.05 * float(radius), 1e-4)
-    tau_z = max(0.02 * float(radius), 1e-4)
+    tau_z = max(0.008 * float(radius), 1e-4)
     for cam, right, up, forward in cams:
         Rc = np.stack([right, up, forward]).astype(np.float32)  # world->cam
         Rc_t = torch.from_numpy(Rc)
