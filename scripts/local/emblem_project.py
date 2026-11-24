@@ -473,7 +473,7 @@ def _panel_text_entries(rgb, fg, fg_dist, fg_extent, edge_margin, has_bg, n_px, 
     interior = fg & (fg_dist >= edge_margin if has_bg else fg) & ~taken
     polarities = [
         interior & (dev >= 55.0) & ((luma - bg_luma) >= 45.0) & (luma >= 165.0),
-        interior & (dev >= 55.0) & ((bg_luma - luma) >= 45.0) & (luma <= 105.0) & (bg_luma >= 115.0),
+        interior & (dev >= 55.0) & ((bg_luma - luma) >= 45.0) & (luma <= 105.0) & (bg_luma >= 85.0),
         interior & (dev >= 65.0) & (chroma >= 0.35) & (mx >= 80.0) & (bg_chr < 0.22) & (bg_luma >= 165.0),
     ]
 
@@ -485,12 +485,12 @@ def _panel_text_entries(rgb, fg, fg_dist, fg_extent, edge_margin, has_bg, n_px, 
     word_px_min = max(90, int(round(0.00020 * h_img * w_img)))
     struct8 = np.ones((3, 3), dtype=bool)
 
-    out = []
-    claimed = taken.copy()
+    candidates = []
 
     for ink in polarities:
         if int(ink.sum()) < word_px_min:
             continue
+        pol_claimed = taken.copy()
         try:
             from scipy import ndimage
             lbl, n_c = ndimage.label(ink, structure=struct8)
@@ -641,7 +641,7 @@ def _panel_text_entries(rgb, fg, fg_dist, fg_extent, edge_margin, has_bg, n_px, 
             wb_px = int(word_band.sum())
             if wb_px < word_px_min or float(wb_px) / n_px > 0.05:
                 continue
-            if int((word_band & claimed).sum()) > 0.10 * wb_px:
+            if int((word_band & pol_claimed).sum()) > 0.10 * wb_px:
                 continue
 
             # Evaluate the tight immediate host panel right around and between
@@ -654,7 +654,7 @@ def _panel_text_entries(rgb, fg, fg_dist, fg_extent, edge_margin, has_bg, n_px, 
                 continue
             if has_bg and float(fg[ann].mean()) < 0.88:
                 continue
-            ann_fg = ann & fg & ~ink & ~claimed
+            ann_fg = ann & fg & ~ink & ~pol_claimed
             if int(ann_fg.sum()) < 32:
                 continue
             panel = np.median(rgb[ann_fg], axis=0)
@@ -689,8 +689,21 @@ def _panel_text_entries(rgb, fg, fg_dist, fg_extent, edge_margin, has_bg, n_px, 
                 "glyphs": int(len(cluster)),
                 "panel_rgb": [int(round(v)) for v in panel.tolist()],
             }
-            out.append((rec, word_band))
-            claimed |= word_band
+            candidates.append((rec, word_band))
+            pol_claimed |= word_band
+
+    # Rank across polarities by glyph count and area so complete dark/colored
+    # lettering (e.g. bold blue "rescEU" on white) always beats smaller inverted
+    # white counter-gaps trapped between strokes.
+    candidates.sort(key=lambda item: (-item[0]["glyphs"], -item[0]["pixels"]))
+    out = []
+    claimed = taken.copy()
+    for rec, word_band in candidates:
+        wb_px = max(1, int(word_band.sum()))
+        if int((word_band & claimed).sum()) > 0.10 * wb_px:
+            continue
+        out.append((rec, word_band))
+        claimed |= word_band
     return out
 
 
